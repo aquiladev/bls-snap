@@ -27,12 +27,24 @@
     ]
   },
   "dependencies": {
+    "bls-snap": "file:../blc-snap",
+    "@fortawesome/fontawesome-svg-core": "^6.2.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@headlessui/react": "^1.7.3",
+    "@metamask/detect-provider": "^2.0.0",
     "@metamask/providers": "^9.0.0",
+    "@reduxjs/toolkit": "^1.8.5",
+    "@types/semver": "^7.3.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",
+    "react-redux": "^8.0.4",
     "react-scripts": "5.0.1",
-    "styled-components": "5.3.3"
+    "redux-persist": "^6.0.0",
+    "redux-thunk": "^2.4.1",
+    "semver": "^7.3.8",
+    "styled-components": "5.3.3",
+    "toastr2": "^3.0.0-alpha.18"
   },
   "devDependencies": {
     "@metamask/eslint-config": "^10.0.0",

@@ -21,6 +21,12 @@ export const getMessage = (originString: string): string =>
  * @throws If the `snap_confirm` call failed.
  */
 export const onRpcRequest: OnRpcRequestHandler = ({ origin, request }) => {
+  // Switch statement for methods not requiring state to speed things up a bit
+  if (request.method === 'ping') {
+    console.log('pong');
+    return 'pong';
+  }
+
   switch (request.method) {
     case 'hello':
       return wallet.request({
