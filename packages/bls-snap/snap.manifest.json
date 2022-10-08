@@ -1,10 +1,10 @@
 {
   "version": "0.1.0",
   "description": "An example Snap written in TypeScript.",
-  "proposedName": "TypeScript Example Snap",
+  "proposedName": "BLS Snap",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MetaMask/template-snap-monorepo.git"
+    "url": "https://github.com/aquiladev/snap-snap.git"
   },
   "source": {
     "shasum": "naL9tJT7QHAFER/TGfTcjwUFZUMhrsWY5f8XqX28M/g=",
@@ -12,13 +12,15 @@
       "npm": {
         "filePath": "dist/bundle.js",
         "iconPath": "images/icon.svg",
-        "packageName": "snap",
+        "packageName": "bls-snap",
         "registry": "https://registry.npmjs.org/"
       }
     }
   },
   "initialPermissions": {
-    "snap_confirm": {}
+    "snap_confirm": {},
+    "endowment:network-access": {},
+    "snap_manageState": {}
   },
   "manifestVersion": "0.1"
 }
