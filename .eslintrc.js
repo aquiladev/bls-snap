@@ -17,6 +17,8 @@ module.exports = {
       extends: ['@metamask/eslint-config-typescript'],
       rules: {
         '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+        '@typescript-eslint/no-shadow': 'off',
+        '@typescript-eslint/no-unused-vars': 'off',
       },
     },
 

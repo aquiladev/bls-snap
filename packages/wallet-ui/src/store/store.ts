@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage';
 import thunk from 'redux-thunk';
 import walletReducer from '../slices/walletSlice';
 import UIReducer from '../slices/UISlice';
+import networkReducer from '../slices/networkSlice';
 
 const persistConfig = {
   key: 'root',
@@ -17,9 +18,16 @@ const walletPersistConfig = {
   whitelist: ['forceReconnect'],
 };
 
+const networkPersistConfig = {
+  key: 'networks',
+  storage,
+  whitelist: ['activeNetwork'],
+};
+
 const reducers = combineReducers({
   wallet: persistReducer(walletPersistConfig, walletReducer),
   UI: UIReducer,
+  networks: persistReducer(networkPersistConfig, networkReducer),
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

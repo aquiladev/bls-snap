@@ -7,7 +7,7 @@
     "url": "https://github.com/aquiladev/snap-snap.git"
   },
   "source": {
-    "shasum": "Qr1sGp6N/TKP5OrPvRv/lM+qs40J8dtZU/WvRE5S/rI=",
+    "shasum": "j+ZcRhFfOhou8e7oVxMF3RfvGEII45Hchw8LyLgEXNs=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
@@ -19,8 +19,8 @@
   },
   "initialPermissions": {
     "snap_confirm": {},
-    "endowment:network-access": {},
-    "snap_manageState": {}
+    "snap_manageState": {},
+    "endowment:network-access": {}
   },
   "manifestVersion": "0.1"
 }

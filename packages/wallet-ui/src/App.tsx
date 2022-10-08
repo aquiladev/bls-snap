@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import { Footer, Header, Home } from './components';
+import { Footer, Header } from './components';
+import { Home } from './components/pages/Home';
 import { ConnectModal } from './components/ui/ConnectModal';
+import { LoadingBackdrop } from './components/ui/LoadingBackdrop';
 import { PopIn } from './components/ui/PopIn';
 
 import { light, dark, GlobalStyle } from './config/theme';
@@ -20,10 +22,17 @@ const Wrapper = styled.div`
 
 function App() {
   const [darkTheme, setDarkTheme] = useState(getThemePreference());
-  const { initSnap, checkConnection } = useBLSSnap();
+  const { initSnap, checkConnection, getWalletData } = useBLSSnap();
   const { connected, forceReconnect } = useAppSelector((state) => state.wallet);
+  const { accounts } = useAppSelector((state) => state.wallet);
+  const networks = useAppSelector((state) => state.networks);
   const { loader } = useAppSelector((state) => state.UI);
   const { hasMetamaskFlask } = useHasMetamaskFlask();
+
+  const address =
+    accounts?.length > 0
+      ? (accounts[0].address as unknown as string)
+      : '0x000000000000000000000000000000';
 
   useEffect(() => {
     if (connected) {
@@ -34,6 +43,13 @@ function App() {
       checkConnection();
     }
   }, [connected, forceReconnect, hasMetamaskFlask]);
+
+  useEffect(() => {
+    if (networks.items.length > 0) {
+      const { chainId } = networks.items[networks.activeNetwork];
+      getWalletData(chainId);
+    }
+  }, [networks.activeNetwork]);
 
   const toggleTheme = () => {
     setLocalStorage('theme', darkTheme ? 'light' : 'dark');
@@ -53,8 +69,13 @@ function App() {
         >
           <ConnectModal />
         </PopIn>
-        <Home />
+        <Home address={address} />
         <Footer />
+        <PopIn isOpen={loading}>
+          {loading && (
+            <LoadingBackdrop>{loader.loadingMessage}</LoadingBackdrop>
+          )}
+        </PopIn>
       </Wrapper>
     </ThemeProvider>
   );

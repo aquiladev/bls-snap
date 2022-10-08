@@ -1,7 +1,7 @@
 import { ButtonHTMLAttributes, ReactNode } from 'react';
 import { IconName } from '@fortawesome/fontawesome-svg-core';
 import { CSSProperties } from 'styled-components';
-import { Variant } from '../../../theme/types';
+import { Variant } from '../../../config/theme';
 import { LeftIcon, RightIcon, TextWrapper, Wrapper } from './Button.style';
 
 type Props = {

@@ -5,8 +5,21 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "preserve"
+    "jsx": "react-jsx",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "noFallthroughCasesInSwitch": true
   },
-  "files": ["../../node_modules/@metamask/snap-types/global.d.ts"],
-  "include": ["src"]
+  "files": [
+    "../../node_modules/@metamask/snap-types/global.d.ts"
+  ],
+  "include": [
+    "src"
+  ]
 }

@@ -56,5 +56,10 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "async-mutex": "^0.4.0",
+    "bls-wallet-clients": "^0.7.3",
+    "ethers": "^5.7.1"
   }
 }
