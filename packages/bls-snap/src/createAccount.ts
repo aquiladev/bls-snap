@@ -1,11 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { ethers } from 'ethers';
-import {
-  Aggregator,
-  BlsWalletWrapper,
-  NetworkConfig,
-  validateConfig,
-} from 'bls-wallet-clients';
+import { BlsWalletWrapper, validateConfig } from 'bls-wallet-clients';
 
 import { ApiParams, CreateAccountRequestParams } from './types/snapApi';
 import { ARBITRUM_GOERLI_NETWORK } from './utils/constants';
@@ -13,8 +8,7 @@ import { upsertAccount } from './utils/snapUtils';
 
 export async function createAccount(params: ApiParams) {
   try {
-    const { state, mutex, requestParams } = params;
-    // const requestParamsObj = requestParams as CreateAccountRequestParams;
+    const { state, mutex } = params;
     const netCfg = validateConfig(ARBITRUM_GOERLI_NETWORK.config);
 
     const provider = new ethers.providers.JsonRpcProvider(

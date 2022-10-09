@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Transaction } from 'bls-snap/src/types/snapState';
+import { Operation, Transaction } from 'bls-snap/src/types/snapState';
 import { ethers } from 'ethers';
-import { Account, Erc20TokenBalance, Operation } from '../types';
+import { Account, Erc20TokenBalance } from '../types';
 
 export type WalletState = {
   connected: boolean;
@@ -90,8 +90,14 @@ export const walletSlice = createSlice({
     addWalletOp: (state, { payload }) => {
       state.ops = [...state.ops, payload];
     },
+    cleanWalletOp: (state) => {
+      state.ops = [];
+    },
     setTransactions: (state, { payload }) => {
       state.transactions = payload;
+    },
+    addTransaction: (state, { payload }) => {
+      state.transactions = [...state.transactions, payload];
     },
   },
 });
@@ -105,7 +111,9 @@ export const {
   setErc20TokenBalanceSelected,
   upsertErc20TokenBalance,
   addWalletOp,
+  cleanWalletOp,
   setTransactions,
+  addTransaction,
 } = walletSlice.actions;
 
 export default walletSlice.reducer;

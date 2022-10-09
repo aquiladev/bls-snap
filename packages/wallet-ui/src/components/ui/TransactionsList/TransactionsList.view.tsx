@@ -24,40 +24,37 @@ export const TransactionsListView = ({ transactions }: Props) => {
     const address = wallet.accounts?.[0] as unknown as string;
     if (chain && address) {
       clearTimeout(timeoutHandle.current); // cancel the timeout that was in-flight
-      timeoutHandle.current = setTimeout(
-        () =>
-          getTransactions(
-            address,
-            wallet.erc20TokenBalanceSelected.address,
-            10,
-            10,
-            chain,
-            false,
-            true,
-          ),
-        TRANSACTIONS_REFRESH_FREQUENCY,
-      );
+      timeoutHandle.current = setTimeout(() => {
+        console.log('check txs');
+        return getTransactions(
+          address,
+          wallet.erc20TokenBalanceSelected.address,
+          10,
+          10,
+          chain,
+        );
+      }, TRANSACTIONS_REFRESH_FREQUENCY);
       return () => clearTimeout(timeoutHandle.current);
     }
   }, [wallet.transactions]);
 
-  useEffect(() => {
-    const chain = networks.items[networks.activeNetwork]?.chainId;
-    const address = wallet.accounts?.[0] as unknown as string;
-    if (chain && address) {
-      clearTimeout(timeoutHandle.current); // cancel the timeout that was in-flight
-      getTransactions(
-        address,
-        wallet.erc20TokenBalanceSelected.address,
-        10,
-        10,
-        chain,
-      );
-    }
-  }, [
-    wallet.erc20TokenBalanceSelected.address,
-    wallet.erc20TokenBalanceSelected.chainId,
-  ]);
+  // useEffect(() => {
+  //   const chain = networks.items[networks.activeNetwork]?.chainId;
+  //   const address = wallet.accounts?.[0] as unknown as string;
+  //   if (chain && address) {
+  //     clearTimeout(timeoutHandle.current); // cancel the timeout that was in-flight
+  //     getTransactions(
+  //       address,
+  //       wallet.erc20TokenBalanceSelected.address,
+  //       10,
+  //       10,
+  //       chain,
+  //     );
+  //   }
+  // }, [
+  //   wallet.erc20TokenBalanceSelected.address,
+  //   wallet.erc20TokenBalanceSelected.chainId,
+  // ]);
 
   return (
     <Wrapper<FC<IListProps<Transaction>>>
@@ -65,7 +62,7 @@ export const TransactionsListView = ({ transactions }: Props) => {
       render={(transaction) => (
         <TransactionListItem transaction={transaction} />
       )}
-      keyExtractor={(transaction) => transaction.txnHash.toString()}
+      keyExtractor={(transaction) => transaction.txHash.toString()}
     />
   );
 };

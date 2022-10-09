@@ -13,8 +13,10 @@ import {
   upsertErc20TokenBalance,
   addWalletOp,
   setTransactions,
+  cleanWalletOp,
+  addTransaction,
 } from '../slices/walletSlice';
-import { Account, Erc20TokenBalance, Network } from '../types';
+import { Account, Erc20TokenBalance, Network, Operation } from '../types';
 import { disableLoading, enableLoadingWithMessage } from '../slices/UISlice';
 import { setNetworks } from '../slices/networkSlice';
 import { addMissingPropertiesToToken } from '../utils/utils';
@@ -319,7 +321,18 @@ export const useBLSSnap = () => {
     return response;
   }
 
-  // async function getOps() {}
+  const getOps = async () => {
+    const data = (await ethereum.request({
+      method: 'wallet_invokeSnap',
+      params: [
+        snapId,
+        {
+          method: 'bls_getOps',
+        },
+      ],
+    })) as Operation[];
+    return data;
+  };
 
   const getTransactions = async (
     senderAddress: string,
@@ -359,16 +372,17 @@ export const useBLSSnap = () => {
         // Filter out stored txns that are not found in the retrieved txns
         const filteredTxns = transactions.filter((txn: Transaction) => {
           return !storedTxns.find((storedTxn: Transaction) =>
-            ethers.BigNumber.from(storedTxn.txnHash).eq(
-              ethers.BigNumber.from(txn.txnHash),
+            ethers.BigNumber.from(storedTxn.txHash).eq(
+              ethers.BigNumber.from(txn.txHash),
             ),
           );
         });
 
-        // sort in timestamp descending order
-        storedTxns = [...storedTxns, ...filteredTxns].sort(
-          (a: Transaction, b: Transaction) => b.timestamp - a.timestamp,
-        );
+        // // sort in timestamp descending order
+        // storedTxns = [...storedTxns, ...filteredTxns].sort(
+        //   (a: Transaction, b: Transaction) => b.timestamp - a.timestamp,
+        // );
+        storedTxns = [...storedTxns, ...filteredTxns];
       }
 
       dispatch(setTransactions(storedTxns));
@@ -384,6 +398,22 @@ export const useBLSSnap = () => {
     }
   };
 
+  const sendBundle = async () => {
+    const data = await ethereum.request({
+      method: 'wallet_invokeSnap',
+      params: [
+        snapId,
+        {
+          method: 'bls_sendBundle',
+        },
+      ],
+    });
+    console.log('sendBundle', data);
+    dispatch(cleanWalletOp());
+    dispatch(addTransaction({ txHash: data.hash }));
+    return data;
+  };
+
   return {
     connectToSnap,
     getNetworks,
@@ -395,7 +425,8 @@ export const useBLSSnap = () => {
     refreshTokensUSDPrice,
     updateTokenBalance,
     addOp,
-    // getOps,
+    getOps,
     getTransactions,
+    sendBundle,
   };
 };

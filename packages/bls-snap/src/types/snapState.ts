@@ -5,6 +5,7 @@ export type SnapState = {
   accounts: BlsAccount[];
   erc20Tokens: Erc20Token[];
   ops: Operation[];
+  transactions: Transaction[];
 };
 
 export type Network = {
@@ -33,14 +34,9 @@ export type Operation = {
 };
 
 export type Transaction = {
-  txnHash: string;
+  txHash: string;
   chainId: string;
-  senderAddress: string;
-  contractAddress: string;
-  contractFuncName: string;
-  contractCallData: string[];
-  status: string;
-  failureReason: string;
-  eventIds: string[];
-  timestamp: number;
+  transactionIndex: string;
+  blockHash: string;
+  blockNumber: string;
 };

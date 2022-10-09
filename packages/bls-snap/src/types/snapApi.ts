@@ -32,9 +32,19 @@ export type AddOperationRequestParams = {
   encodedFunction: string;
 } & BaseRequestParams;
 
+export type GetOperationsRequestParams = BaseRequestParams;
+
+export type GetTransactionsRequestParams = {
+  senderAddress?: string;
+  contractAddress?: string;
+  txHash?: string;
+} & BaseRequestParams;
+
 export type ApiRequestParams =
   | CreateAccountRequestParams
   | GetStoredNetworksRequestParams
   | GetStoredErc20TokensRequestParams
   | GetErc20TokenBalanceRequestParams
-  | AddOperationRequestParams;
+  | AddOperationRequestParams
+  | GetOperationsRequestParams
+  | GetTransactionsRequestParams;

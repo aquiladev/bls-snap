@@ -1,5 +1,10 @@
 import { useAppSelector } from '../../../hooks/redux';
+import { useBLSSnap } from '../../../services/useBLSSnap';
+import { Button } from '../../ui/Button';
 import { Header } from '../../ui/Header';
+import { Buttons, HeaderButton } from '../../ui/Header/Header.style';
+import { Separator } from '../../ui/Header/SendModal/SendModal.style';
+import { OperationsList } from '../../ui/OperationsList';
 import { SideBar } from '../../ui/SideBar';
 import { TransactionsList } from '../../ui/TransactionsList';
 import { RightPart, Wrapper } from './Home.style';
@@ -9,7 +14,15 @@ type Props = {
 };
 
 export const HomeView = ({ address }: Props) => {
-  const { erc20TokenBalanceSelected } = useAppSelector((state) => state.wallet);
+  const { erc20TokenBalanceSelected, ops } = useAppSelector(
+    (state) => state.wallet,
+  );
+  const { sendBundle } = useBLSSnap();
+
+  const handleSendBundle = async () => {
+    await sendBundle();
+  };
+
   return (
     <Wrapper>
       <SideBar address={address} />
@@ -17,7 +30,22 @@ export const HomeView = ({ address }: Props) => {
         {Object.keys(erc20TokenBalanceSelected).length > 0 && (
           <Header address={address} />
         )}
-        <TransactionsList transactions={[]} />
+        <div>
+          <div style={{ padding: 4 }}>Operations</div>
+          <OperationsList operations={[]} />
+          {Boolean(ops.length) && (
+            <Buttons style={{ textAlign: 'center' }}>
+              <HeaderButton onClick={() => handleSendBundle()}>
+                Send Bundle
+              </HeaderButton>
+            </Buttons>
+          )}
+        </div>
+        <Separator />
+        <div>
+          <div style={{ padding: 4 }}>Transactions</div>
+          <TransactionsList transactions={[]} />
+        </div>
       </RightPart>
     </Wrapper>
   );

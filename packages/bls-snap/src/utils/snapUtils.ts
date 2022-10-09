@@ -1,11 +1,18 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { Mutex } from 'async-mutex';
+import { ethers } from 'ethers';
+import {
+  Aggregator,
+  BlsWalletWrapper,
+  validateConfig,
+} from 'bls-wallet-clients';
 import {
   BlsAccount,
   Erc20Token,
   Network,
   Operation,
   SnapState,
+  Transaction,
 } from '../types/snapState';
 import { ARBITRUM_GOERLI_NETWORK } from './constants';
 
@@ -225,4 +232,109 @@ export async function upsertOperation(
       params: ['update', state],
     });
   });
+}
+
+export async function cleanOperations(
+  wallet: any,
+  mutex: Mutex,
+  state: Partial<SnapState>,
+) {
+  return mutex.runExclusive(async () => {
+    if (!state) {
+      state = await wallet.request({
+        method: 'snap_manageState',
+        params: ['get'],
+      });
+    }
+
+    // eslint-disable-next-line require-atomic-updates
+    state.ops = [];
+
+    await wallet.request({
+      method: 'snap_manageState',
+      params: ['update', state],
+    });
+  });
+}
+
+export function getOperations(state: Partial<SnapState>): Operation[] {
+  return state.ops || [];
+}
+
+export async function upsertTransaction(
+  tx: Transaction,
+  wallet: any,
+  mutex: Mutex,
+  state: Partial<SnapState>,
+) {
+  return mutex.runExclusive(async () => {
+    if (!state) {
+      state = await wallet.request({
+        method: 'snap_manageState',
+        params: ['get'],
+      });
+    }
+
+    if (!state.transactions) {
+      state.transactions = [];
+    }
+
+    let exists = false;
+    state.transactions = state.transactions.map((t) => {
+      if (t.txHash === tx.txHash) {
+        exists = true;
+        return tx;
+      }
+      return t;
+    });
+
+    if (!exists) {
+      state.transactions.push(tx);
+    }
+
+    await wallet.request({
+      method: 'snap_manageState',
+      params: ['update', state],
+    });
+  });
+}
+
+export async function getTransactions(
+  wallet: any,
+  mutex: Mutex,
+  state: Partial<SnapState>,
+): Promise<Transaction[]> {
+  // eslint-disable-next-line array-callback-return
+  const pendingTxs = (state.transactions || []).filter((t) => !t.blockNumber);
+  for (const tx of pendingTxs) {
+    await checkTxStatus(tx, wallet, mutex, state);
+  }
+
+  return state.transactions || [];
+}
+
+async function checkTxStatus(
+  tx: Transaction,
+  wallet: any,
+  mutex: Mutex,
+  state: Partial<SnapState>,
+) {
+  const aggregator = new Aggregator('https://arbitrum-goerli.blswallet.org');
+  const maybeReceipt = await aggregator.lookupReceipt(tx.txHash);
+
+  console.log('TX STATUS', tx.txHash, maybeReceipt);
+  if (maybeReceipt) {
+    await upsertTransaction(
+      {
+        txHash: tx.txHash,
+        chainId: tx.chainId,
+        transactionIndex: maybeReceipt.transactionIndex,
+        blockHash: maybeReceipt.blockHash,
+        blockNumber: maybeReceipt.blockNumber,
+      },
+      wallet,
+      mutex,
+      state,
+    );
+  }
 }

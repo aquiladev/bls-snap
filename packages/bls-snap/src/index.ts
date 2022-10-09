@@ -3,8 +3,11 @@ import { Mutex } from 'async-mutex';
 import { addOp } from './addOp';
 import { createAccount } from './createAccount';
 import { getErc20TokenBalance } from './getErc20TokenBalance';
+import { getOps } from './getOps';
 import { getStoredErc20Tokens } from './getStoredErc20Tokens';
 import { getStoredNetworks } from './getStoredNetworks';
+import { getTransactions } from './getTransactions';
+import { sendBundle } from './sendBundle';
 import { ApiParams, ApiRequestParams } from './types/snapApi';
 import { Erc20Token } from './types/snapState';
 import { ARBITRUM_GOERLI_NETWORK } from './utils/constants';
@@ -105,6 +108,12 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
       return getErc20TokenBalance(apiParams);
     case 'bls_addOp':
       return addOp(apiParams);
+    case 'bls_getOps':
+      return getOps(apiParams);
+    case 'bls_getTransactions':
+      return getTransactions(apiParams);
+    case 'bls_sendBundle':
+      return sendBundle(apiParams);
     default:
       throw new Error('Method not found.');
   }
