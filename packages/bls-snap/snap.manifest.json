@@ -7,7 +7,7 @@
     "url": "https://github.com/aquiladev/snap-snap.git"
   },
   "source": {
-    "shasum": "TL0Mbq4gSM2Af5Z5sJUGtjjaSDNL/DsiTh62WsHX6ss=",
+    "shasum": "kqc08PPmWW/blJHWWCwSvsUSMV+fn5KPmpACYwD6h0Y=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",

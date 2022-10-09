@@ -65,8 +65,8 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
   await upsertNetwork(ARBITRUM_GOERLI_NETWORK, wallet, mutex, state);
   const token: Erc20Token = {
     address: ARBITRUM_GOERLI_NETWORK.config.addresses.testToken,
-    name: 'Dai',
-    symbol: 'DAI',
+    name: 'AnyToken',
+    symbol: 'TOK',
     decimals: 18,
     chainId: ARBITRUM_GOERLI_NETWORK.chainId,
   };
