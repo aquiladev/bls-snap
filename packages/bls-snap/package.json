@@ -5,7 +5,7 @@
   "description": "The 'Hello, world!' of MetaMask Snaps, now written in TypeScript.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aquiladev/snap-snap.git"
+    "url": "https://github.com/aquiladev/bls-snap.git"
   },
   "license": "(MIT-0 OR Apache-2.0)",
   "main": "src/index.ts",

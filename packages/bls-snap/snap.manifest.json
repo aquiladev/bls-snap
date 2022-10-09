@@ -4,7 +4,7 @@
   "proposedName": "BLS Snap",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aquiladev/snap-snap.git"
+    "url": "https://github.com/aquiladev/bls-snap.git"
   },
   "source": {
     "shasum": "kqc08PPmWW/blJHWWCwSvsUSMV+fn5KPmpACYwD6h0Y=",
