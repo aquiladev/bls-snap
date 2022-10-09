@@ -50,31 +50,6 @@ export async function sendBundle(params: ApiParams) {
     }
 
     console.log('Bundle hash:', addResult.hash);
-    // const checkConfirmation = async () => {
-    //   console.log('Checking for confirmation');
-    //   const maybeReceipt = await aggregator.lookupReceipt(addResult.hash);
-
-    //   if (maybeReceipt === undefined) {
-    //     return;
-    //   }
-
-    //   console.log('Confirmed in block', maybeReceipt.blockNumber);
-    //   provider.off('block', checkConfirmation);
-    //   await snapUtils.upsertTransaction(
-    //     {
-    //       txHash: addResult.hash,
-    //       chainId: String(netCfg.auxiliary.chainid),
-    //       transactionIndex: maybeReceipt.transactionIndex,
-    //       blockHash: maybeReceipt.blockHash,
-    //       blockNumber: maybeReceipt.blockNumber,
-    //     },
-    //     wallet,
-    //     mutex,
-    //     state,
-    //   );
-    // };
-
-    // provider.on('block', checkConfirmation);
 
     await snapUtils.upsertTransaction(
       {
