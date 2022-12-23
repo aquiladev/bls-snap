@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { ethers, utils, providers } from 'ethers';
+import { ethers, utils, BigNumber } from 'ethers';
 import { ApiParams, GetErc20TokenBalanceRequestParams } from './types/snapApi';
 
 export async function getErc20TokenBalance(params: ApiParams) {
@@ -38,19 +38,17 @@ export async function getErc20TokenBalance(params: ApiParams) {
 
     const provider = new ethers.providers.JsonRpcProvider(
       'https://goerli-rollup.arbitrum.io/rpc',
+      { name: '', chainId: 421613 },
     );
-    const result = await provider.send('eth_call', [
-      {
-        to: tokenAddress,
-        data: callData,
-      },
-      'latest',
-    ]);
+    const result = await provider.call({
+      to: tokenAddress,
+      data: callData,
+    });
     const [balance] = utils.defaultAbiCoder.decode(['uint256'], result);
 
     console.log(`getErc20Balance:\nresp: ${JSON.stringify(balance)}`);
 
-    return balance;
+    return BigNumber.from(balance).toHexString();
   } catch (err) {
     console.error(`Problem found: ${err}`);
     throw err;

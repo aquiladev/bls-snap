@@ -175,6 +175,8 @@ export const useBLSSnap = () => {
     // }
 
     const acc: Account = await addAccount(chainId);
+    dispatch(setAccounts(acc));
+
     const tokens = await getTokens(chainId);
     console.log('Tokens', tokens);
     const tokenBalances = await Promise.all(
@@ -201,7 +203,6 @@ export const useBLSSnap = () => {
       dispatch(setNetworks(networks));
     }
     dispatch(setErc20TokenBalances(tokensWithBalances));
-    dispatch(setAccounts(acc));
 
     if (tokensWithBalances.length > 0) {
       setErc20TokenBalance(tokensWithBalances[0]);
@@ -220,7 +221,7 @@ export const useBLSSnap = () => {
     }
 
     if (!loader.isLoading) {
-      dispatch(enableLoadingWithMessage('Initializing wallet ...'));
+      dispatch(enableLoadingWithMessage('Initializing wallet...'));
     }
 
     try {
@@ -297,7 +298,7 @@ export const useBLSSnap = () => {
     const provider = new ethers.providers.JsonRpcProvider(
       'https://goerli-rollup.arbitrum.io/rpc',
     );
-    const erc20Address = '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853';
+    const erc20Address = '0x5081a39b8A5f0E35a8D959395a630b68B74Dd30f';
     const erc20Abi = ['function mint(address to, uint amount) returns (bool)'];
     const erc20 = new ethers.Contract(erc20Address, erc20Abi, provider);
 
