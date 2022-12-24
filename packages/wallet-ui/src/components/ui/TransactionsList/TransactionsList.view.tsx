@@ -1,4 +1,4 @@
-import { Transaction } from 'bls-snap/src/types/snapState';
+import { Bundle } from 'bls-snap/src/types/snapState';
 import { FC, useEffect, useRef } from 'react';
 import { useAppSelector } from '../../../hooks/redux';
 import { useBLSSnap } from '../../../services/useBLSSnap';
@@ -8,11 +8,11 @@ import { TransactionListItem } from './TransactionListItem';
 import { Wrapper } from './TransactionsList.style';
 
 type Props = {
-  transactions: Transaction[];
+  transactions: Bundle[];
 };
 
 export const TransactionsListView = ({ transactions }: Props) => {
-  const { getTransactions } = useBLSSnap();
+  const { getBundles } = useBLSSnap();
   const networks = useAppSelector((state) => state.networks);
   const wallet = useAppSelector((state) => state.wallet);
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -24,19 +24,20 @@ export const TransactionsListView = ({ transactions }: Props) => {
     const address = wallet.accounts?.[0] as unknown as string;
     if (chain && address) {
       clearTimeout(timeoutHandle.current); // cancel the timeout that was in-flight
-      timeoutHandle.current = setTimeout(() => {
-        console.log('check txs');
-        return getTransactions(
+      timeoutHandle.current = setTimeout(async () => {
+        console.log('check bundles');
+        const bundles = await getBundles(
           address,
           wallet.erc20TokenBalanceSelected.address,
           10,
-          10,
           chain,
         );
+        console.log('bundles', bundles);
+        return bundles;
       }, TRANSACTIONS_REFRESH_FREQUENCY);
       return () => clearTimeout(timeoutHandle.current);
     }
-  }, [wallet.transactions]);
+  }, [wallet.bundles]);
 
   // useEffect(() => {
   //   const chain = networks.items[networks.activeNetwork]?.chainId;
@@ -57,12 +58,12 @@ export const TransactionsListView = ({ transactions }: Props) => {
   // ]);
 
   return (
-    <Wrapper<FC<IListProps<Transaction>>>
-      data={transactions.length > 0 ? transactions : wallet.transactions}
+    <Wrapper<FC<IListProps<Bundle>>>
+      data={transactions.length > 0 ? transactions : wallet.bundles}
       render={(transaction) => (
         <TransactionListItem transaction={transaction} />
       )}
-      keyExtractor={(transaction) => transaction.txHash.toString()}
+      keyExtractor={(transaction) => transaction.bundleHash.toString()}
     />
   );
 };

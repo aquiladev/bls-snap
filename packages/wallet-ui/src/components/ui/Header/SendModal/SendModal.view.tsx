@@ -8,10 +8,8 @@ import {
   Buttons,
   ButtonStyled,
   Header,
-  MessageAlert,
   Network,
   Separator,
-  SeparatorSmall,
   Title,
   Wrapper,
 } from './SendModal.style';
@@ -30,7 +28,7 @@ export const SendModalView = ({ closeModal }: Props) => {
     chainId:
       networks.items.length > 0
         ? networks.items[networks.activeNetwork].chainId
-        : '',
+        : 0,
   });
   const [errors, setErrors] = useState({ amount: '', address: '' });
 

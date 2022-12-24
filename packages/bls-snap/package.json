@@ -60,6 +60,6 @@
   "dependencies": {
     "async-mutex": "^0.4.0",
     "bls-wallet-clients": "^0.8.1",
-    "ethers": "^5.7.1"
+    "ethers": "^5.7.2"
   }
 }

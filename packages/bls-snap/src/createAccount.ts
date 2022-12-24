@@ -8,7 +8,7 @@ import { upsertAccount } from './utils/snapUtils';
 
 export async function createAccount(params: ApiParams) {
   try {
-    const { state, mutex } = params;
+    const { state, mutex, wallet } = params;
     const netCfg = validateConfig(ARBITRUM_GOERLI_NETWORK.config);
 
     const provider = new ethers.providers.JsonRpcProvider(
@@ -29,7 +29,11 @@ export async function createAccount(params: ApiParams) {
     );
 
     await upsertAccount(
-      { address: account.address, chainId: ARBITRUM_GOERLI_NETWORK.chainId },
+      {
+        chainId: ARBITRUM_GOERLI_NETWORK.chainId,
+        address: account.address,
+        privateKey,
+      },
       wallet,
       mutex,
       state,

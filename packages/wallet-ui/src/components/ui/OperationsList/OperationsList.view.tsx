@@ -12,7 +12,7 @@ type Props = {
 };
 
 export const OperationsListView = ({ operations }: Props) => {
-  const { getOps } = useBLSSnap();
+  const { getOperations } = useBLSSnap();
   const networks = useAppSelector((state) => state.networks);
   const wallet = useAppSelector((state) => state.wallet);
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -25,16 +25,16 @@ export const OperationsListView = ({ operations }: Props) => {
     if (chain && address) {
       clearTimeout(timeoutHandle.current); // cancel the timeout that was in-flight
       timeoutHandle.current = setTimeout(
-        () => getOps(),
+        () => getOperations(),
         TRANSACTIONS_REFRESH_FREQUENCY,
       );
       return () => clearTimeout(timeoutHandle.current);
     }
-  }, [wallet.ops]);
+  }, [wallet.operations]);
 
   return (
     <Wrapper<FC<IListProps<Operation>>>
-      data={operations.length > 0 ? operations : wallet.ops}
+      data={operations.length > 0 ? operations : wallet.operations}
       render={(op) => <OperationListItem operation={op} />}
       keyExtractor={(op) => op.contractAddress + op.encodedFunction}
     />

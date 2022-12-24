@@ -1,6 +1,5 @@
 import { useAppSelector } from '../../../hooks/redux';
 import { useBLSSnap } from '../../../services/useBLSSnap';
-import { Button } from '../../ui/Button';
 import { Header } from '../../ui/Header';
 import { Buttons, HeaderButton } from '../../ui/Header/Header.style';
 import { Separator } from '../../ui/Header/SendModal/SendModal.style';
@@ -14,13 +13,13 @@ type Props = {
 };
 
 export const HomeView = ({ address }: Props) => {
-  const { erc20TokenBalanceSelected, ops } = useAppSelector(
+  const { erc20TokenBalanceSelected, operations: ops } = useAppSelector(
     (state) => state.wallet,
   );
   const { sendBundle } = useBLSSnap();
 
   const handleSendBundle = async () => {
-    await sendBundle();
+    await sendBundle(address, erc20TokenBalanceSelected.chainId);
   };
 
   return (
@@ -43,7 +42,7 @@ export const HomeView = ({ address }: Props) => {
         </div>
         <Separator />
         <div>
-          <div style={{ padding: 4 }}>Transactions</div>
+          <div style={{ padding: 4 }}>Bundles</div>
           <TransactionsList transactions={[]} />
         </div>
       </RightPart>

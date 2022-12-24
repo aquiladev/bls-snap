@@ -2,9 +2,9 @@
 import { ApiParams, AddOperationRequestParams } from './types/snapApi';
 import { upsertOperation } from './utils/snapUtils';
 
-export async function addOp(params: ApiParams) {
+export async function addOperation(params: ApiParams) {
   try {
-    const { state, mutex, requestParams } = params;
+    const { state, mutex, requestParams, wallet } = params;
     const { contractAddress, encodedFunction } =
       requestParams as AddOperationRequestParams;
 

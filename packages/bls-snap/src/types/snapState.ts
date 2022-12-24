@@ -5,7 +5,7 @@ export type SnapState = {
   accounts: BlsAccount[];
   erc20Tokens: Erc20Token[];
   ops: Operation[];
-  transactions: Transaction[];
+  bundles: Bundle[];
 };
 
 export type Network = {
@@ -18,6 +18,7 @@ export type Network = {
 
 export type BlsAccount = {
   address: string;
+  privateKey: string;
   chainId: number;
 };
 
@@ -35,10 +36,11 @@ export type Operation = {
   encodedFunction: string;
 };
 
-export type Transaction = {
-  txHash: string;
+export type Bundle = {
+  bundleHash: string;
   chainId: number;
-  transactionIndex: string;
-  blockHash: string;
-  blockNumber: string;
+  error?: string;
+  transactionIndex?: number;
+  blockHash?: string;
+  blockNumber?: number;
 };

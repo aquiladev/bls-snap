@@ -5,16 +5,24 @@ import {
   BlsWalletWrapper,
   validateConfig,
 } from 'bls-wallet-clients';
-import { ApiParams } from './types/snapApi';
+import { ApiParams, SendBundleRequestParams } from './types/snapApi';
 import { ARBITRUM_GOERLI_NETWORK } from './utils/constants';
 import * as snapUtils from './utils/snapUtils';
-import { Transaction } from './types/snapState';
+import { Bundle } from './types/snapState';
 
 export async function sendBundle(params: ApiParams) {
   try {
-    const { state, mutex } = params;
-    const ops = snapUtils.getOperations(state);
-    console.log('OPS', ops);
+    const { state, mutex, wallet, requestParams } = params;
+    const { senderAddress, chainId } = requestParams as SendBundleRequestParams;
+
+    const account = snapUtils.getAccount(state, senderAddress, chainId);
+    console.log('ACCOUNT', account);
+    if (!account) {
+      throw new Error(`Account not found: ${senderAddress}`);
+    }
+
+    const operations = snapUtils.getOperations(state);
+    console.log('OPERATIONS', operations);
 
     const netCfg = validateConfig(ARBITRUM_GOERLI_NETWORK.config);
 
@@ -23,24 +31,20 @@ export async function sendBundle(params: ApiParams) {
       { name: '', chainId: ARBITRUM_GOERLI_NETWORK.chainId },
     );
 
-    // 32 random bytes
-    const privateKey =
-      '0x0001020304050607080910111213141516171819202122232425262728293031';
-
     // Note that if a wallet doesn't yet exist, it will be
     // lazily created on the first transaction.
-    const account = await BlsWalletWrapper.connect(
-      privateKey,
+    const _account = await BlsWalletWrapper.connect(
+      account.privateKey,
       netCfg.addresses.verificationGateway,
       provider,
     );
 
-    const nonce = await account.Nonce();
+    const nonce = await _account.Nonce();
     // All of the actions in a bundle are atomic, if one
     // action fails they will all fail.
-    const bundle = account.sign({
+    const bundle = _account.sign({
       nonce,
-      actions: ops,
+      actions: operations,
     });
 
     const aggregator = new Aggregator(ARBITRUM_GOERLI_NETWORK.aggregator);
@@ -52,11 +56,11 @@ export async function sendBundle(params: ApiParams) {
 
     console.log('Bundle hash:', addResult.hash);
 
-    await snapUtils.upsertTransaction(
+    await snapUtils.upsertBundle(
       {
-        txHash: addResult.hash,
+        bundleHash: addResult.hash,
         chainId: ARBITRUM_GOERLI_NETWORK.chainId,
-      } as Transaction,
+      } as Bundle,
       wallet,
       mutex,
       state,

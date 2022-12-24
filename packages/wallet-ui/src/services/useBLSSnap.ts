@@ -2,8 +2,7 @@
 import { ethers } from 'ethers';
 import Toastr from 'toastr2';
 import semver from 'semver/preload';
-import { Erc20Token, Transaction } from 'bls-snap/src/types/snapState';
-import { ARBITRUM_GOERLI_NETWORK } from 'bls-snap/src/utils/constants';
+import { Erc20Token, Bundle } from 'bls-snap/src/types/snapState';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import {
   setForceReconnect,
@@ -12,10 +11,10 @@ import {
   setAccounts,
   setErc20TokenBalances,
   upsertErc20TokenBalance,
-  addWalletOp,
-  setTransactions,
-  cleanWalletOp,
-  addTransaction,
+  addOperation as addOp,
+  cleanOperations,
+  setBundles,
+  addBundle,
 } from '../slices/walletSlice';
 import { Account, Erc20TokenBalance, Network, Operation } from '../types';
 import { disableLoading, enableLoadingWithMessage } from '../slices/UISlice';
@@ -26,7 +25,7 @@ import { getAssetPriceUSD } from './coinGecko';
 export const useBLSSnap = () => {
   const dispatch = useAppDispatch();
   const { activeNetwork } = useAppSelector((state) => state.networks);
-  const { erc20TokenBalances, transactions } = useAppSelector(
+  const { erc20TokenBalances, bundles } = useAppSelector(
     (state) => state.wallet,
   );
   const { loader } = useAppSelector((state) => state.UI);
@@ -92,7 +91,7 @@ export const useBLSSnap = () => {
       params: [
         snapId,
         {
-          method: 'bls_getStoredNetworks',
+          method: 'bls_getNetworks',
         },
       ],
     })) as Network[];
@@ -105,6 +104,24 @@ export const useBLSSnap = () => {
       return semver.lt(snaps[snapId]?.version, minSnapVersion);
     }
     return false;
+  };
+
+  const recoverAccounts = async (chainId: number) => {
+    dispatch(enableLoadingWithMessage('Recovering accounts...'));
+    const data = (await ethereum.request({
+      method: 'wallet_invokeSnap',
+      params: [
+        snapId,
+        {
+          method: 'bls_recoverAccounts',
+          params: {
+            chainId,
+          },
+        },
+      ],
+    })) as Account[];
+    console.log('RecoverAccounts', data);
+    return data;
   };
 
   const addAccount = async (chainId: number) => {
@@ -121,6 +138,7 @@ export const useBLSSnap = () => {
         },
       ],
     })) as Account;
+    console.log('CreateAccount', data);
     return data;
   };
 
@@ -130,7 +148,7 @@ export const useBLSSnap = () => {
       params: [
         snapId,
         {
-          method: 'bls_getStoredErc20Tokens',
+          method: 'bls_getErc20Tokens',
           params: {
             chainId,
           },
@@ -170,12 +188,13 @@ export const useBLSSnap = () => {
     if (!loader.isLoading && !networks) {
       dispatch(enableLoadingWithMessage('Getting network data ...'));
     }
-    // let acc: Account[] | Account = await recoverAccounts(chainId);
-    // if (!acc || acc.length === 0 || !acc[0].address) {
-    //   acc = await addAccount(chainId);
-    // }
 
-    const acc: Account = await addAccount(chainId);
+    let acc: Account[] | Account = await recoverAccounts(chainId);
+    if (!acc || acc.length === 0 || !acc[0].address) {
+      // eslint-disable-next-line require-atomic-updates
+      acc = await addAccount(chainId);
+    }
+    // const acc: Account = await addAccount(chainId);
     dispatch(setAccounts(acc));
 
     const tokens = await getTokens(chainId);
@@ -295,21 +314,17 @@ export const useBLSSnap = () => {
     }
   };
 
-  async function addOp(address: string) {
-    const provider = new ethers.providers.JsonRpcProvider(
-      ARBITRUM_GOERLI_NETWORK.rpcUrl,
-      { name: '', chainId: ARBITRUM_GOERLI_NETWORK.chainId },
-    );
+  async function addOperation(address: string) {
     const erc20Address = '0x5081a39b8A5f0E35a8D959395a630b68B74Dd30f';
     const erc20Abi = ['function mint(address to, uint amount) returns (bool)'];
-    const erc20 = new ethers.Contract(erc20Address, erc20Abi, provider);
+    const erc20 = new ethers.Contract(erc20Address, erc20Abi);
 
     const response = await ethereum.request({
       method: 'wallet_invokeSnap',
       params: [
         snapId,
         {
-          method: 'bls_addOp',
+          method: 'bls_addOperation',
           params: {
             contractAddress: erc20Address,
             encodedFunction: erc20.interface.encodeFunctionData('mint', [
@@ -320,34 +335,33 @@ export const useBLSSnap = () => {
         },
       ],
     });
-    dispatch(addWalletOp(response));
+    dispatch(addOp(response));
     return response;
   }
 
-  const getOps = async () => {
+  const getOperations = async () => {
     const data = (await ethereum.request({
       method: 'wallet_invokeSnap',
       params: [
         snapId,
         {
-          method: 'bls_getOps',
+          method: 'bls_getOperations',
         },
       ],
     })) as Operation[];
     return data;
   };
 
-  const getTransactions = async (
+  const getBundles = async (
     senderAddress: string,
     contractAddress: string,
     pageSize: number,
-    txnsInLastNumOfDays: number,
     chainId: number,
     showLoading = true,
     onlyFromState = false,
   ) => {
     if (showLoading) {
-      dispatch(enableLoadingWithMessage('Retrieving transactions...'));
+      dispatch(enableLoadingWithMessage('Retrieving bundles...'));
     }
 
     try {
@@ -356,27 +370,24 @@ export const useBLSSnap = () => {
         params: [
           snapId,
           {
-            method: 'bls_getTransactions',
+            method: 'bls_getBundles',
             params: {
               senderAddress,
               contractAddress,
               pageSize,
-              txnsInLastNumOfDays,
-              onlyFromState,
-              withDeployTxn: true,
               chainId,
             },
           },
         ],
       });
 
-      let storedTxns = data;
+      let _bundles = data;
       if (onlyFromState) {
         // Filter out stored txns that are not found in the retrieved txns
-        const filteredTxns = transactions.filter((txn: Transaction) => {
-          return !storedTxns.find((storedTxn: Transaction) =>
-            ethers.BigNumber.from(storedTxn.txHash).eq(
-              ethers.BigNumber.from(txn.txHash),
+        const filteredBundles = bundles.filter((bundle: Bundle) => {
+          return !_bundles.find((b: Bundle) =>
+            ethers.BigNumber.from(b.bundleHash).eq(
+              ethers.BigNumber.from(bundle.bundleHash),
             ),
           );
         });
@@ -385,10 +396,10 @@ export const useBLSSnap = () => {
         // storedTxns = [...storedTxns, ...filteredTxns].sort(
         //   (a: Transaction, b: Transaction) => b.timestamp - a.timestamp,
         // );
-        storedTxns = [...storedTxns, ...filteredTxns];
+        _bundles = [..._bundles, ...filteredBundles];
       }
 
-      dispatch(setTransactions(storedTxns));
+      dispatch(setBundles(_bundles));
 
       if (showLoading) {
         dispatch(disableLoading());
@@ -396,24 +407,28 @@ export const useBLSSnap = () => {
       return data;
     } catch (err) {
       dispatch(disableLoading());
-      dispatch(setTransactions([]));
+      dispatch(setBundles([]));
       console.error(err);
     }
   };
 
-  const sendBundle = async () => {
+  const sendBundle = async (senderAddress: string, chainId: number) => {
     const data = await ethereum.request({
       method: 'wallet_invokeSnap',
       params: [
         snapId,
         {
           method: 'bls_sendBundle',
+          params: {
+            senderAddress,
+            chainId,
+          },
         },
       ],
     });
     console.log('sendBundle', data);
-    dispatch(cleanWalletOp());
-    dispatch(addTransaction({ txHash: data.hash }));
+    dispatch(cleanOperations());
+    dispatch(addBundle({ bundleHash: data.hash }));
     return data;
   };
 
@@ -427,9 +442,9 @@ export const useBLSSnap = () => {
     setErc20TokenBalance,
     refreshTokensUSDPrice,
     updateTokenBalance,
-    addOp,
-    getOps,
-    getTransactions,
+    addOperation,
+    getOperations,
+    getBundles,
     sendBundle,
   };
 };

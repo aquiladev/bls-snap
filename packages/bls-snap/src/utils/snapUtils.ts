@@ -7,7 +7,7 @@ import {
   Network,
   Operation,
   SnapState,
-  Transaction,
+  Bundle,
 } from '../types/snapState';
 import { ARBITRUM_GOERLI_NETWORK } from './constants';
 
@@ -27,24 +27,24 @@ export async function upsertNetwork(
       });
     }
 
-    const storedNetwork = getNetwork(state, network.chainId);
+    const _network = getNetwork(state, network.chainId);
     // eslint-disable-next-line no-negated-condition
-    if (!storedNetwork) {
+    if (!_network) {
       if (!state.networks) {
         state.networks = [];
       }
 
       state.networks.push(network);
     } else {
-      if (JSON.stringify(storedNetwork) === JSON.stringify(network)) {
+      if (JSON.stringify(_network) === JSON.stringify(network)) {
         console.log(
           `upsertNetwork: same network and hence skip calling snap state update: ${JSON.stringify(
-            storedNetwork,
+            _network,
           )}`,
         );
         return;
       }
-      storedNetwork.name = network.name;
+      _network.name = network.name;
     }
 
     await wallet.request({
@@ -62,9 +62,9 @@ export function getNetworks(state: Partial<SnapState>) {
   return state.networks;
 }
 
-export function getNetworkFromChainId(
+export function getNetworkByChainId(
   state: Partial<SnapState>,
-  targerChainId: number | undefined,
+  targerChainId?: number,
 ) {
   const chainId = targerChainId || ARBITRUM_GOERLI_NETWORK.chainId;
   const network = getNetwork(state, chainId);
@@ -75,9 +75,65 @@ export function getNetworkFromChainId(
   }
 
   console.log(
-    `getNetworkFromChainId: From ${targerChainId}:\n${JSON.stringify(network)}`,
+    `getNetworkByChainId: From ${targerChainId}:\n${JSON.stringify(network)}`,
   );
   return network;
+}
+
+export function getAccount(
+  state: Partial<SnapState>,
+  address: string,
+  chainId: number,
+) {
+  return state.accounts?.find(
+    (acc) =>
+      acc.address.toLowerCase() === address.toLowerCase() &&
+      acc.chainId === chainId,
+  );
+}
+
+export function getAccounts(state: Partial<SnapState>, chainId: number) {
+  return state.accounts?.filter((acc) => acc.chainId === chainId);
+}
+
+export async function upsertAccount(
+  account: BlsAccount,
+  wallet: any,
+  mutex: Mutex,
+  state: Partial<SnapState>,
+) {
+  return mutex.runExclusive(async () => {
+    if (!state) {
+      // eslint-disable-next-line require-atomic-updates, no-param-reassign
+      state = await wallet.request({
+        method: 'snap_manageState',
+        params: ['get'],
+      });
+    }
+
+    const _account = getAccount(state, account.address, account.chainId);
+    if (_account) {
+      if (JSON.stringify(_account) === JSON.stringify(account)) {
+        console.log(
+          `upsertAccount: same account and hence skip calling snap state update: ${JSON.stringify(
+            _account,
+          )}`,
+        );
+        return;
+      }
+    } else {
+      if (!state.accounts) {
+        state.accounts = [];
+      }
+
+      state.accounts.push(account);
+    }
+
+    await wallet.request({
+      method: 'snap_manageState',
+      params: ['update', state],
+    });
+  });
 }
 
 export function getErc20Token(
@@ -104,89 +160,35 @@ export async function upsertErc20Token(
 ) {
   return mutex.runExclusive(async () => {
     if (!state) {
+      // eslint-disable-next-line require-atomic-updates, no-param-reassign
       state = await wallet.request({
         method: 'snap_manageState',
         params: ['get'],
       });
     }
 
-    const storedErc20Token = getErc20Token(
+    const _erc20Token = getErc20Token(
       state,
       erc20Token.address,
       erc20Token.chainId,
     );
-    if (storedErc20Token) {
-      if (JSON.stringify(storedErc20Token) === JSON.stringify(erc20Token)) {
+    if (_erc20Token) {
+      if (JSON.stringify(_erc20Token) === JSON.stringify(erc20Token)) {
         console.log(
           `upsertErc20Token: same Erc20 token and hence skip calling snap state update: ${JSON.stringify(
-            storedErc20Token,
+            _erc20Token,
           )}`,
         );
         return;
       }
-      storedErc20Token.name = erc20Token.name;
-      storedErc20Token.symbol = erc20Token.symbol;
-      storedErc20Token.decimals = erc20Token.decimals;
+      _erc20Token.name = erc20Token.name;
+      _erc20Token.symbol = erc20Token.symbol;
+      _erc20Token.decimals = erc20Token.decimals;
     } else {
       if (!state.erc20Tokens) {
         state.erc20Tokens = [];
       }
       state.erc20Tokens.push(erc20Token);
-    }
-
-    await wallet.request({
-      method: 'snap_manageState',
-      params: ['update', state],
-    });
-  });
-}
-
-export function getAccount(
-  state: Partial<SnapState>,
-  accountAddress: string,
-  chainId: number,
-) {
-  return state.accounts?.find(
-    (acc) =>
-      acc.address.toLowerCase() === accountAddress.toLowerCase() &&
-      acc.chainId === chainId,
-  );
-}
-
-export function getAccounts(state: Partial<SnapState>, chainId: number) {
-  return state.accounts?.filter((acc) => acc.chainId === chainId);
-}
-
-export async function upsertAccount(
-  account: BlsAccount,
-  wallet: any,
-  mutex: Mutex,
-  state: Partial<SnapState>,
-) {
-  return mutex.runExclusive(async () => {
-    if (!state) {
-      state = await wallet.request({
-        method: 'snap_manageState',
-        params: ['get'],
-      });
-    }
-
-    const storedAccount = getAccount(state, account.address, account.chainId);
-    if (storedAccount) {
-      if (JSON.stringify(storedAccount) === JSON.stringify(account)) {
-        console.log(
-          `upsertAccount: same account and hence skip calling snap state update: ${JSON.stringify(
-            storedAccount,
-          )}`,
-        );
-        return;
-      }
-    } else {
-      if (!state.accounts) {
-        state.accounts = [];
-      }
-
-      state.accounts.push(account);
     }
 
     await wallet.request({
@@ -204,6 +206,7 @@ export async function upsertOperation(
 ) {
   return mutex.runExclusive(async () => {
     if (!state) {
+      // eslint-disable-next-line require-atomic-updates, no-param-reassign
       state = await wallet.request({
         method: 'snap_manageState',
         params: ['get'],
@@ -230,6 +233,7 @@ export async function cleanOperations(
 ) {
   return mutex.runExclusive(async () => {
     if (!state) {
+      // eslint-disable-next-line require-atomic-updates, no-param-reassign
       state = await wallet.request({
         method: 'snap_manageState',
         params: ['get'],
@@ -250,35 +254,36 @@ export function getOperations(state: Partial<SnapState>): Operation[] {
   return state.ops || [];
 }
 
-export async function upsertTransaction(
-  tx: Transaction,
+export async function upsertBundle(
+  bundle: Bundle,
   wallet: any,
   mutex: Mutex,
   state: Partial<SnapState>,
 ) {
   return mutex.runExclusive(async () => {
     if (!state) {
+      // eslint-disable-next-line require-atomic-updates, no-param-reassign
       state = await wallet.request({
         method: 'snap_manageState',
         params: ['get'],
       });
     }
 
-    if (!state.transactions) {
-      state.transactions = [];
+    if (!state.bundles) {
+      state.bundles = [];
     }
 
     let exists = false;
-    state.transactions = state.transactions.map((t) => {
-      if (t.txHash === tx.txHash) {
+    state.bundles = state.bundles.map((t) => {
+      if (t.bundleHash === bundle.bundleHash) {
         exists = true;
-        return tx;
+        return bundle;
       }
       return t;
     });
 
     if (!exists) {
-      state.transactions.push(tx);
+      state.bundles.push(bundle);
     }
 
     await wallet.request({
@@ -288,42 +293,42 @@ export async function upsertTransaction(
   });
 }
 
-export async function getTransactions(
+export async function getBundles(
   wallet: any,
   mutex: Mutex,
   state: Partial<SnapState>,
-): Promise<Transaction[]> {
+): Promise<Bundle[]> {
   // eslint-disable-next-line array-callback-return
-  const pendingTxs = (state.transactions || []).filter((t) => !t.blockNumber);
-  for (const tx of pendingTxs) {
-    await checkTxStatus(tx, wallet, mutex, state);
+  const pendingBundles = (state.bundles || []).filter((t) => !t.blockNumber);
+  for (const bundle of pendingBundles) {
+    await checkBundleStatus(bundle, wallet, mutex, state);
   }
 
-  return state.transactions || [];
+  return state.bundles || [];
 }
 
-async function checkTxStatus(
-  tx: Transaction,
+async function checkBundleStatus(
+  bundle: Bundle,
   wallet: any,
   mutex: Mutex,
   state: Partial<SnapState>,
 ) {
   const aggregator = new Aggregator(ARBITRUM_GOERLI_NETWORK.aggregator);
-  const maybeReceipt = await aggregator.lookupReceipt(tx.txHash);
+  const receipt = await aggregator.lookupReceipt(bundle.bundleHash);
 
-  console.log('TX STATUS', tx.txHash, maybeReceipt);
-  if (maybeReceipt) {
-    await upsertTransaction(
-      {
-        txHash: tx.txHash,
-        chainId: tx.chainId,
-        transactionIndex: maybeReceipt.transactionIndex,
-        blockHash: maybeReceipt.blockHash,
-        blockNumber: maybeReceipt.blockNumber,
-      },
-      wallet,
-      mutex,
-      state,
-    );
+  console.log('BUNDLE STATUS', bundle.bundleHash, receipt);
+  if (receipt) {
+    const _bundle: Bundle = {
+      bundleHash: bundle.bundleHash,
+      chainId: bundle.chainId,
+    };
+    if ('submitError' in receipt) {
+      _bundle.error = receipt.submitError;
+    } else {
+      _bundle.transactionIndex = receipt.transactionIndex;
+      _bundle.blockHash = receipt.blockHash;
+      _bundle.blockNumber = receipt.blockNumber;
+    }
+    await upsertBundle(_bundle, wallet, mutex, state);
   }
 }

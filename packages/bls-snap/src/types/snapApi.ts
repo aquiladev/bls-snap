@@ -9,18 +9,16 @@ export type ApiParams = {
 };
 
 export type BaseRequestParams = {
-  chainId?: number;
-  isDev?: boolean;
+  chainId: number;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export type RecoverAccountRequestParams = BaseRequestParams;
+
 export type CreateAccountRequestParams = BaseRequestParams;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/ban-types
-export type GetStoredNetworksRequestParams = Omit<BaseRequestParams, 'chainId'>;
+export type GetNetworksRequestParams = Omit<BaseRequestParams, 'chainId'>;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export type GetStoredErc20TokensRequestParams = BaseRequestParams;
+export type GetErc20TokensRequestParams = BaseRequestParams;
 
 export type GetErc20TokenBalanceRequestParams = {
   tokenAddress: string;
@@ -34,17 +32,23 @@ export type AddOperationRequestParams = {
 
 export type GetOperationsRequestParams = BaseRequestParams;
 
-export type GetTransactionsRequestParams = {
+export type GetBundlesRequestParams = {
   senderAddress?: string;
   contractAddress?: string;
-  txHash?: string;
+  bundleHash?: string;
+} & BaseRequestParams;
+
+export type SendBundleRequestParams = {
+  senderAddress: string;
 } & BaseRequestParams;
 
 export type ApiRequestParams =
+  | RecoverAccountRequestParams
   | CreateAccountRequestParams
-  | GetStoredNetworksRequestParams
-  | GetStoredErc20TokensRequestParams
+  | GetNetworksRequestParams
+  | GetErc20TokensRequestParams
   | GetErc20TokenBalanceRequestParams
   | AddOperationRequestParams
   | GetOperationsRequestParams
-  | GetTransactionsRequestParams;
+  | GetBundlesRequestParams
+  | SendBundleRequestParams;
