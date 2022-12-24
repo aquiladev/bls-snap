@@ -26,6 +26,11 @@
     "serve": "mm-snap serve",
     "start": "mm-snap watch"
   },
+  "dependencies": {
+    "async-mutex": "^0.4.0",
+    "bls-wallet-clients": "^0.8.1",
+    "ethers": "^5.7.2"
+  },
   "devDependencies": {
     "@lavamoat/allow-scripts": "^2.0.3",
     "@metamask/auto-changelog": "^2.6.0",
@@ -56,10 +61,5 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
-  },
-  "dependencies": {
-    "async-mutex": "^0.4.0",
-    "bls-wallet-clients": "^0.8.1",
-    "ethers": "^5.7.2"
   }
 }

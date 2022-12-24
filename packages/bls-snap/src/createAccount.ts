@@ -16,9 +16,13 @@ export async function createAccount(params: ApiParams) {
       { name: '', chainId: ARBITRUM_GOERLI_NETWORK.chainId },
     );
 
+    // const privateKey =
+    //   '0x0001020304050607080910111213141516171819202122232425262728293031';
+
     // 32 random bytes
-    const privateKey =
-      '0x0001020304050607080910111213141516171819202122232425262728293031';
+    const _arr = new Uint8Array(32);
+    crypto.getRandomValues(_arr);
+    const privateKey = ethers.utils.hexlify(_arr);
 
     // Note that if a wallet doesn't yet exist, it will be
     // lazily created on the first transaction.
