@@ -9,7 +9,7 @@ export type ApiParams = {
 };
 
 export type BaseRequestParams = {
-  chainId?: string;
+  chainId?: number;
   isDev?: boolean;
 };
 

@@ -6995,6 +6995,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bls-snap@file:../bls-snap::locator=wallet-ui%40workspace%3Apackages%2Fwallet-ui":
+  version: 0.1.0
+  resolution: "bls-snap@file:../bls-snap#../bls-snap::hash=fdf3ad&locator=wallet-ui%40workspace%3Apackages%2Fwallet-ui"
+  dependencies:
+    async-mutex: ^0.4.0
+    bls-wallet-clients: ^0.8.1
+    ethers: ^5.7.1
+  checksum: df8ce0073908064f7feeddc030a6c0c1aa0a6765ee26cea4abd55d6b4537ac178368271e8d4c42ee7dbcfd5e4dc412ba66c160165882875dca0f2d3b5696a306
+  languageName: node
+  linkType: hard
+
 "bls-snap@workspace:packages/bls-snap":
   version: 0.0.0-use.local
   resolution: "bls-snap@workspace:packages/bls-snap"
@@ -18184,6 +18195,7 @@ __metadata:
     "@types/styled-components": ^5.1.25
     "@typescript-eslint/eslint-plugin": ^5.33.0
     "@typescript-eslint/parser": ^5.33.0
+    bls-snap: "file:../bls-snap"
     bls-wallet-clients: ^0.7.3
     buffer: ^6.0.3
     console-browserify: ^1.2.0
@@ -18211,6 +18223,7 @@ __metadata:
     redux-thunk: ^2.4.1
     rimraf: ^3.0.2
     semver: ^7.3.8
+    stream-browserify: ^3.0.0
     styled-components: 5.3.3
     toastr2: ^3.0.0-alpha.18
     typescript: ^4.7.4

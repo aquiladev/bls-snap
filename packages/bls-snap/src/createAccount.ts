@@ -2,7 +2,7 @@
 import { ethers } from 'ethers';
 import { BlsWalletWrapper, validateConfig } from 'bls-wallet-clients';
 
-import { ApiParams, CreateAccountRequestParams } from './types/snapApi';
+import { ApiParams } from './types/snapApi';
 import { ARBITRUM_GOERLI_NETWORK } from './utils/constants';
 import { upsertAccount } from './utils/snapUtils';
 
@@ -12,7 +12,8 @@ export async function createAccount(params: ApiParams) {
     const netCfg = validateConfig(ARBITRUM_GOERLI_NETWORK.config);
 
     const provider = new ethers.providers.JsonRpcProvider(
-      'https://goerli-rollup.arbitrum.io/rpc',
+      ARBITRUM_GOERLI_NETWORK.rpcUrl,
+      { name: '', chainId: ARBITRUM_GOERLI_NETWORK.chainId },
     );
 
     // 32 random bytes
@@ -28,7 +29,7 @@ export async function createAccount(params: ApiParams) {
     );
 
     await upsertAccount(
-      { address: account.address, chainId: String(netCfg.auxiliary.chainid) },
+      { address: account.address, chainId: ARBITRUM_GOERLI_NETWORK.chainId },
       wallet,
       mutex,
       state,

@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 import Toastr from 'toastr2';
 import semver from 'semver/preload';
 import { Erc20Token, Transaction } from 'bls-snap/src/types/snapState';
+import { ARBITRUM_GOERLI_NETWORK } from 'bls-snap/src/utils/constants';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import {
   setForceReconnect,
@@ -106,7 +107,7 @@ export const useBLSSnap = () => {
     return false;
   };
 
-  const addAccount = async (chainId: string) => {
+  const addAccount = async (chainId: number) => {
     dispatch(enableLoadingWithMessage('Creating account...'));
     const data = (await ethereum.request({
       method: 'wallet_invokeSnap',
@@ -123,7 +124,7 @@ export const useBLSSnap = () => {
     return data;
   };
 
-  const getTokens = async (chainId: string) => {
+  const getTokens = async (chainId: number) => {
     const tokens = (await ethereum.request({
       method: 'wallet_invokeSnap',
       params: [
@@ -142,7 +143,7 @@ export const useBLSSnap = () => {
   const getTokenBalance = async (
     tokenAddress: string,
     userAddress: string,
-    chainId: string,
+    chainId: number,
   ) => {
     const response = await ethereum.request({
       method: 'wallet_invokeSnap',
@@ -165,7 +166,7 @@ export const useBLSSnap = () => {
     dispatch(setErc20TokenBalanceSelected(erc20TokenBalance));
   };
 
-  const getWalletData = async (chainId: string, networks?: Network[]) => {
+  const getWalletData = async (chainId: number, networks?: Network[]) => {
     if (!loader.isLoading && !networks) {
       dispatch(enableLoadingWithMessage('Getting network data ...'));
     }
@@ -267,7 +268,7 @@ export const useBLSSnap = () => {
   const updateTokenBalance = async (
     tokenAddress: string,
     accountAddress: string,
-    chainId: string,
+    chainId: number,
   ) => {
     const foundTokenWithBalance = erc20TokenBalances.find(
       (tokenBalance) =>
@@ -296,7 +297,8 @@ export const useBLSSnap = () => {
 
   async function addOp(address: string) {
     const provider = new ethers.providers.JsonRpcProvider(
-      'https://goerli-rollup.arbitrum.io/rpc',
+      ARBITRUM_GOERLI_NETWORK.rpcUrl,
+      { name: '', chainId: ARBITRUM_GOERLI_NETWORK.chainId },
     );
     const erc20Address = '0x5081a39b8A5f0E35a8D959395a630b68B74Dd30f';
     const erc20Abi = ['function mint(address to, uint amount) returns (bool)'];
@@ -340,7 +342,7 @@ export const useBLSSnap = () => {
     contractAddress: string,
     pageSize: number,
     txnsInLastNumOfDays: number,
-    chainId: string,
+    chainId: number,
     showLoading = true,
     onlyFromState = false,
   ) => {

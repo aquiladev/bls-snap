@@ -1,11 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { Mutex } from 'async-mutex';
-import { ethers } from 'ethers';
-import {
-  Aggregator,
-  BlsWalletWrapper,
-  validateConfig,
-} from 'bls-wallet-clients';
+import { Aggregator } from 'bls-wallet-clients';
 import {
   BlsAccount,
   Erc20Token,
@@ -59,10 +54,8 @@ export async function upsertNetwork(
   });
 }
 
-export function getNetwork(state: Partial<SnapState>, chainId: string) {
-  return state.networks?.find(
-    (network) => Number(network.chainId) === Number(chainId),
-  );
+export function getNetwork(state: Partial<SnapState>, chainId: number) {
+  return state.networks?.find((network) => network.chainId === chainId);
 }
 
 export function getNetworks(state: Partial<SnapState>) {
@@ -71,7 +64,7 @@ export function getNetworks(state: Partial<SnapState>) {
 
 export function getNetworkFromChainId(
   state: Partial<SnapState>,
-  targerChainId: string | undefined,
+  targerChainId: number | undefined,
 ) {
   const chainId = targerChainId || ARBITRUM_GOERLI_NETWORK.chainId;
   const network = getNetwork(state, chainId);
@@ -90,19 +83,17 @@ export function getNetworkFromChainId(
 export function getErc20Token(
   state: Partial<SnapState>,
   tokenAddress: string,
-  chainId: string,
+  chainId: number,
 ) {
   return state.erc20Tokens?.find(
     (token) =>
       token.address.toLowerCase() === tokenAddress.toLowerCase() &&
-      Number(token.chainId) === Number(chainId),
+      token.chainId === chainId,
   );
 }
 
-export function getErc20Tokens(state: Partial<SnapState>, chainId: string) {
-  return state.erc20Tokens?.filter(
-    (token) => Number(token.chainId) === Number(chainId),
-  );
+export function getErc20Tokens(state: Partial<SnapState>, chainId: number) {
+  return state.erc20Tokens?.filter((token) => token.chainId === chainId);
 }
 
 export async function upsertErc20Token(
@@ -153,19 +144,17 @@ export async function upsertErc20Token(
 export function getAccount(
   state: Partial<SnapState>,
   accountAddress: string,
-  chainId: string,
+  chainId: number,
 ) {
   return state.accounts?.find(
     (acc) =>
       acc.address.toLowerCase() === accountAddress.toLowerCase() &&
-      Number(acc.chainId) === Number(chainId),
+      acc.chainId === chainId,
   );
 }
 
-export function getAccounts(state: Partial<SnapState>, chainId: string) {
-  return state.accounts?.filter(
-    (acc) => Number(acc.chainId) === Number(chainId),
-  );
+export function getAccounts(state: Partial<SnapState>, chainId: number) {
+  return state.accounts?.filter((acc) => acc.chainId === chainId);
 }
 
 export async function upsertAccount(
@@ -319,7 +308,7 @@ async function checkTxStatus(
   mutex: Mutex,
   state: Partial<SnapState>,
 ) {
-  const aggregator = new Aggregator('https://arbitrum-goerli.blswallet.org');
+  const aggregator = new Aggregator(ARBITRUM_GOERLI_NETWORK.aggregator);
   const maybeReceipt = await aggregator.lookupReceipt(tx.txHash);
 
   console.log('TX STATUS', tx.txHash, maybeReceipt);

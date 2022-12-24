@@ -19,7 +19,8 @@ export async function sendBundle(params: ApiParams) {
     const netCfg = validateConfig(ARBITRUM_GOERLI_NETWORK.config);
 
     const provider = new ethers.providers.JsonRpcProvider(
-      'https://goerli-rollup.arbitrum.io/rpc',
+      ARBITRUM_GOERLI_NETWORK.rpcUrl,
+      { name: '', chainId: ARBITRUM_GOERLI_NETWORK.chainId },
     );
 
     // 32 random bytes
@@ -42,7 +43,7 @@ export async function sendBundle(params: ApiParams) {
       actions: ops,
     });
 
-    const aggregator = new Aggregator('https://arbitrum-goerli.blswallet.org');
+    const aggregator = new Aggregator(ARBITRUM_GOERLI_NETWORK.aggregator);
     const addResult = await aggregator.add(bundle);
 
     if ('failures' in addResult) {
@@ -54,7 +55,7 @@ export async function sendBundle(params: ApiParams) {
     await snapUtils.upsertTransaction(
       {
         txHash: addResult.hash,
-        chainId: String(netCfg.auxiliary.chainid),
+        chainId: ARBITRUM_GOERLI_NETWORK.chainId,
       } as Transaction,
       wallet,
       mutex,

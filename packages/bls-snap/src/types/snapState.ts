@@ -10,13 +10,15 @@ export type SnapState = {
 
 export type Network = {
   name: string;
-  chainId: string;
+  chainId: number;
+  rpcUrl: string;
+  aggregator: string;
   config: NetworkConfig;
 };
 
 export type BlsAccount = {
   address: string;
-  chainId: string;
+  chainId: number;
 };
 
 export type Erc20Token = {
@@ -24,7 +26,7 @@ export type Erc20Token = {
   name: string;
   symbol: string;
   decimals: number;
-  chainId: string;
+  chainId: number;
 };
 
 export type Operation = {
@@ -35,7 +37,7 @@ export type Operation = {
 
 export type Transaction = {
   txHash: string;
-  chainId: string;
+  chainId: number;
   transactionIndex: string;
   blockHash: string;
   blockNumber: string;
