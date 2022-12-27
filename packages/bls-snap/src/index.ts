@@ -1,12 +1,13 @@
 import { OnRpcRequestHandler } from '@metamask/snap-types';
 import { Mutex } from 'async-mutex';
-import { addOp } from './addOp';
+import { addOperation } from './addOperation';
+import { getOperations } from './getOperations';
 import { createAccount } from './createAccount';
 import { getErc20TokenBalance } from './getErc20TokenBalance';
-import { getOps } from './getOps';
-import { getStoredErc20Tokens } from './getStoredErc20Tokens';
-import { getStoredNetworks } from './getStoredNetworks';
-import { getTransactions } from './getTransactions';
+import { getErc20Tokens } from './getErc20Tokens';
+import { getNetworks } from './getNetworks';
+import { getBundles } from './getBundles';
+import { recoverAccounts } from './recoverAccounts';
 import { sendBundle } from './sendBundle';
 import { ApiParams, ApiRequestParams } from './types/snapApi';
 import { Erc20Token } from './types/snapState';
@@ -98,20 +99,22 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
           },
         ],
       });
-    case 'bls_getStoredNetworks':
-      return getStoredNetworks(apiParams);
+    case 'bls_getNetworks':
+      return getNetworks(apiParams);
+    case 'bls_recoverAccounts':
+      return recoverAccounts(apiParams);
     case 'bls_createAccount':
       return createAccount(apiParams);
-    case 'bls_getStoredErc20Tokens':
-      return getStoredErc20Tokens(apiParams);
+    case 'bls_getErc20Tokens':
+      return getErc20Tokens(apiParams);
     case 'bls_getErc20TokenBalance':
       return getErc20TokenBalance(apiParams);
-    case 'bls_addOp':
-      return addOp(apiParams);
-    case 'bls_getOps':
-      return getOps(apiParams);
-    case 'bls_getTransactions':
-      return getTransactions(apiParams);
+    case 'bls_addOperation':
+      return addOperation(apiParams);
+    case 'bls_getOperations':
+      return getOperations(apiParams);
+    case 'bls_getBundles':
+      return getBundles(apiParams);
     case 'bls_sendBundle':
       return sendBundle(apiParams);
     default:

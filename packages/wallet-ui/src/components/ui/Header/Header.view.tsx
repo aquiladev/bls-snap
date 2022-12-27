@@ -21,7 +21,7 @@ export const HeaderView = ({ address }: Props) => {
   const [sendOpen, setSendOpen] = useState(false);
   const networks = useAppSelector((state) => state.networks);
   const wallet = useAppSelector((state) => state.wallet);
-  const { updateTokenBalance, addOp } = useBLSSnap();
+  const { updateTokenBalance, addOperation } = useBLSSnap();
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const timeoutHandle = useRef(setTimeout(() => {}));
 
@@ -63,7 +63,7 @@ export const HeaderView = ({ address }: Props) => {
   };
 
   const handleMintClick = async () => {
-    await addOp(wallet.accounts[0].address);
+    await addOperation(wallet.accounts[0].address);
   };
 
   return (

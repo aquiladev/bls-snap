@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Operation, Transaction } from 'bls-snap/src/types/snapState';
+import { Operation, Bundle } from 'bls-snap/src/types/snapState';
 import { ethers } from 'ethers';
 import { Account, Erc20TokenBalance } from '../types';
 
@@ -10,8 +10,8 @@ export type WalletState = {
   accounts: Account[];
   erc20TokenBalances: Erc20TokenBalance[];
   erc20TokenBalanceSelected: Erc20TokenBalance;
-  ops: Operation[];
-  transactions: Transaction[];
+  operations: Operation[];
+  bundles: Bundle[];
 };
 
 const initialState: WalletState = {
@@ -21,8 +21,8 @@ const initialState: WalletState = {
   accounts: [],
   erc20TokenBalances: [],
   erc20TokenBalanceSelected: {} as Erc20TokenBalance,
-  ops: [],
-  transactions: [],
+  operations: [],
+  bundles: [],
 };
 
 export const walletSlice = createSlice({
@@ -87,17 +87,17 @@ export const walletSlice = createSlice({
         }
       }
     },
-    addWalletOp: (state, { payload }) => {
-      state.ops = [...state.ops, payload];
+    addOperation: (state, { payload }) => {
+      state.operations = [...state.operations, payload];
     },
-    cleanWalletOp: (state) => {
-      state.ops = [];
+    cleanOperations: (state) => {
+      state.operations = [];
     },
-    setTransactions: (state, { payload }) => {
-      state.transactions = payload;
+    setBundles: (state, { payload }) => {
+      state.bundles = payload;
     },
-    addTransaction: (state, { payload }) => {
-      state.transactions = [...state.transactions, payload];
+    addBundle: (state, { payload }) => {
+      state.bundles = [...state.bundles, payload];
     },
   },
 });
@@ -110,10 +110,10 @@ export const {
   setErc20TokenBalances,
   setErc20TokenBalanceSelected,
   upsertErc20TokenBalance,
-  addWalletOp,
-  cleanWalletOp,
-  setTransactions,
-  addTransaction,
+  addOperation,
+  cleanOperations,
+  setBundles,
+  addBundle,
 } = walletSlice.actions;
 
 export default walletSlice.reducer;

@@ -27,7 +27,7 @@ import {
 type Props = {
   address: string;
   amount: string;
-  chainId: string;
+  chainId: number;
   closeModal?: () => void;
 };
 

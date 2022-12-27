@@ -1,6 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { ethers, utils, BigNumber } from 'ethers';
 import { ApiParams, GetErc20TokenBalanceRequestParams } from './types/snapApi';
+import { ARBITRUM_GOERLI_NETWORK } from './utils/constants';
 
 export async function getErc20TokenBalance(params: ApiParams) {
   try {
@@ -37,8 +38,8 @@ export async function getErc20TokenBalance(params: ApiParams) {
     ]);
 
     const provider = new ethers.providers.JsonRpcProvider(
-      'https://goerli-rollup.arbitrum.io/rpc',
-      { name: '', chainId: 421613 },
+      ARBITRUM_GOERLI_NETWORK.rpcUrl,
+      { name: '', chainId: ARBITRUM_GOERLI_NETWORK.chainId },
     );
     const result = await provider.call({
       to: tokenAddress,

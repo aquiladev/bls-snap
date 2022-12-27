@@ -2,22 +2,27 @@
 import { ethers } from 'ethers';
 import { BlsWalletWrapper, validateConfig } from 'bls-wallet-clients';
 
-import { ApiParams, CreateAccountRequestParams } from './types/snapApi';
+import { ApiParams } from './types/snapApi';
 import { ARBITRUM_GOERLI_NETWORK } from './utils/constants';
 import { upsertAccount } from './utils/snapUtils';
 
 export async function createAccount(params: ApiParams) {
   try {
-    const { state, mutex } = params;
+    const { state, mutex, wallet } = params;
     const netCfg = validateConfig(ARBITRUM_GOERLI_NETWORK.config);
 
     const provider = new ethers.providers.JsonRpcProvider(
-      'https://goerli-rollup.arbitrum.io/rpc',
+      ARBITRUM_GOERLI_NETWORK.rpcUrl,
+      { name: '', chainId: ARBITRUM_GOERLI_NETWORK.chainId },
     );
 
+    // const privateKey =
+    //   '0x0001020304050607080910111213141516171819202122232425262728293031';
+
     // 32 random bytes
-    const privateKey =
-      '0x0001020304050607080910111213141516171819202122232425262728293031';
+    const _arr = new Uint8Array(32);
+    crypto.getRandomValues(_arr);
+    const privateKey = ethers.utils.hexlify(_arr);
 
     // Note that if a wallet doesn't yet exist, it will be
     // lazily created on the first transaction.
@@ -28,7 +33,11 @@ export async function createAccount(params: ApiParams) {
     );
 
     await upsertAccount(
-      { address: account.address, chainId: String(netCfg.auxiliary.chainid) },
+      {
+        chainId: ARBITRUM_GOERLI_NETWORK.chainId,
+        address: account.address,
+        privateKey,
+      },
       wallet,
       mutex,
       state,

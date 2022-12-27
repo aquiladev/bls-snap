@@ -1,5 +1,5 @@
-import { Transaction } from 'bls-snap/src/types/snapState';
+import { Bundle } from 'bls-snap/src/types/snapState';
 
-export const getTxnStatus = (transaction: Transaction): string => {
-  return transaction.blockNumber ? 'Completed' : 'Pending';
+export const getBundleStatus = (bundle: Bundle): string => {
+  return bundle.blockNumber ? 'Completed' : 'Pending';
 };

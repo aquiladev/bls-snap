@@ -2,10 +2,10 @@
 import { ApiParams } from './types/snapApi';
 import * as snapUtils from './utils/snapUtils';
 
-export async function getTransactions(params: ApiParams) {
+export async function getOperations(params: ApiParams) {
   try {
-    const { state, mutex } = params;
-    return snapUtils.getTransactions(wallet, mutex, state);
+    const { state } = params;
+    return snapUtils.getOperations(state);
   } catch (err) {
     console.error(`Problem found: ${err}`);
     throw err;
