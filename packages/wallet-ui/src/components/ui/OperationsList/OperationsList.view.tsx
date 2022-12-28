@@ -25,7 +25,7 @@ export const OperationsListView = ({ operations }: Props) => {
     if (chain && address) {
       clearTimeout(timeoutHandle.current); // cancel the timeout that was in-flight
       timeoutHandle.current = setTimeout(
-        () => getOperations(),
+        () => getOperations(chain),
         TRANSACTIONS_REFRESH_FREQUENCY,
       );
       return () => clearTimeout(timeoutHandle.current);

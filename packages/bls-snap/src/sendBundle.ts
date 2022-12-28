@@ -15,28 +15,30 @@ export async function sendBundle(params: ApiParams) {
     const { state, mutex, wallet, requestParams } = params;
     const { senderAddress, chainId } = requestParams as SendBundleRequestParams;
 
-    const account = snapUtils.getAccount(state, senderAddress, chainId);
-    console.log('ACCOUNT', account);
+    const account = snapUtils.getAccount(senderAddress, chainId, state);
     if (!account) {
       throw new Error(`Account not found: ${senderAddress}`);
     }
 
-    const operations = snapUtils.getOperations(state);
-    console.log('OPERATIONS', operations);
+    const operations = snapUtils.getOperations(chainId, state);
+    if (!operations?.length) {
+      throw new Error('No operations found');
+    }
 
-    const netCfg = validateConfig(ARBITRUM_GOERLI_NETWORK.config);
-
-    const provider = new ethers.providers.JsonRpcProvider(
-      ARBITRUM_GOERLI_NETWORK.rpcUrl,
-      { name: '', chainId: ARBITRUM_GOERLI_NETWORK.chainId },
-    );
+    const netConfig = validateConfig(ARBITRUM_GOERLI_NETWORK.config);
+    if (chainId !== ARBITRUM_GOERLI_NETWORK.chainId) {
+      throw new Error(`ChainId not supported: ${chainId}`);
+    }
 
     // Note that if a wallet doesn't yet exist, it will be
     // lazily created on the first transaction.
     const _account = await BlsWalletWrapper.connect(
       account.privateKey,
-      netCfg.addresses.verificationGateway,
-      provider,
+      netConfig.addresses.verificationGateway,
+      new ethers.providers.JsonRpcProvider(ARBITRUM_GOERLI_NETWORK.rpcUrl, {
+        name: '',
+        chainId,
+      }),
     );
 
     const nonce = await _account.Nonce();
@@ -59,13 +61,14 @@ export async function sendBundle(params: ApiParams) {
     await snapUtils.upsertBundle(
       {
         bundleHash: addResult.hash,
-        chainId: ARBITRUM_GOERLI_NETWORK.chainId,
+        operations,
       } as Bundle,
+      chainId,
       wallet,
       mutex,
       state,
     );
-    await snapUtils.cleanOperations(wallet, mutex, state);
+    await snapUtils.cleanOperations(chainId, wallet, mutex, state);
     return addResult;
   } catch (err) {
     console.error(`Problem found: ${err}`);

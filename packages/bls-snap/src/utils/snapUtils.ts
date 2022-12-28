@@ -15,9 +15,8 @@ export async function upsertNetwork(
   network: Network,
   wallet: any,
   mutex: Mutex,
-  state: Partial<SnapState>,
+  state: SnapState,
 ) {
-  console.log('NET', network);
   return mutex.runExclusive(async () => {
     if (!state) {
       // eslint-disable-next-line require-atomic-updates, no-param-reassign
@@ -27,15 +26,8 @@ export async function upsertNetwork(
       });
     }
 
-    const _network = getNetwork(state, network.chainId);
-    // eslint-disable-next-line no-negated-condition
-    if (!_network) {
-      if (!state.networks) {
-        state.networks = [];
-      }
-
-      state.networks.push(network);
-    } else {
+    const _network = getNetwork(network.chainId, state);
+    if (_network) {
       if (JSON.stringify(_network) === JSON.stringify(network)) {
         console.log(
           `upsertNetwork: same network and hence skip calling snap state update: ${JSON.stringify(
@@ -45,6 +37,13 @@ export async function upsertNetwork(
         return;
       }
       _network.name = network.name;
+    } else {
+      if (!state) {
+        // eslint-disable-next-line no-param-reassign
+        state = {};
+      }
+
+      state[network.chainId] = network;
     }
 
     await wallet.request({
@@ -54,53 +53,20 @@ export async function upsertNetwork(
   });
 }
 
-export function getNetwork(state: Partial<SnapState>, chainId: number) {
-  return state.networks?.find((network) => network.chainId === chainId);
+export function getNetwork(chainId: number, state: SnapState) {
+  return state[chainId];
 }
 
-export function getNetworks(state: Partial<SnapState>) {
-  return state.networks;
-}
-
-export function getNetworkByChainId(
-  state: Partial<SnapState>,
-  targerChainId?: number,
-) {
-  const chainId = targerChainId || ARBITRUM_GOERLI_NETWORK.chainId;
-  const network = getNetwork(state, chainId);
-  if (!network) {
-    throw new Error(
-      `can't find the network in snap state with chainId: ${chainId}`,
-    );
-  }
-
-  console.log(
-    `getNetworkByChainId: From ${targerChainId}:\n${JSON.stringify(network)}`,
-  );
-  return network;
-}
-
-export function getAccount(
-  state: Partial<SnapState>,
-  address: string,
-  chainId: number,
-) {
-  return state.accounts?.find(
-    (acc) =>
-      acc.address.toLowerCase() === address.toLowerCase() &&
-      acc.chainId === chainId,
-  );
-}
-
-export function getAccounts(state: Partial<SnapState>, chainId: number) {
-  return state.accounts?.filter((acc) => acc.chainId === chainId);
+export function getNetworks(state: SnapState) {
+  return state;
 }
 
 export async function upsertAccount(
   account: BlsAccount,
+  chainId: number,
   wallet: any,
   mutex: Mutex,
-  state: Partial<SnapState>,
+  state: SnapState,
 ) {
   return mutex.runExclusive(async () => {
     if (!state) {
@@ -111,7 +77,9 @@ export async function upsertAccount(
       });
     }
 
-    const _account = getAccount(state, account.address, account.chainId);
+    assertNetwork(chainId, state);
+
+    const _account = getAccount(account.address, chainId, state);
     if (_account) {
       if (JSON.stringify(_account) === JSON.stringify(account)) {
         console.log(
@@ -122,11 +90,10 @@ export async function upsertAccount(
         return;
       }
     } else {
-      if (!state.accounts) {
-        state.accounts = [];
+      if (!state[chainId].accounts) {
+        state[chainId].accounts = [];
       }
-
-      state.accounts.push(account);
+      state[chainId].accounts?.push(account);
     }
 
     await wallet.request({
@@ -136,27 +103,29 @@ export async function upsertAccount(
   });
 }
 
-export function getErc20Token(
-  state: Partial<SnapState>,
-  tokenAddress: string,
+export function getAccount(
+  address: string,
   chainId: number,
-) {
-  return state.erc20Tokens?.find(
-    (token) =>
-      token.address.toLowerCase() === tokenAddress.toLowerCase() &&
-      token.chainId === chainId,
+  state: SnapState,
+): BlsAccount | undefined {
+  return (state[chainId]?.accounts || []).find(
+    (acc) => acc.address.toLowerCase() === address.toLowerCase(),
   );
 }
 
-export function getErc20Tokens(state: Partial<SnapState>, chainId: number) {
-  return state.erc20Tokens?.filter((token) => token.chainId === chainId);
+export function getAccounts(
+  chainId: number,
+  state: SnapState,
+): BlsAccount[] | undefined {
+  return state[chainId]?.accounts;
 }
 
 export async function upsertErc20Token(
   erc20Token: Erc20Token,
+  chainId: number,
   wallet: any,
   mutex: Mutex,
-  state: Partial<SnapState>,
+  state: SnapState,
 ) {
   return mutex.runExclusive(async () => {
     if (!state) {
@@ -167,11 +136,9 @@ export async function upsertErc20Token(
       });
     }
 
-    const _erc20Token = getErc20Token(
-      state,
-      erc20Token.address,
-      erc20Token.chainId,
-    );
+    assertNetwork(chainId, state);
+
+    const _erc20Token = getErc20Token(erc20Token.address, chainId, state);
     if (_erc20Token) {
       if (JSON.stringify(_erc20Token) === JSON.stringify(erc20Token)) {
         console.log(
@@ -185,10 +152,10 @@ export async function upsertErc20Token(
       _erc20Token.symbol = erc20Token.symbol;
       _erc20Token.decimals = erc20Token.decimals;
     } else {
-      if (!state.erc20Tokens) {
-        state.erc20Tokens = [];
+      if (!state[chainId].erc20Tokens) {
+        state[chainId].erc20Tokens = [];
       }
-      state.erc20Tokens.push(erc20Token);
+      state[chainId].erc20Tokens?.push(erc20Token);
     }
 
     await wallet.request({
@@ -196,13 +163,31 @@ export async function upsertErc20Token(
       params: ['update', state],
     });
   });
+}
+
+export function getErc20Token(
+  tokenAddress: string,
+  chainId: number,
+  state: SnapState,
+): Erc20Token | undefined {
+  return state[chainId]?.erc20Tokens?.find(
+    (token) => token.address.toLowerCase() === tokenAddress.toLowerCase(),
+  );
+}
+
+export function getErc20Tokens(
+  chainId: number,
+  state: SnapState,
+): Erc20Token[] | undefined {
+  return state[chainId]?.erc20Tokens;
 }
 
 export async function upsertOperation(
-  op: Operation,
+  operation: Operation,
+  chainId: number,
   wallet: any,
   mutex: Mutex,
-  state: Partial<SnapState>,
+  state: SnapState,
 ) {
   return mutex.runExclusive(async () => {
     if (!state) {
@@ -213,23 +198,33 @@ export async function upsertOperation(
       });
     }
 
-    if (!state.ops) {
-      state.ops = [];
+    assertNetwork(chainId, state);
+
+    if (!state[chainId]?.operations) {
+      state[chainId].operations = [];
     }
 
-    state.ops.push(op);
+    state[chainId].operations?.push(operation);
 
     await wallet.request({
       method: 'snap_manageState',
       params: ['update', state],
     });
   });
+}
+
+export function getOperations(
+  chainId: number,
+  state: SnapState,
+): Operation[] | undefined {
+  return state[chainId]?.operations;
 }
 
 export async function cleanOperations(
+  chainId: number,
   wallet: any,
   mutex: Mutex,
-  state: Partial<SnapState>,
+  state: SnapState,
 ) {
   return mutex.runExclusive(async () => {
     if (!state) {
@@ -240,25 +235,23 @@ export async function cleanOperations(
       });
     }
 
-    // eslint-disable-next-line require-atomic-updates
-    state.ops = [];
+    assertNetwork(chainId, state);
+
+    state[chainId].operations = [];
 
     await wallet.request({
       method: 'snap_manageState',
       params: ['update', state],
     });
   });
-}
-
-export function getOperations(state: Partial<SnapState>): Operation[] {
-  return state.ops || [];
 }
 
 export async function upsertBundle(
   bundle: Bundle,
+  chainId: number,
   wallet: any,
   mutex: Mutex,
-  state: Partial<SnapState>,
+  state: SnapState,
 ) {
   return mutex.runExclusive(async () => {
     if (!state) {
@@ -269,21 +262,23 @@ export async function upsertBundle(
       });
     }
 
-    if (!state.bundles) {
-      state.bundles = [];
+    assertNetwork(chainId, state);
+
+    if (!state[chainId]?.bundles) {
+      state[chainId].bundles = [];
     }
 
     let exists = false;
-    state.bundles = state.bundles.map((t) => {
-      if (t.bundleHash === bundle.bundleHash) {
+    state[chainId].bundles = state[chainId].bundles?.map((b) => {
+      if (b.bundleHash === bundle.bundleHash) {
         exists = true;
         return bundle;
       }
-      return t;
+      return b;
     });
 
     if (!exists) {
-      state.bundles.push(bundle);
+      state[chainId].bundles?.push(bundle);
     }
 
     await wallet.request({
@@ -294,41 +289,48 @@ export async function upsertBundle(
 }
 
 export async function getBundles(
+  chainId: number,
   wallet: any,
   mutex: Mutex,
-  state: Partial<SnapState>,
-): Promise<Bundle[]> {
-  // eslint-disable-next-line array-callback-return
-  const pendingBundles = (state.bundles || []).filter((t) => !t.blockNumber);
+  state: SnapState,
+): Promise<Bundle[] | undefined> {
+  const pendingBundles = (state[chainId]?.bundles || []).filter(
+    (b) => !b.blockNumber,
+  );
   for (const bundle of pendingBundles) {
-    await checkBundleStatus(bundle, wallet, mutex, state);
+    await checkBundleStatus(bundle, chainId, wallet, mutex, state);
   }
 
-  return state.bundles || [];
+  return state[chainId]?.bundles;
 }
 
-async function checkBundleStatus(
+export async function checkBundleStatus(
   bundle: Bundle,
+  chainId: number,
   wallet: any,
   mutex: Mutex,
-  state: Partial<SnapState>,
+  state: SnapState,
 ) {
   const aggregator = new Aggregator(ARBITRUM_GOERLI_NETWORK.aggregator);
   const receipt = await aggregator.lookupReceipt(bundle.bundleHash);
 
   console.log('BUNDLE STATUS', bundle.bundleHash, receipt);
   if (receipt) {
-    const _bundle: Bundle = {
-      bundleHash: bundle.bundleHash,
-      chainId: bundle.chainId,
-    };
     if ('submitError' in receipt) {
-      _bundle.error = receipt.submitError;
+      bundle.error = receipt.submitError;
     } else {
-      _bundle.transactionIndex = receipt.transactionIndex;
-      _bundle.blockHash = receipt.blockHash;
-      _bundle.blockNumber = receipt.blockNumber;
+      bundle.transactionIndex = receipt.transactionIndex;
+      bundle.blockHash = receipt.blockHash;
+      bundle.blockNumber = receipt.blockNumber;
     }
-    await upsertBundle(_bundle, wallet, mutex, state);
+    await upsertBundle(bundle, chainId, wallet, mutex, state);
+  }
+}
+
+function assertNetwork(chainId: number, state: SnapState) {
+  if (!state[chainId]) {
+    throw new Error(
+      `can't find the network in snap state with chainId: ${chainId}`,
+    );
   }
 }

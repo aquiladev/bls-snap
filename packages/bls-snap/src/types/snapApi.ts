@@ -2,7 +2,7 @@ import { Mutex } from 'async-mutex';
 import { SnapState } from './snapState';
 
 export type ApiParams = {
-  state: Partial<SnapState>;
+  state: SnapState;
   requestParams: ApiRequestParams;
   mutex: Mutex;
   wallet: any;

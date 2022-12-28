@@ -63,7 +63,8 @@ export const HeaderView = ({ address }: Props) => {
   };
 
   const handleMintClick = async () => {
-    await addOperation(wallet.accounts[0].address);
+    const chain = networks.items[networks.activeNetwork]?.chainId;
+    await addOperation(wallet.accounts[0].address, chain);
   };
 
   return (

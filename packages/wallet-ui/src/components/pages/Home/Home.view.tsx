@@ -13,13 +13,15 @@ type Props = {
 };
 
 export const HomeView = ({ address }: Props) => {
-  const { erc20TokenBalanceSelected, operations: ops } = useAppSelector(
+  const networks = useAppSelector((state) => state.networks);
+  const { erc20TokenBalanceSelected, operations } = useAppSelector(
     (state) => state.wallet,
   );
   const { sendBundle } = useBLSSnap();
 
   const handleSendBundle = async () => {
-    await sendBundle(address, erc20TokenBalanceSelected.chainId);
+    const chain = networks.items[networks.activeNetwork]?.chainId;
+    await sendBundle(address, chain);
   };
 
   return (
@@ -32,7 +34,7 @@ export const HomeView = ({ address }: Props) => {
         <div>
           <div style={{ padding: 4 }}>Operations</div>
           <OperationsList operations={[]} />
-          {Boolean(ops.length) && (
+          {Boolean(operations.length) && (
             <Buttons style={{ textAlign: 'center' }}>
               <HeaderButton onClick={() => handleSendBundle()}>
                 Send Bundle

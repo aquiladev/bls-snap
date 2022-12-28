@@ -1,5 +1,5 @@
 /* eslint-disable consistent-return */
-import { ethers } from 'ethers';
+import { ethers, BigNumber } from 'ethers';
 import Toastr from 'toastr2';
 import semver from 'semver/preload';
 import { Erc20Token, Bundle } from 'bls-snap/src/types/snapState';
@@ -94,8 +94,10 @@ export const useBLSSnap = () => {
           method: 'bls_getNetworks',
         },
       ],
-    })) as Network[];
-    return data;
+    })) as Record<number, Network>;
+
+    // TODO: Switch Wallet UI to use new storage structure
+    return Object.values(data);
   };
 
   const oldVersionDetected = async () => {
@@ -124,7 +126,7 @@ export const useBLSSnap = () => {
     return data;
   };
 
-  const addAccount = async (chainId: number) => {
+  const createAccount = async (chainId: number) => {
     dispatch(enableLoadingWithMessage('Creating account...'));
     const data = (await ethereum.request({
       method: 'wallet_invokeSnap',
@@ -192,7 +194,7 @@ export const useBLSSnap = () => {
     let acc: Account[] | Account = await recoverAccounts(chainId);
     if (!acc || acc.length === 0 || !acc[0].address) {
       // eslint-disable-next-line require-atomic-updates
-      acc = await addAccount(chainId);
+      acc = await createAccount(chainId);
     }
     // const acc: Account = await addAccount(chainId);
     dispatch(setAccounts(acc));
@@ -245,12 +247,12 @@ export const useBLSSnap = () => {
     }
 
     try {
-      const nets = await getNetworks();
-      if (nets.length === 0) {
+      const networks = await getNetworks();
+      if (!networks) {
         return;
       }
-      const { chainId } = nets[activeNetwork];
-      await getWalletData(chainId, nets);
+      const { chainId } = networks[activeNetwork];
+      await getWalletData(chainId, networks);
     } catch (err: any) {
       if (err.code && err.code === 4100) {
         const toastr = new Toastr();
@@ -289,14 +291,11 @@ export const useBLSSnap = () => {
     accountAddress: string,
     chainId: number,
   ) => {
+    console.log('updateTokenBalance', tokenAddress, accountAddress, chainId);
     const foundTokenWithBalance = erc20TokenBalances.find(
       (tokenBalance) =>
-        ethers.BigNumber.from(tokenBalance.address).eq(
-          ethers.BigNumber.from(tokenAddress),
-        ) &&
-        ethers.BigNumber.from(tokenBalance.chainId).eq(
-          ethers.BigNumber.from(chainId),
-        ),
+        BigNumber.from(tokenBalance.address).eq(BigNumber.from(tokenAddress)) &&
+        tokenBalance.chainId === chainId,
     );
     if (foundTokenWithBalance) {
       const tokenBalance = await getTokenBalance(
@@ -314,7 +313,7 @@ export const useBLSSnap = () => {
     }
   };
 
-  async function addOperation(address: string) {
+  async function addOperation(address: string, chainId: number) {
     const erc20Address = '0x5081a39b8A5f0E35a8D959395a630b68B74Dd30f';
     const erc20Abi = ['function mint(address to, uint amount) returns (bool)'];
     const erc20 = new ethers.Contract(erc20Address, erc20Abi);
@@ -331,6 +330,7 @@ export const useBLSSnap = () => {
               address,
               ethers.utils.parseUnits('1', 18),
             ]),
+            chainId,
           },
         },
       ],
@@ -339,13 +339,16 @@ export const useBLSSnap = () => {
     return response;
   }
 
-  const getOperations = async () => {
+  const getOperations = async (chainId: number) => {
     const data = (await ethereum.request({
       method: 'wallet_invokeSnap',
       params: [
         snapId,
         {
           method: 'bls_getOperations',
+          params: {
+            chainId,
+          },
         },
       ],
     })) as Operation[];

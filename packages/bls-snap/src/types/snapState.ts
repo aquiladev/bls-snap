@@ -1,12 +1,6 @@
 import { NetworkConfig } from 'bls-wallet-clients';
 
-export type SnapState = {
-  networks: Network[];
-  accounts: BlsAccount[];
-  erc20Tokens: Erc20Token[];
-  ops: Operation[];
-  bundles: Bundle[];
-};
+export type SnapState = Record<number, Network>;
 
 export type Network = {
   name: string;
@@ -14,12 +8,16 @@ export type Network = {
   rpcUrl: string;
   aggregator: string;
   config: NetworkConfig;
+
+  accounts?: BlsAccount[];
+  erc20Tokens?: Erc20Token[];
+  operations?: Operation[];
+  bundles?: Bundle[];
 };
 
 export type BlsAccount = {
   address: string;
   privateKey: string;
-  chainId: number;
 };
 
 export type Erc20Token = {
@@ -27,7 +25,6 @@ export type Erc20Token = {
   name: string;
   symbol: string;
   decimals: number;
-  chainId: number;
 };
 
 export type Operation = {
@@ -37,9 +34,10 @@ export type Operation = {
 };
 
 export type Bundle = {
+  operations: Operation[];
   bundleHash: string;
-  chainId: number;
   error?: string;
+  transactionHash?: string;
   transactionIndex?: number;
   blockHash?: string;
   blockNumber?: number;
