@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Operation, Bundle } from 'bls-snap/src/types/snapState';
-import { ethers } from 'ethers';
+import { BigNumber } from 'ethers';
 import { Account, Erc20TokenBalance } from '../types';
 
 export type WalletState = {
@@ -55,16 +55,13 @@ export const walletSlice = createSlice({
       state.erc20TokenBalanceSelected = payload;
     },
     upsertErc20TokenBalance: (state, { payload }) => {
-      // only update erc20TokenBalances if same chainId as selected token
+      // TODO: currently there is no chainId in the payload,
+      // so we need to update it in order to support new structure
       if (state.erc20TokenBalanceSelected.chainId === payload.chainId) {
         const foundIndex = state.erc20TokenBalances.findIndex(
           (token) =>
-            ethers.BigNumber.from(token.address).eq(
-              ethers.BigNumber.from(payload.address),
-            ) &&
-            ethers.BigNumber.from(token.chainId).eq(
-              ethers.BigNumber.from(payload.chainId),
-            ),
+            BigNumber.from(token.address).eq(BigNumber.from(payload.address)) &&
+            token.chainId === payload.chainId,
         );
         if (foundIndex < 0) {
           state.erc20TokenBalances.push(payload);
@@ -87,6 +84,9 @@ export const walletSlice = createSlice({
         }
       }
     },
+    setOperations: (state, { payload }) => {
+      state.operations = payload;
+    },
     addOperation: (state, { payload }) => {
       state.operations = [...state.operations, payload];
     },
@@ -99,6 +99,14 @@ export const walletSlice = createSlice({
     addBundle: (state, { payload }) => {
       state.bundles = [...state.bundles, payload];
     },
+    updateBundle: (state, { payload }) => {
+      state.bundles = state.bundles.map((bundle) => {
+        if (bundle.bundleHash === payload.bundleHash) {
+          return { ...bundle, ...payload };
+        }
+        return bundle;
+      });
+    },
   },
 });
 
@@ -110,10 +118,12 @@ export const {
   setErc20TokenBalances,
   setErc20TokenBalanceSelected,
   upsertErc20TokenBalance,
+  setOperations,
   addOperation,
   cleanOperations,
   setBundles,
   addBundle,
+  updateBundle,
 } = walletSlice.actions;
 
 export default walletSlice.reducer;

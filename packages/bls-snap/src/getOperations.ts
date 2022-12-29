@@ -1,11 +1,17 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { ApiParams } from './types/snapApi';
+import { ApiParams, GetOperationsRequestParams } from './types/snapApi';
 import * as snapUtils from './utils/snapUtils';
 
 export async function getOperations(params: ApiParams) {
   try {
-    const { state } = params;
-    return snapUtils.getOperations(state);
+    const { state, requestParams } = params;
+    const { senderAddress, chainId } =
+      requestParams as GetOperationsRequestParams;
+
+    const operations = snapUtils.getOperations(senderAddress, chainId, state);
+    console.log(`getOperations:\n${JSON.stringify(operations, null, 2)}`);
+
+    return operations || [];
   } catch (err) {
     console.error(`Problem found: ${err}`);
     throw err;

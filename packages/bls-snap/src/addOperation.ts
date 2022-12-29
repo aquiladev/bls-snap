@@ -5,16 +5,17 @@ import { upsertOperation } from './utils/snapUtils';
 export async function addOperation(params: ApiParams) {
   try {
     const { state, mutex, requestParams, wallet } = params;
-    const { contractAddress, encodedFunction } =
+    const { senderAddress, contractAddress, encodedFunction, chainId } =
       requestParams as AddOperationRequestParams;
 
-    const op = {
-      ethValue: 0,
+    const operation = {
+      value: 0,
+      senderAddress,
       contractAddress,
       encodedFunction,
     };
-    await upsertOperation(op, wallet, mutex, state);
-    return op;
+    await upsertOperation(operation, chainId, wallet, mutex, state);
+    return operation;
   } catch (err) {
     console.error(`Problem found: ${err}`);
     throw err;

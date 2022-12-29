@@ -2,7 +2,7 @@ import { Mutex } from 'async-mutex';
 import { SnapState } from './snapState';
 
 export type ApiParams = {
-  state: Partial<SnapState>;
+  state: SnapState;
   requestParams: ApiRequestParams;
   mutex: Mutex;
   wallet: any;
@@ -26,14 +26,21 @@ export type GetErc20TokenBalanceRequestParams = {
 } & BaseRequestParams;
 
 export type AddOperationRequestParams = {
+  senderAddress: string;
   contractAddress: string;
   encodedFunction: string;
 } & BaseRequestParams;
 
-export type GetOperationsRequestParams = BaseRequestParams;
+export type GetOperationsRequestParams = {
+  senderAddress: string;
+} & BaseRequestParams;
+
+export type GetBundleRequestParams = {
+  bundleHash: string;
+} & BaseRequestParams;
 
 export type GetBundlesRequestParams = {
-  senderAddress?: string;
+  senderAddress: string;
   contractAddress?: string;
   bundleHash?: string;
 } & BaseRequestParams;
@@ -50,5 +57,6 @@ export type ApiRequestParams =
   | GetErc20TokenBalanceRequestParams
   | AddOperationRequestParams
   | GetOperationsRequestParams
+  | GetBundleRequestParams
   | GetBundlesRequestParams
   | SendBundleRequestParams;

@@ -7,7 +7,7 @@ export async function getNetworks(params: ApiParams) {
     const { state } = params;
 
     const networks = snapUtils.getNetworks(state);
-    console.log(`getNetworks: networks:\n${JSON.stringify(networks, null, 2)}`);
+    console.log(`getNetworks:\n${JSON.stringify(networks, null, 2)}`);
 
     return networks;
   } catch (err) {

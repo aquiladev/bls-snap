@@ -15,28 +15,34 @@ export async function sendBundle(params: ApiParams) {
     const { state, mutex, wallet, requestParams } = params;
     const { senderAddress, chainId } = requestParams as SendBundleRequestParams;
 
-    const account = snapUtils.getAccount(state, senderAddress, chainId);
-    console.log('ACCOUNT', account);
+    const account = snapUtils.getAccount(senderAddress, chainId, state);
     if (!account) {
-      throw new Error(`Account not found: ${senderAddress}`);
+      throw new Error(
+        `Account not found: ${senderAddress} chainId: ${chainId}`,
+      );
     }
 
-    const operations = snapUtils.getOperations(state);
-    console.log('OPERATIONS', operations);
+    const operations = snapUtils.getOperations(senderAddress, chainId, state);
+    if (!operations?.length) {
+      throw new Error(
+        `No operations found: ${senderAddress} chainId: ${chainId}`,
+      );
+    }
 
-    const netCfg = validateConfig(ARBITRUM_GOERLI_NETWORK.config);
-
-    const provider = new ethers.providers.JsonRpcProvider(
-      ARBITRUM_GOERLI_NETWORK.rpcUrl,
-      { name: '', chainId: ARBITRUM_GOERLI_NETWORK.chainId },
-    );
+    const netConfig = validateConfig(ARBITRUM_GOERLI_NETWORK.config);
+    if (chainId !== ARBITRUM_GOERLI_NETWORK.chainId) {
+      throw new Error(`ChainId not supported: ${chainId}`);
+    }
 
     // Note that if a wallet doesn't yet exist, it will be
     // lazily created on the first transaction.
     const _account = await BlsWalletWrapper.connect(
       account.privateKey,
-      netCfg.addresses.verificationGateway,
-      provider,
+      netConfig.addresses.verificationGateway,
+      new ethers.providers.JsonRpcProvider(ARBITRUM_GOERLI_NETWORK.rpcUrl, {
+        name: '',
+        chainId,
+      }),
     );
 
     const nonce = await _account.Nonce();
@@ -44,7 +50,13 @@ export async function sendBundle(params: ApiParams) {
     // action fails they will all fail.
     const bundle = _account.sign({
       nonce,
-      actions: operations,
+      actions: operations.map((op) => {
+        return {
+          ethValue: op.value,
+          contractAddress: op.contractAddress,
+          encodedFunction: op.encodedFunction,
+        };
+      }),
     });
 
     const aggregator = new Aggregator(ARBITRUM_GOERLI_NETWORK.aggregator);
@@ -55,17 +67,18 @@ export async function sendBundle(params: ApiParams) {
     }
 
     console.log('Bundle hash:', addResult.hash);
-
     await snapUtils.upsertBundle(
       {
+        senderAddress,
         bundleHash: addResult.hash,
-        chainId: ARBITRUM_GOERLI_NETWORK.chainId,
+        operations,
       } as Bundle,
+      chainId,
       wallet,
       mutex,
       state,
     );
-    await snapUtils.cleanOperations(wallet, mutex, state);
+    await snapUtils.cleanOperations(chainId, wallet, mutex, state);
     return addResult;
   } catch (err) {
     console.error(`Problem found: ${err}`);

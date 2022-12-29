@@ -7,7 +7,7 @@ export async function recoverAccounts(params: ApiParams) {
     const { state, requestParams } = params;
     const { chainId } = requestParams as RecoverAccountRequestParams;
 
-    const accounts = await getAccounts(state, chainId);
+    const accounts = await getAccounts(chainId, state);
     if (accounts?.length) {
       return accounts.map((a) => {
         return { address: a.address };

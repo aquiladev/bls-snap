@@ -44,14 +44,14 @@ export const HeaderView = ({ address }: Props) => {
 
   // eslint-disable-next-line consistent-return
   useEffect(() => {
-    const chain = networks.items[networks.activeNetwork]?.chainId;
-    if (chain && address) {
+    const chainId = networks.items[networks.activeNetwork]?.chainId;
+    if (chainId && address) {
       clearTimeout(timeoutHandle.current); // cancel the timeout that was in-flight
       timeoutHandle.current = setTimeout(async () => {
         await updateTokenBalance(
           wallet.erc20TokenBalanceSelected.address,
           address,
-          chain,
+          chainId,
         );
       }, TOKEN_BALANCE_REFRESH_FREQUENCY);
       return () => clearTimeout(timeoutHandle.current);
@@ -63,7 +63,8 @@ export const HeaderView = ({ address }: Props) => {
   };
 
   const handleMintClick = async () => {
-    await addOperation(wallet.accounts[0].address);
+    const { chainId } = networks.items[networks.activeNetwork];
+    await addOperation(wallet.accounts[0].address, chainId);
   };
 
   return (

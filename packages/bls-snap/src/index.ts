@@ -13,6 +13,7 @@ import { ApiParams, ApiRequestParams } from './types/snapApi';
 import { Erc20Token } from './types/snapState';
 import { ARBITRUM_GOERLI_NETWORK } from './utils/constants';
 import { upsertErc20Token, upsertNetwork } from './utils/snapUtils';
+import { getBundle } from './getBundle';
 
 const mutex = new Mutex();
 
@@ -52,9 +53,7 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
   });
 
   if (!state) {
-    state = {
-      networks: [],
-    };
+    state = {};
 
     // initialize state if empty and set default data
     await wallet.request({
@@ -64,14 +63,21 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
   }
 
   await upsertNetwork(ARBITRUM_GOERLI_NETWORK, wallet, mutex, state);
+
+  // Add default token
   const token: Erc20Token = {
     address: ARBITRUM_GOERLI_NETWORK.config.addresses.testToken,
     name: 'AnyToken',
     symbol: 'TOK',
     decimals: 18,
-    chainId: ARBITRUM_GOERLI_NETWORK.chainId,
   };
-  await upsertErc20Token(token, wallet, mutex, state);
+  await upsertErc20Token(
+    token,
+    ARBITRUM_GOERLI_NETWORK.chainId,
+    wallet,
+    mutex,
+    state,
+  );
 
   const requestParams = request?.params as unknown as ApiRequestParams;
   console.log(
@@ -115,6 +121,8 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
       return getOperations(apiParams);
     case 'bls_getBundles':
       return getBundles(apiParams);
+    case 'bls_getBundle':
+      return getBundle(apiParams);
     case 'bls_sendBundle':
       return sendBundle(apiParams);
     default:
