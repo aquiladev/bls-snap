@@ -5,7 +5,7 @@ import { Buttons, HeaderButton } from '../../ui/Header/Header.style';
 import { Separator } from '../../ui/Header/SendModal/SendModal.style';
 import { OperationsList } from '../../ui/OperationsList';
 import { SideBar } from '../../ui/SideBar';
-import { TransactionsList } from '../../ui/TransactionsList';
+import { BundlesList } from '../../ui/BundlesList';
 import { RightPart, Wrapper } from './Home.style';
 
 type Props = {
@@ -20,8 +20,8 @@ export const HomeView = ({ address }: Props) => {
   const { sendBundle } = useBLSSnap();
 
   const handleSendBundle = async () => {
-    const chain = networks.items[networks.activeNetwork]?.chainId;
-    await sendBundle(address, chain);
+    const { chainId } = networks.items[networks.activeNetwork];
+    await sendBundle(address, chainId);
   };
 
   return (
@@ -33,7 +33,7 @@ export const HomeView = ({ address }: Props) => {
         )}
         <div>
           <div style={{ padding: 4 }}>Operations</div>
-          <OperationsList operations={[]} />
+          <OperationsList />
           {Boolean(operations.length) && (
             <Buttons style={{ textAlign: 'center' }}>
               <HeaderButton onClick={() => handleSendBundle()}>
@@ -45,7 +45,7 @@ export const HomeView = ({ address }: Props) => {
         <Separator />
         <div>
           <div style={{ padding: 4 }}>Bundles</div>
-          <TransactionsList transactions={[]} />
+          <BundlesList />
         </div>
       </RightPart>
     </Wrapper>

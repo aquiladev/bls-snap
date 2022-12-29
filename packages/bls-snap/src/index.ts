@@ -13,6 +13,7 @@ import { ApiParams, ApiRequestParams } from './types/snapApi';
 import { Erc20Token } from './types/snapState';
 import { ARBITRUM_GOERLI_NETWORK } from './utils/constants';
 import { upsertErc20Token, upsertNetwork } from './utils/snapUtils';
+import { getBundle } from './getBundle';
 
 const mutex = new Mutex();
 
@@ -120,6 +121,8 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
       return getOperations(apiParams);
     case 'bls_getBundles':
       return getBundles(apiParams);
+    case 'bls_getBundle':
+      return getBundle(apiParams);
     case 'bls_sendBundle':
       return sendBundle(apiParams);
     default:

@@ -4,11 +4,11 @@ import * as snapUtils from './utils/snapUtils';
 
 export async function getBundles(params: ApiParams) {
   try {
-    const { state, mutex, requestParams } = params;
-    const { chainId } = requestParams as GetBundlesRequestParams;
+    const { state, requestParams } = params;
+    const { senderAddress, chainId } = requestParams as GetBundlesRequestParams;
 
-    const bundles = snapUtils.getBundles(chainId, wallet, mutex, state);
-    console.log(`getNetworks: networks:\n${JSON.stringify(bundles, null, 2)}`);
+    const bundles = snapUtils.getBundles(senderAddress, chainId, state);
+    console.log(`getBundles:\n${JSON.stringify(bundles, null, 2)}`);
 
     return bundles || [];
   } catch (err) {

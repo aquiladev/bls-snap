@@ -13,8 +13,10 @@ import {
   upsertErc20TokenBalance,
   addOperation as addOp,
   cleanOperations,
+  setOperations,
   setBundles,
   addBundle,
+  updateBundle,
 } from '../slices/walletSlice';
 import { Account, Erc20TokenBalance, Network, Operation } from '../types';
 import { disableLoading, enableLoadingWithMessage } from '../slices/UISlice';
@@ -186,24 +188,197 @@ export const useBLSSnap = () => {
     dispatch(setErc20TokenBalanceSelected(erc20TokenBalance));
   };
 
+  const refreshTokensUSDPrice = async () => {
+    if (erc20TokenBalances.length > 0) {
+      const tokenUSDPrices = await Promise.all(
+        erc20TokenBalances.map(async (token) => {
+          return await getAssetPriceUSD(token);
+        }),
+      );
+
+      const tokensRefreshed = erc20TokenBalances.map(
+        (token, index): Erc20TokenBalance => {
+          return {
+            ...token,
+            usdPrice: tokenUSDPrices[index],
+          };
+        },
+      );
+      dispatch(setErc20TokenBalances(tokensRefreshed));
+    }
+  };
+
+  const updateTokenBalance = async (
+    tokenAddress: string,
+    accountAddress: string,
+    chainId: number,
+  ) => {
+    const foundTokenWithBalance = erc20TokenBalances.find(
+      (tokenBalance) =>
+        BigNumber.from(tokenBalance.address).eq(BigNumber.from(tokenAddress)) &&
+        tokenBalance.chainId === chainId,
+    );
+    if (foundTokenWithBalance) {
+      const tokenBalance = await getTokenBalance(
+        tokenAddress,
+        accountAddress,
+        chainId,
+      );
+      const usdPrice = await getAssetPriceUSD(foundTokenWithBalance);
+      const tokenWithBalance: Erc20TokenBalance = addMissingPropertiesToToken(
+        foundTokenWithBalance,
+        tokenBalance,
+        usdPrice,
+      );
+      dispatch(upsertErc20TokenBalance(tokenWithBalance));
+    }
+  };
+
+  const addOperation = async (address: string, chainId: number) => {
+    const erc20Address = '0x5081a39b8A5f0E35a8D959395a630b68B74Dd30f';
+    const erc20Abi = ['function mint(address to, uint amount) returns (bool)'];
+    const erc20 = new ethers.Contract(erc20Address, erc20Abi);
+
+    const response = await ethereum.request({
+      method: 'wallet_invokeSnap',
+      params: [
+        snapId,
+        {
+          method: 'bls_addOperation',
+          params: {
+            senderAddress: address,
+            contractAddress: erc20Address,
+            encodedFunction: erc20.interface.encodeFunctionData('mint', [
+              address,
+              ethers.utils.parseUnits('1', 18),
+            ]),
+            chainId,
+          },
+        },
+      ],
+    });
+    dispatch(addOp(response));
+    return response;
+  };
+
+  const getOperations = async (address: string, chainId: number) => {
+    const data = (await ethereum.request({
+      method: 'wallet_invokeSnap',
+      params: [
+        snapId,
+        {
+          method: 'bls_getOperations',
+          params: {
+            senderAddress: address,
+            chainId,
+          },
+        },
+      ],
+    })) as Operation[];
+    dispatch(setOperations(data));
+    return data;
+  };
+
+  const getBundles = async (
+    senderAddress: string,
+    chainId: number,
+    contractAddress?: string,
+  ) => {
+    const data = (await ethereum.request({
+      method: 'wallet_invokeSnap',
+      params: [
+        snapId,
+        {
+          method: 'bls_getBundles',
+          params: {
+            senderAddress,
+            contractAddress,
+            chainId,
+          },
+        },
+      ],
+    })) as Bundle[];
+    dispatch(setBundles(data));
+    return data;
+  };
+
+  const getBundle = async (
+    bundleHash: string,
+    chainId: number,
+    showLoading = true,
+  ) => {
+    if (showLoading) {
+      dispatch(enableLoadingWithMessage('Retrieving bundles...'));
+    }
+
+    try {
+      const data = (await ethereum.request({
+        method: 'wallet_invokeSnap',
+        params: [
+          snapId,
+          {
+            method: 'bls_getBundle',
+            params: {
+              bundleHash,
+              chainId,
+            },
+          },
+        ],
+      })) as Bundle | undefined;
+
+      if (data) {
+        dispatch(updateBundle(data));
+      }
+
+      if (showLoading) {
+        dispatch(disableLoading());
+      }
+      return data;
+    } catch (err) {
+      dispatch(disableLoading());
+      console.error(err);
+    }
+  };
+
+  const sendBundle = async (senderAddress: string, chainId: number) => {
+    const data = await ethereum.request({
+      method: 'wallet_invokeSnap',
+      params: [
+        snapId,
+        {
+          method: 'bls_sendBundle',
+          params: {
+            senderAddress,
+            chainId,
+          },
+        },
+      ],
+    });
+    console.log('sendBundle', data);
+    dispatch(cleanOperations());
+    dispatch(addBundle({ bundleHash: data.hash }));
+    return data;
+  };
+
   const getWalletData = async (chainId: number, networks?: Network[]) => {
     if (!loader.isLoading && !networks) {
       dispatch(enableLoadingWithMessage('Getting network data ...'));
     }
 
-    let acc: Account[] | Account = await recoverAccounts(chainId);
-    if (!acc || acc.length === 0 || !acc[0].address) {
+    let account: Account[] | Account = await recoverAccounts(chainId);
+    if (!account || account.length === 0 || !account[0].address) {
       // eslint-disable-next-line require-atomic-updates
-      acc = await createAccount(chainId);
+      account = await createAccount(chainId);
     }
-    // const acc: Account = await addAccount(chainId);
-    dispatch(setAccounts(acc));
+    dispatch(setAccounts(account));
+    const accountAddr = Array.isArray(account)
+      ? account[0].address
+      : account.address;
 
     const tokens = await getTokens(chainId);
     console.log('Tokens', tokens);
     const tokenBalances = await Promise.all(
       tokens.map(async (token) => {
-        const accountAddr = Array.isArray(acc) ? acc[0].address : acc.address;
         return await getTokenBalance(token.address, accountAddr, chainId);
       }),
     );
@@ -230,6 +405,9 @@ export const useBLSSnap = () => {
       setErc20TokenBalance(tokensWithBalances[0]);
     }
 
+    await getOperations(accountAddr, chainId);
+    await getBundles(accountAddr, chainId);
+
     // if (!Array.isArray(acc)) {
     //   dispatch(setInfoModalVisible(true));
     // }
@@ -248,6 +426,7 @@ export const useBLSSnap = () => {
 
     try {
       const networks = await getNetworks();
+      console.log('Networks', networks);
       if (!networks) {
         return;
       }
@@ -266,175 +445,6 @@ export const useBLSSnap = () => {
     }
   };
 
-  const refreshTokensUSDPrice = async () => {
-    if (erc20TokenBalances.length > 0) {
-      const tokenUSDPrices = await Promise.all(
-        erc20TokenBalances.map(async (token) => {
-          return await getAssetPriceUSD(token);
-        }),
-      );
-
-      const tokensRefreshed = erc20TokenBalances.map(
-        (token, index): Erc20TokenBalance => {
-          return {
-            ...token,
-            usdPrice: tokenUSDPrices[index],
-          };
-        },
-      );
-      dispatch(setErc20TokenBalances(tokensRefreshed));
-    }
-  };
-
-  const updateTokenBalance = async (
-    tokenAddress: string,
-    accountAddress: string,
-    chainId: number,
-  ) => {
-    console.log('updateTokenBalance', tokenAddress, accountAddress, chainId);
-    const foundTokenWithBalance = erc20TokenBalances.find(
-      (tokenBalance) =>
-        BigNumber.from(tokenBalance.address).eq(BigNumber.from(tokenAddress)) &&
-        tokenBalance.chainId === chainId,
-    );
-    if (foundTokenWithBalance) {
-      const tokenBalance = await getTokenBalance(
-        tokenAddress,
-        accountAddress,
-        chainId,
-      );
-      const usdPrice = await getAssetPriceUSD(foundTokenWithBalance);
-      const tokenWithBalance: Erc20TokenBalance = addMissingPropertiesToToken(
-        foundTokenWithBalance,
-        tokenBalance,
-        usdPrice,
-      );
-      dispatch(upsertErc20TokenBalance(tokenWithBalance));
-    }
-  };
-
-  async function addOperation(address: string, chainId: number) {
-    const erc20Address = '0x5081a39b8A5f0E35a8D959395a630b68B74Dd30f';
-    const erc20Abi = ['function mint(address to, uint amount) returns (bool)'];
-    const erc20 = new ethers.Contract(erc20Address, erc20Abi);
-
-    const response = await ethereum.request({
-      method: 'wallet_invokeSnap',
-      params: [
-        snapId,
-        {
-          method: 'bls_addOperation',
-          params: {
-            contractAddress: erc20Address,
-            encodedFunction: erc20.interface.encodeFunctionData('mint', [
-              address,
-              ethers.utils.parseUnits('1', 18),
-            ]),
-            chainId,
-          },
-        },
-      ],
-    });
-    dispatch(addOp(response));
-    return response;
-  }
-
-  const getOperations = async (chainId: number) => {
-    const data = (await ethereum.request({
-      method: 'wallet_invokeSnap',
-      params: [
-        snapId,
-        {
-          method: 'bls_getOperations',
-          params: {
-            chainId,
-          },
-        },
-      ],
-    })) as Operation[];
-    return data;
-  };
-
-  const getBundles = async (
-    senderAddress: string,
-    contractAddress: string,
-    pageSize: number,
-    chainId: number,
-    showLoading = true,
-    onlyFromState = false,
-  ) => {
-    if (showLoading) {
-      dispatch(enableLoadingWithMessage('Retrieving bundles...'));
-    }
-
-    try {
-      const data = await ethereum.request({
-        method: 'wallet_invokeSnap',
-        params: [
-          snapId,
-          {
-            method: 'bls_getBundles',
-            params: {
-              senderAddress,
-              contractAddress,
-              pageSize,
-              chainId,
-            },
-          },
-        ],
-      });
-
-      let _bundles = data;
-      if (onlyFromState) {
-        // Filter out stored txns that are not found in the retrieved txns
-        const filteredBundles = bundles.filter((bundle: Bundle) => {
-          return !_bundles.find((b: Bundle) =>
-            ethers.BigNumber.from(b.bundleHash).eq(
-              ethers.BigNumber.from(bundle.bundleHash),
-            ),
-          );
-        });
-
-        // // sort in timestamp descending order
-        // storedTxns = [...storedTxns, ...filteredTxns].sort(
-        //   (a: Transaction, b: Transaction) => b.timestamp - a.timestamp,
-        // );
-        _bundles = [..._bundles, ...filteredBundles];
-      }
-
-      dispatch(setBundles(_bundles));
-
-      if (showLoading) {
-        dispatch(disableLoading());
-      }
-      return data;
-    } catch (err) {
-      dispatch(disableLoading());
-      dispatch(setBundles([]));
-      console.error(err);
-    }
-  };
-
-  const sendBundle = async (senderAddress: string, chainId: number) => {
-    const data = await ethereum.request({
-      method: 'wallet_invokeSnap',
-      params: [
-        snapId,
-        {
-          method: 'bls_sendBundle',
-          params: {
-            senderAddress,
-            chainId,
-          },
-        },
-      ],
-    });
-    console.log('sendBundle', data);
-    dispatch(cleanOperations());
-    dispatch(addBundle({ bundleHash: data.hash }));
-    return data;
-  };
-
   return {
     connectToSnap,
     getNetworks,
@@ -447,6 +457,7 @@ export const useBLSSnap = () => {
     updateTokenBalance,
     addOperation,
     getOperations,
+    getBundle,
     getBundles,
     sendBundle,
   };

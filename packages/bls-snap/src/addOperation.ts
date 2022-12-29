@@ -5,11 +5,12 @@ import { upsertOperation } from './utils/snapUtils';
 export async function addOperation(params: ApiParams) {
   try {
     const { state, mutex, requestParams, wallet } = params;
-    const { contractAddress, encodedFunction, chainId } =
+    const { senderAddress, contractAddress, encodedFunction, chainId } =
       requestParams as AddOperationRequestParams;
 
     const operation = {
-      ethValue: 0,
+      value: 0,
+      senderAddress,
       contractAddress,
       encodedFunction,
     };

@@ -17,12 +17,16 @@ export async function sendBundle(params: ApiParams) {
 
     const account = snapUtils.getAccount(senderAddress, chainId, state);
     if (!account) {
-      throw new Error(`Account not found: ${senderAddress}`);
+      throw new Error(
+        `Account not found: ${senderAddress} chainId: ${chainId}`,
+      );
     }
 
-    const operations = snapUtils.getOperations(chainId, state);
+    const operations = snapUtils.getOperations(senderAddress, chainId, state);
     if (!operations?.length) {
-      throw new Error('No operations found');
+      throw new Error(
+        `No operations found: ${senderAddress} chainId: ${chainId}`,
+      );
     }
 
     const netConfig = validateConfig(ARBITRUM_GOERLI_NETWORK.config);
@@ -46,7 +50,13 @@ export async function sendBundle(params: ApiParams) {
     // action fails they will all fail.
     const bundle = _account.sign({
       nonce,
-      actions: operations,
+      actions: operations.map((op) => {
+        return {
+          ethValue: op.value,
+          contractAddress: op.contractAddress,
+          encodedFunction: op.encodedFunction,
+        };
+      }),
     });
 
     const aggregator = new Aggregator(ARBITRUM_GOERLI_NETWORK.aggregator);
@@ -57,9 +67,9 @@ export async function sendBundle(params: ApiParams) {
     }
 
     console.log('Bundle hash:', addResult.hash);
-
     await snapUtils.upsertBundle(
       {
+        senderAddress,
         bundleHash: addResult.hash,
         operations,
       } as Bundle,

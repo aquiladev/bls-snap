@@ -5,9 +5,10 @@ import * as snapUtils from './utils/snapUtils';
 export async function getOperations(params: ApiParams) {
   try {
     const { state, requestParams } = params;
-    const { chainId } = requestParams as GetOperationsRequestParams;
+    const { senderAddress, chainId } =
+      requestParams as GetOperationsRequestParams;
 
-    const operations = snapUtils.getOperations(chainId, state);
+    const operations = snapUtils.getOperations(senderAddress, chainId, state);
     console.log(`getOperations:\n${JSON.stringify(operations, null, 2)}`);
 
     return operations || [];

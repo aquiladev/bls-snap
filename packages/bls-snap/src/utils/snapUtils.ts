@@ -214,10 +214,13 @@ export async function upsertOperation(
 }
 
 export function getOperations(
+  senderAddress: string,
   chainId: number,
   state: SnapState,
 ): Operation[] | undefined {
-  return state[chainId]?.operations;
+  return state[chainId]?.operations?.filter(
+    (op) => op.senderAddress === senderAddress,
+  );
 }
 
 export async function cleanOperations(
@@ -288,23 +291,38 @@ export async function upsertBundle(
   });
 }
 
-export async function getBundles(
+export function getBundles(
+  senderAddress: string,
+  chainId: number,
+  state: SnapState,
+): Bundle[] | undefined {
+  return state[chainId]?.bundles?.filter(
+    (op) => op.senderAddress === senderAddress,
+  );
+}
+
+export async function getBundle(
+  bundleHash: string,
   chainId: number,
   wallet: any,
   mutex: Mutex,
   state: SnapState,
-): Promise<Bundle[] | undefined> {
-  const pendingBundles = (state[chainId]?.bundles || []).filter(
-    (b) => !b.blockNumber,
+): Promise<Bundle> {
+  const bundle = state[chainId]?.bundles?.find(
+    (op) => op.bundleHash === bundleHash,
   );
-  for (const bundle of pendingBundles) {
-    await checkBundleStatus(bundle, chainId, wallet, mutex, state);
+  if (!bundle) {
+    throw new Error(`Bundle not found ${bundleHash}`);
   }
 
-  return state[chainId]?.bundles;
+  if (!bundle?.blockNumber) {
+    await updateBundleStatus(bundle, chainId, wallet, mutex, state);
+  }
+
+  return bundle;
 }
 
-export async function checkBundleStatus(
+export async function updateBundleStatus(
   bundle: Bundle,
   chainId: number,
   wallet: any,
@@ -320,6 +338,7 @@ export async function checkBundleStatus(
       bundle.error = receipt.submitError;
     } else {
       bundle.transactionIndex = receipt.transactionIndex;
+      bundle.transactionHash = receipt.transactionHash;
       bundle.blockHash = receipt.blockHash;
       bundle.blockNumber = receipt.blockNumber;
     }

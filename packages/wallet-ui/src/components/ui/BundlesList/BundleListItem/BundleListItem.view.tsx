@@ -1,12 +1,12 @@
 import { Bundle } from 'bls-snap/src/types/snapState';
-import { Wrapper } from './TransactionListItem.style';
+import { Wrapper } from './BundleListItem.style';
 import { getBundleStatus } from './types';
 
 type Props = {
   transaction: Bundle;
 };
 
-export const TransactionListItemView = ({ transaction }: Props) => {
+export const BundleListItemView = ({ transaction }: Props) => {
   const status = getBundleStatus(transaction);
   const statusColor = status.toLowerCase() === 'pending' ? 'orange' : 'green';
 

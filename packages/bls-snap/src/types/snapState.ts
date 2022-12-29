@@ -28,12 +28,14 @@ export type Erc20Token = {
 };
 
 export type Operation = {
-  ethValue: number;
+  value: number;
+  senderAddress: string;
   contractAddress: string;
   encodedFunction: string;
 };
 
 export type Bundle = {
+  senderAddress: string;
   operations: Operation[];
   bundleHash: string;
   error?: string;
