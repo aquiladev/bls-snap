@@ -28,6 +28,7 @@ export type Erc20Token = {
 };
 
 export type Operation = {
+  id: string;
   value: number;
   senderAddress: string;
   contractAddress: string;

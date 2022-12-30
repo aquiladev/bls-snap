@@ -78,7 +78,7 @@ export async function sendBundle(params: ApiParams) {
       mutex,
       state,
     );
-    await snapUtils.cleanOperations(chainId, wallet, mutex, state);
+    await snapUtils.removeOperations(operations, chainId, wallet, mutex, state);
     return addResult;
   } catch (err) {
     console.error(`Problem found: ${err}`);

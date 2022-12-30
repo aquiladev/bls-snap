@@ -12,7 +12,7 @@ export const OperationsListView = () => {
     <Wrapper<FC<IListProps<Operation>>>
       data={wallet.operations || []}
       render={(op) => <OperationListItem operation={op} />}
-      keyExtractor={(op) => op.contractAddress + op.encodedFunction}
+      keyExtractor={(op) => op.id}
     />
   );
 };

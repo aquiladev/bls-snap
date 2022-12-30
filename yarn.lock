@@ -4442,6 +4442,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/uuid@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "@types/uuid@npm:9.0.0"
+  checksum: 59ae56d9547c8758588659da2a2b4c97cce79c2aae1798c892bb29452ef08e87859dea2ec3a66bfa88d0d2153147520be2b1893be920f9f0bc9c53a3207ea6aa
+  languageName: node
+  linkType: hard
+
 "@types/ws@npm:^8.5.1":
   version: 8.5.3
   resolution: "@types/ws@npm:8.5.3"
@@ -5661,12 +5668,13 @@ __metadata:
 
 "bls-snap@file:../bls-snap::locator=wallet-ui%40workspace%3Apackages%2Fwallet-ui":
   version: 0.1.0
-  resolution: "bls-snap@file:../bls-snap#../bls-snap::hash=7b2354&locator=wallet-ui%40workspace%3Apackages%2Fwallet-ui"
+  resolution: "bls-snap@file:../bls-snap#../bls-snap::hash=9e2158&locator=wallet-ui%40workspace%3Apackages%2Fwallet-ui"
   dependencies:
     async-mutex: ^0.4.0
     bls-wallet-clients: ^0.8.1
     ethers: ^5.7.2
-  checksum: 730da921e441b5c2eee0962a1556304f9a06cc50eadce780a1bebac60fec9c983be2cb5984a21d52123d2f1bd579ca5660e5f0192d1bf5cc15cf390e82704c22
+    uuid: ^9.0.0
+  checksum: 2f7d2caedb4a67a3e0b6344fb79d1bd067914ab82d72b259ff81eb6a4faeb47a2937d088f8e3135b622c0e25a927f05ac9b91ef667a5b5f391cb2b8bed311599
   languageName: node
   linkType: hard
 
@@ -5682,6 +5690,7 @@ __metadata:
     "@metamask/eslint-config-typescript": ^10.0.0
     "@metamask/snap-types": ^0.22.0
     "@metamask/snaps-cli": ^0.22.0
+    "@types/uuid": ^9.0.0
     "@typescript-eslint/eslint-plugin": ^5.33.0
     "@typescript-eslint/parser": ^5.33.0
     async-mutex: ^0.4.0
@@ -5698,6 +5707,7 @@ __metadata:
     prettier-plugin-packagejson: ^2.2.11
     rimraf: ^3.0.2
     typescript: ^4.7.4
+    uuid: ^9.0.0
   languageName: unknown
   linkType: soft
 
@@ -16489,6 +16499,15 @@ __metadata:
   bin:
     uuid: dist/bin/uuid
   checksum: 5575a8a75c13120e2f10e6ddc801b2c7ed7d8f3c8ac22c7ed0c7b2ba6383ec0abda88c905085d630e251719e0777045ae3236f04c812184b7c765f63a70e58df
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "uuid@npm:9.0.0"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 8dd2c83c43ddc7e1c71e36b60aea40030a6505139af6bee0f382ebcd1a56f6cd3028f7f06ffb07f8cf6ced320b76aea275284b224b002b289f89fe89c389b028
   languageName: node
   linkType: hard
 
