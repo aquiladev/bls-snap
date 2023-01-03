@@ -1,5 +1,6 @@
 import { OnRpcRequestHandler } from '@metamask/snap-types';
 import { Mutex } from 'async-mutex';
+
 import { addOperation } from './addOperation';
 import { getOperations } from './getOperations';
 import { createAccount } from './createAccount';
