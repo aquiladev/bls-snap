@@ -5668,13 +5668,12 @@ __metadata:
 
 "bls-snap@file:../bls-snap::locator=wallet-ui%40workspace%3Apackages%2Fwallet-ui":
   version: 0.1.0
-  resolution: "bls-snap@file:../bls-snap#../bls-snap::hash=9e2158&locator=wallet-ui%40workspace%3Apackages%2Fwallet-ui"
+  resolution: "bls-snap@file:../bls-snap#../bls-snap::hash=c36ccf&locator=wallet-ui%40workspace%3Apackages%2Fwallet-ui"
   dependencies:
     async-mutex: ^0.4.0
-    bls-wallet-clients: ^0.8.1
     ethers: ^5.7.2
     uuid: ^9.0.0
-  checksum: 2f7d2caedb4a67a3e0b6344fb79d1bd067914ab82d72b259ff81eb6a4faeb47a2937d088f8e3135b622c0e25a927f05ac9b91ef667a5b5f391cb2b8bed311599
+  checksum: c9ad8b6fbe096de6093b2b66f082ffe521a8b5457834044d4c0c2d29442705c6c16044e52ab3ccb3156eef795ceffbb59108ce78fcab5ef7ce1995ffcb3c398f
   languageName: node
   linkType: hard
 
@@ -5694,7 +5693,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^5.33.0
     "@typescript-eslint/parser": ^5.33.0
     async-mutex: ^0.4.0
-    bls-wallet-clients: ^0.8.1
+    bls-wallet-clients: ^0.8.2
     eslint: ^8.21.0
     eslint-config-prettier: ^8.1.0
     eslint-plugin-import: ^2.26.0
@@ -5711,17 +5710,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"bls-wallet-clients@npm:^0.7.3":
-  version: 0.7.3
-  resolution: "bls-wallet-clients@npm:0.7.3"
-  dependencies:
-    "@thehubbleproject/bls": ^0.5.1
-    ethers: 5.5.4
-  checksum: f3b45af79f826854f38f9a619d4528f5be15ee9964b10b8304fa76766e70c58c7133b3a385e09eaa96634c6e4861a6efc4ae5a41f222c79a92990049c0b52a1d
-  languageName: node
-  linkType: hard
-
-"bls-wallet-clients@npm:^0.8.1":
+"bls-wallet-clients@npm:^0.8.2":
   version: 0.8.2
   resolution: "bls-wallet-clients@npm:0.8.2"
   dependencies:
@@ -16623,7 +16612,6 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^5.33.0
     "@typescript-eslint/parser": ^5.33.0
     bls-snap: "file:../bls-snap"
-    bls-wallet-clients: ^0.7.3
     buffer: ^6.0.3
     console-browserify: ^1.2.0
     crypto-browserify: ^3.12.0

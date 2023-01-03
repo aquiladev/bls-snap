@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "async-mutex": "^0.4.0",
-    "bls-wallet-clients": "^0.8.1",
+    "bls-wallet-clients": "^0.8.2",
     "ethers": "^5.7.2",
     "uuid": "^9.0.0"
   },

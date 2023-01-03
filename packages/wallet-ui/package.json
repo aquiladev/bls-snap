@@ -39,7 +39,6 @@
     "@reduxjs/toolkit": "^1.8.5",
     "@types/semver": "^7.3.12",
     "bls-snap": "file:../bls-snap",
-    "bls-wallet-clients": "^0.7.3",
     "buffer": "^6.0.3",
     "console-browserify": "^1.2.0",
     "crypto-browserify": "^3.12.0",
