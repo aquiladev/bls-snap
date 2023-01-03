@@ -120,6 +120,31 @@ export function getAccounts(
   return state[chainId]?.accounts;
 }
 
+export async function addTestToken(
+  network: Network,
+  wallet: any,
+  mutex: Mutex,
+  state: SnapState,
+) {
+  if (!network?.config?.addresses?.testToken) {
+    return;
+  }
+
+  const token: Erc20Token = {
+    address: network.config.addresses.testToken,
+    name: 'AnyToken',
+    symbol: 'TOK',
+    decimals: 18,
+  };
+  await upsertErc20Token(
+    token,
+    ARBITRUM_GOERLI_NETWORK.chainId,
+    wallet,
+    mutex,
+    state,
+  );
+}
+
 export async function upsertErc20Token(
   erc20Token: Erc20Token,
   chainId: number,
@@ -204,6 +229,7 @@ export async function upsertOperation(
       state[chainId].operations = [];
     }
 
+    // insert
     state[chainId].operations?.push(operation);
 
     await wallet.request({
@@ -219,11 +245,12 @@ export function getOperations(
   state: SnapState,
 ): Operation[] | undefined {
   return state[chainId]?.operations?.filter(
-    (op) => op.senderAddress === senderAddress,
+    (op) => op.senderAddress.toLowerCase() === senderAddress.toLowerCase(),
   );
 }
 
-export async function cleanOperations(
+export async function removeOperations(
+  operations: Operation[],
   chainId: number,
   wallet: any,
   mutex: Mutex,
@@ -240,7 +267,9 @@ export async function cleanOperations(
 
     assertNetwork(chainId, state);
 
-    state[chainId].operations = [];
+    state[chainId].operations = state[chainId].operations?.filter((o) => {
+      return !operations.find((op) => op.id === o.id);
+    });
 
     await wallet.request({
       method: 'snap_manageState',
@@ -297,7 +326,7 @@ export function getBundles(
   state: SnapState,
 ): Bundle[] | undefined {
   return state[chainId]?.bundles?.filter(
-    (op) => op.senderAddress === senderAddress,
+    (op) => op.senderAddress.toLowerCase() === senderAddress.toLowerCase(),
   );
 }
 

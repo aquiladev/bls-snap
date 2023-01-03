@@ -1,10 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { ethers } from 'ethers';
-import {
-  Aggregator,
-  BlsWalletWrapper,
-  validateConfig,
-} from 'bls-wallet-clients';
+import { Aggregator, BlsWalletWrapper } from 'bls-wallet-clients';
+
 import { ApiParams, SendBundleRequestParams } from './types/snapApi';
 import { ARBITRUM_GOERLI_NETWORK } from './utils/constants';
 import * as snapUtils from './utils/snapUtils';
@@ -29,7 +26,7 @@ export async function sendBundle(params: ApiParams) {
       );
     }
 
-    const netConfig = validateConfig(ARBITRUM_GOERLI_NETWORK.config);
+    const netConfig = ARBITRUM_GOERLI_NETWORK.config;
     if (chainId !== ARBITRUM_GOERLI_NETWORK.chainId) {
       throw new Error(`ChainId not supported: ${chainId}`);
     }
@@ -78,7 +75,7 @@ export async function sendBundle(params: ApiParams) {
       mutex,
       state,
     );
-    await snapUtils.cleanOperations(chainId, wallet, mutex, state);
+    await snapUtils.removeOperations(operations, chainId, wallet, mutex, state);
     return addResult;
   } catch (err) {
     console.error(`Problem found: ${err}`);

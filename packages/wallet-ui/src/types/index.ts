@@ -13,5 +13,6 @@ export type Operation = {
 
 export type Erc20TokenBalance = {
   amount: BigNumber;
+  chainId: number;
   usdPrice?: number;
 } & Types.Erc20Token;

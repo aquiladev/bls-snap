@@ -25,21 +25,19 @@ export const HeaderView = ({ address }: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const timeoutHandle = useRef(setTimeout(() => {}));
 
-  const getUSDValue = () => {
-    const amountFloat = parseFloat(
+  const getAmount = (): number => {
+    return parseFloat(
       ethers.utils.formatUnits(
         wallet.erc20TokenBalanceSelected.amount,
         wallet.erc20TokenBalanceSelected.decimals,
       ),
     );
-    if (wallet.erc20TokenBalanceSelected.usdPrice) {
-      return getAmountPrice(
-        wallet.erc20TokenBalanceSelected,
-        amountFloat,
-        false,
-      );
-    }
-    return '';
+  };
+
+  const getUSDValue = (amount: number) => {
+    return wallet.erc20TokenBalanceSelected.usdPrice
+      ? getAmountPrice(wallet.erc20TokenBalanceSelected, amount, false)
+      : '';
   };
 
   // eslint-disable-next-line consistent-return
@@ -67,11 +65,12 @@ export const HeaderView = ({ address }: Props) => {
     await addOperation(wallet.accounts[0].address, chainId);
   };
 
+  const amount = getAmount();
   return (
     <Wrapper>
       <AssetQuantity
-        USDValue={getUSDValue()}
-        currencyValue={wallet.erc20TokenBalanceSelected.name}
+        USDValue={getUSDValue(amount)}
+        currencyValue={amount.toString()}
         currency={wallet.erc20TokenBalanceSelected.symbol}
         size="big"
         centered

@@ -7,12 +7,12 @@ import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import {
   setForceReconnect,
   setWalletConnection,
-  setErc20TokenBalanceSelected,
   setAccounts,
+  setErc20TokenBalanceSelected,
   setErc20TokenBalances,
   upsertErc20TokenBalance,
   addOperation as addOp,
-  cleanOperations,
+  removeOperations,
   setOperations,
   setBundles,
   addBundle,
@@ -27,7 +27,7 @@ import { getAssetPriceUSD } from './coinGecko';
 export const useBLSSnap = () => {
   const dispatch = useAppDispatch();
   const { activeNetwork } = useAppSelector((state) => state.networks);
-  const { erc20TokenBalances, bundles } = useAppSelector(
+  const { erc20TokenBalances, operations } = useAppSelector(
     (state) => state.wallet,
   );
   const { loader } = useAppSelector((state) => state.UI);
@@ -196,10 +196,13 @@ export const useBLSSnap = () => {
         }),
       );
 
+      const networks = await getNetworks();
+      const { chainId } = networks[activeNetwork];
       const tokensRefreshed = erc20TokenBalances.map(
         (token, index): Erc20TokenBalance => {
           return {
             ...token,
+            chainId,
             usdPrice: tokenUSDPrices[index],
           };
         },
@@ -227,6 +230,7 @@ export const useBLSSnap = () => {
       const usdPrice = await getAssetPriceUSD(foundTokenWithBalance);
       const tokenWithBalance: Erc20TokenBalance = addMissingPropertiesToToken(
         foundTokenWithBalance,
+        chainId,
         tokenBalance,
         usdPrice,
       );
@@ -341,6 +345,7 @@ export const useBLSSnap = () => {
   };
 
   const sendBundle = async (senderAddress: string, chainId: number) => {
+    dispatch(removeOperations(operations));
     const data = await ethereum.request({
       method: 'wallet_invokeSnap',
       params: [
@@ -355,7 +360,6 @@ export const useBLSSnap = () => {
       ],
     });
     console.log('sendBundle', data);
-    dispatch(cleanOperations());
     dispatch(addBundle({ bundleHash: data.hash }));
     return data;
   };
@@ -392,6 +396,7 @@ export const useBLSSnap = () => {
     const tokensWithBalances = tokens.map((token, index): Erc20TokenBalance => {
       return addMissingPropertiesToToken(
         token,
+        chainId,
         tokenBalances[index],
         tokenUSDPrices[index],
       );

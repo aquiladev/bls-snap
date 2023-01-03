@@ -12,11 +12,11 @@ export type BaseRequestParams = {
   chainId: number;
 };
 
+export type GetNetworksRequestParams = Omit<BaseRequestParams, 'chainId'>;
+
 export type RecoverAccountRequestParams = BaseRequestParams;
 
 export type CreateAccountRequestParams = BaseRequestParams;
-
-export type GetNetworksRequestParams = Omit<BaseRequestParams, 'chainId'>;
 
 export type GetErc20TokensRequestParams = BaseRequestParams;
 
@@ -25,14 +25,14 @@ export type GetErc20TokenBalanceRequestParams = {
   userAddress: string;
 } & BaseRequestParams;
 
+export type GetOperationsRequestParams = {
+  senderAddress: string;
+} & BaseRequestParams;
+
 export type AddOperationRequestParams = {
   senderAddress: string;
   contractAddress: string;
   encodedFunction: string;
-} & BaseRequestParams;
-
-export type GetOperationsRequestParams = {
-  senderAddress: string;
 } & BaseRequestParams;
 
 export type GetBundleRequestParams = {
@@ -50,13 +50,13 @@ export type SendBundleRequestParams = {
 } & BaseRequestParams;
 
 export type ApiRequestParams =
+  | GetNetworksRequestParams
   | RecoverAccountRequestParams
   | CreateAccountRequestParams
-  | GetNetworksRequestParams
   | GetErc20TokensRequestParams
   | GetErc20TokenBalanceRequestParams
-  | AddOperationRequestParams
   | GetOperationsRequestParams
+  | AddOperationRequestParams
   | GetBundleRequestParams
   | GetBundlesRequestParams
   | SendBundleRequestParams;

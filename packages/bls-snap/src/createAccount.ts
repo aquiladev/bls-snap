@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { ethers } from 'ethers';
-import { BlsWalletWrapper, validateConfig } from 'bls-wallet-clients';
+import { BlsWalletWrapper } from 'bls-wallet-clients';
 
 import { ApiParams, CreateAccountRequestParams } from './types/snapApi';
 import { ARBITRUM_GOERLI_NETWORK } from './utils/constants';
@@ -10,7 +10,7 @@ export async function createAccount(params: ApiParams) {
   try {
     const { state, mutex, wallet, requestParams } = params;
     const { chainId } = requestParams as CreateAccountRequestParams;
-    const netConfig = validateConfig(ARBITRUM_GOERLI_NETWORK.config);
+    const netConfig = ARBITRUM_GOERLI_NETWORK.config;
     if (chainId !== ARBITRUM_GOERLI_NETWORK.chainId) {
       throw new Error(`ChainId not supported: ${chainId}`);
     }

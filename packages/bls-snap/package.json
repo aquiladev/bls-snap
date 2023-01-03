@@ -29,7 +29,8 @@
   "dependencies": {
     "async-mutex": "^0.4.0",
     "bls-wallet-clients": "^0.8.1",
-    "ethers": "^5.7.2"
+    "ethers": "^5.7.2",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@lavamoat/allow-scripts": "^2.0.3",
@@ -40,6 +41,7 @@
     "@metamask/eslint-config-typescript": "^10.0.0",
     "@metamask/snap-types": "^0.22.0",
     "@metamask/snaps-cli": "^0.22.0",
+    "@types/uuid": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
     "eslint": "^8.21.0",

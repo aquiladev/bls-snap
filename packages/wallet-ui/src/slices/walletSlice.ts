@@ -90,8 +90,11 @@ export const walletSlice = createSlice({
     addOperation: (state, { payload }) => {
       state.operations = [...state.operations, payload];
     },
-    cleanOperations: (state) => {
-      state.operations = [];
+    removeOperations: (state, { payload }) => {
+      const _operations = Array(payload).flat();
+      state.operations = state.operations.filter((o) => {
+        return !_operations.find((op) => op.id === o.id);
+      });
     },
     setBundles: (state, { payload }) => {
       state.bundles = payload;
@@ -120,7 +123,7 @@ export const {
   upsertErc20TokenBalance,
   setOperations,
   addOperation,
-  cleanOperations,
+  removeOperations,
   setBundles,
   addBundle,
   updateBundle,

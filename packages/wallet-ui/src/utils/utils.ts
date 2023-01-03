@@ -54,11 +54,13 @@ export const isSpecialInputKey = (event: KeyboardEvent<HTMLInputElement>) => {
 
 export const addMissingPropertiesToToken = (
   token: Erc20Token,
+  chainId: number,
   balance?: string,
   usdPrice?: number,
 ): Erc20TokenBalance => {
   return {
     ...token,
+    chainId,
     amount: ethers.BigNumber.from(balance || '0x0'),
     usdPrice,
   };

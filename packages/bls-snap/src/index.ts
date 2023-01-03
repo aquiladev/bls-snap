@@ -1,5 +1,6 @@
 import { OnRpcRequestHandler } from '@metamask/snap-types';
 import { Mutex } from 'async-mutex';
+
 import { addOperation } from './addOperation';
 import { getOperations } from './getOperations';
 import { createAccount } from './createAccount';
@@ -10,9 +11,8 @@ import { getBundles } from './getBundles';
 import { recoverAccounts } from './recoverAccounts';
 import { sendBundle } from './sendBundle';
 import { ApiParams, ApiRequestParams } from './types/snapApi';
-import { Erc20Token } from './types/snapState';
 import { ARBITRUM_GOERLI_NETWORK } from './utils/constants';
-import { upsertErc20Token, upsertNetwork } from './utils/snapUtils';
+import { addTestToken, upsertNetwork } from './utils/snapUtils';
 import { getBundle } from './getBundle';
 
 const mutex = new Mutex();
@@ -63,21 +63,7 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
   }
 
   await upsertNetwork(ARBITRUM_GOERLI_NETWORK, wallet, mutex, state);
-
-  // Add default token
-  const token: Erc20Token = {
-    address: ARBITRUM_GOERLI_NETWORK.config.addresses.testToken,
-    name: 'AnyToken',
-    symbol: 'TOK',
-    decimals: 18,
-  };
-  await upsertErc20Token(
-    token,
-    ARBITRUM_GOERLI_NETWORK.chainId,
-    wallet,
-    mutex,
-    state,
-  );
+  await addTestToken(ARBITRUM_GOERLI_NETWORK, wallet, mutex, state);
 
   const requestParams = request?.params as unknown as ApiRequestParams;
   console.log(
