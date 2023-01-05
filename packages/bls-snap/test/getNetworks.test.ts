@@ -1,7 +1,4 @@
 /* eslint-disable import/no-named-as-default-member */
-import chai, { expect } from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
 import { Mutex } from 'async-mutex';
 import { NetworkConfig } from 'bls-wallet-clients';
 
@@ -11,18 +8,15 @@ import { SnapState } from '../src/types/snapState';
 import * as snapUtils from '../src/utils/snapUtils';
 import { WalletMock } from './utils/wallet.mock';
 
-chai.use(sinonChai);
-const sandbox = sinon.createSandbox();
-
 describe('getNetworks', function () {
   const walletStub = new WalletMock();
 
   const state: SnapState = {
     212: {
       name: 'Testnet',
-      chainId: 1,
+      chainId: 212,
       rpcUrl: 'https://testnet-rpc.com',
-      aggregator: 'https://testnet-explorer.com',
+      aggregator: 'https://testnet-aggregator.com',
       config: {} as NetworkConfig,
     },
   };
@@ -35,7 +29,6 @@ describe('getNetworks', function () {
 
   afterEach(function () {
     walletStub.reset();
-    sandbox.restore();
   });
 
   it('should get the networks', async () => {
@@ -50,7 +43,7 @@ describe('getNetworks', function () {
   });
 
   it('should throw error if getNetworks failed', async function () {
-    sandbox.stub(snapUtils, 'getNetworks').throws(new Error());
+    sinon.stub(snapUtils, 'getNetworks').throws(new Error());
     const requestObject: GetNetworksRequestParams = {};
     apiParams.requestParams = requestObject;
 
