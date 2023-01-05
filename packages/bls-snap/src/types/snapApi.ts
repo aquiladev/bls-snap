@@ -14,7 +14,7 @@ export type BaseRequestParams = {
 
 export type GetNetworksRequestParams = Omit<BaseRequestParams, 'chainId'>;
 
-export type RecoverAccountRequestParams = BaseRequestParams;
+export type RecoverAccountsRequestParams = BaseRequestParams;
 
 export type CreateAccountRequestParams = BaseRequestParams;
 
@@ -51,7 +51,7 @@ export type SendBundleRequestParams = {
 
 export type ApiRequestParams =
   | GetNetworksRequestParams
-  | RecoverAccountRequestParams
+  | RecoverAccountsRequestParams
   | CreateAccountRequestParams
   | GetErc20TokensRequestParams
   | GetErc20TokenBalanceRequestParams

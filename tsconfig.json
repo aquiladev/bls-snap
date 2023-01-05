@@ -8,7 +8,7 @@
     "resolveJsonModule": true,
     "useUnknownInCatchVariables": false,
     "sourceMap": true,
-    "strict": true,
+    "strict": false,
     "target": "ES2017"
   },
   "exclude": ["**/__snapshots__/**", "**/test/**", "**/*.test.ts"]

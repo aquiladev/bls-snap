@@ -5,6 +5,7 @@ import { BlsWalletWrapper } from 'bls-wallet-clients';
 import { ApiParams, CreateAccountRequestParams } from './types/snapApi';
 import { ARBITRUM_GOERLI_NETWORK } from './utils/constants';
 import { upsertAccount } from './utils/snapUtils';
+import { randomPrivateKey } from './utils/crypto';
 
 export async function createAccount(params: ApiParams) {
   try {
@@ -15,13 +16,7 @@ export async function createAccount(params: ApiParams) {
       throw new Error(`ChainId not supported: ${chainId}`);
     }
 
-    // const privateKey =
-    //   '0x0001020304050607080910111213141516171819202122232425262728293031';
-
-    // 32 random bytes
-    const _key = new Uint8Array(32);
-    crypto.getRandomValues(_key);
-    const privateKey = ethers.utils.hexlify(_key);
+    const privateKey = randomPrivateKey();
 
     // Note that if a wallet doesn't yet exist, it will be
     // lazily created on the first transaction.
