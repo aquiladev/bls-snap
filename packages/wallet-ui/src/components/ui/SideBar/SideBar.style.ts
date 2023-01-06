@@ -14,6 +14,7 @@ export const Wrapper = styled.div`
   background-color: ${(props) => props.theme.colors.background};
   min-width: 272px;
   border-right: 1px solid ${(props) => props.theme.colors.border.default};
+  padding: ${(props) => props.theme.spacing.small};
 `;
 
 export const AccountLabel = styled.h3`

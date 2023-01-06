@@ -32,7 +32,7 @@ export const HomeView = ({ address }: Props) => {
           <Header address={address} />
         )}
         <div>
-          <div style={{ padding: 4 }}>Operations</div>
+          <div>Operations</div>
           <OperationsList />
           {Boolean(operations.length) && (
             <Buttons style={{ textAlign: 'center' }}>
@@ -44,7 +44,7 @@ export const HomeView = ({ address }: Props) => {
         </div>
         <Separator />
         <div>
-          <div style={{ padding: 4 }}>Bundles</div>
+          <div>Bundles</div>
           <BundlesList />
         </div>
       </RightPart>

@@ -17,4 +17,5 @@ export const RightPart = styled.div`
   flex-direction: column;
   width: 100%;
   background-color: ${(props) => props.theme.colors.background};
+  padding: ${(props) => props.theme.spacing.small};
 `;
