@@ -18,7 +18,7 @@ export const CloseButton = styled.button`
   position: absolute;
   right: 16px;
   top: 16px;
-  font-size: 14px;
+  font-size: ${(props) => props.theme.fontSizes.small};
   font-weight: 900;
   border: none;
   background-color: Transparent;

@@ -53,7 +53,7 @@ export const Parag = styled.p`
   margin-left: 1rem;
   font-style: normal;
   font-weight: 400;
-  font-size: 12px;
+  font-size: ${(props) => props.theme.fontSizes.small};
   line-height: 140%;
   margin-top: 0;
   margin-bottom: 0;
