@@ -5,7 +5,7 @@
   "license": "(MIT-0 OR Apache-2.0)",
   "scripts": {
     "build": "react-app-rewired build",
-    "clean": "rimraf build",
+    "clean": "rimraf build/*",
     "eject": "react-scripts eject",
     "lint": "yarn lint:eslint && yarn lint:misc --check",
     "lint:eslint": "eslint . --cache --ext js,ts",

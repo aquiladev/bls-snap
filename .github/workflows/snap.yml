@@ -4,8 +4,9 @@ on:
   push:
     branches:
       - main
-  pull_request: {}
-  workflow_dispatch: {}
+  pull_request:
+    paths:
+      - "packages/**"
 
 jobs:
   test:
@@ -22,5 +23,6 @@ jobs:
           key: uns-yarn-${{ hashFiles('**/yarn.lock') }}
       - run: yarn install
         if: steps.cache.outputs.cache-hit != 'true'
-      - run: yarn workspace bls-snap build
-      - run: yarn workspace bls-snap test
+      - run: yarn clean
+      - run: yarn build
+      - run: yarn test
