@@ -5690,13 +5690,13 @@ __metadata:
 
 "bls-snap@file:../bls-snap::locator=wallet-ui%40workspace%3Apackages%2Fwallet-ui":
   version: 0.1.0
-  resolution: "bls-snap@file:../bls-snap#../bls-snap::hash=b34789&locator=wallet-ui%40workspace%3Apackages%2Fwallet-ui"
+  resolution: "bls-snap@file:../bls-snap#../bls-snap::hash=44bc2c&locator=wallet-ui%40workspace%3Apackages%2Fwallet-ui"
   dependencies:
     async-mutex: ^0.4.0
     bls-wallet-clients: ^0.8.2
     ethers: ^5.7.2
     uuid: ^9.0.0
-  checksum: f21808593fd181be6e6e6fbc53c32ee8702f2c36646826726c01d67e5356c6c50079aa9f960fefe2d4ddaa3b3001a169451fc7694b6e4b389c4517e31eb52af6
+  checksum: c8dca0fb4c6d8a296ff7204727761ddb0b3d7590b9bd918c9cecc3fca2583e128cd4f56bfadb03ce15974b3a8cb29099204172c811923fc554ea8c6b5fd96eb9
   languageName: node
   linkType: hard
 
