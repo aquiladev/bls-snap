@@ -4,7 +4,6 @@
   "private": true,
   "license": "(MIT-0 OR Apache-2.0)",
   "scripts": {
-    "setup": "yarn install --immutable",
     "build": "react-app-rewired build",
     "clean": "rimraf build/*",
     "eject": "react-scripts eject",
@@ -39,7 +38,7 @@
     "@mui/material": "^5.10.8",
     "@reduxjs/toolkit": "^1.8.5",
     "@types/semver": "^7.3.12",
-    "bls-snap": "file:../bls-snap",
+    "bls-snap": "workspace:packages/bls-snap",
     "buffer": "^6.0.3",
     "console-browserify": "^1.2.0",
     "crypto-browserify": "^3.12.0",

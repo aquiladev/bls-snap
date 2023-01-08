@@ -5688,18 +5688,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bls-snap@file:../bls-snap::locator=wallet-ui%40workspace%3Apackages%2Fwallet-ui":
-  version: 0.1.0
-  resolution: "bls-snap@file:../bls-snap#../bls-snap::hash=44bc2c&locator=wallet-ui%40workspace%3Apackages%2Fwallet-ui"
-  dependencies:
-    async-mutex: ^0.4.0
-    bls-wallet-clients: ^0.8.2
-    ethers: ^5.7.2
-    uuid: ^9.0.0
-  checksum: c8dca0fb4c6d8a296ff7204727761ddb0b3d7590b9bd918c9cecc3fca2583e128cd4f56bfadb03ce15974b3a8cb29099204172c811923fc554ea8c6b5fd96eb9
-  languageName: node
-  linkType: hard
-
 "bls-snap@workspace:packages/bls-snap":
   version: 0.0.0-use.local
   resolution: "bls-snap@workspace:packages/bls-snap"
@@ -16606,7 +16594,7 @@ __metadata:
     "@types/styled-components": ^5.1.25
     "@typescript-eslint/eslint-plugin": ^5.33.0
     "@typescript-eslint/parser": ^5.33.0
-    bls-snap: "file:../bls-snap"
+    bls-snap: "workspace:packages/bls-snap"
     buffer: ^6.0.3
     console-browserify: ^1.2.0
     crypto-browserify: ^3.12.0
