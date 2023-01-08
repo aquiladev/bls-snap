@@ -21,7 +21,7 @@ jobs:
         with:
           path: '**/node_modules'
           key: uns-yarn-${{ hashFiles('**/yarn.lock') }}
-      - run: yarn install
+      - run: yarn setup
         if: steps.cache.outputs.cache-hit != 'true'
       - run: yarn clean
       - run: yarn build

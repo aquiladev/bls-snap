@@ -4,6 +4,7 @@
   "private": true,
   "license": "(MIT-0 OR Apache-2.0)",
   "scripts": {
+    "setup": "yarn install --frozen-lockfile",
     "build": "react-app-rewired build",
     "clean": "rimraf build/*",
     "eject": "react-scripts eject",

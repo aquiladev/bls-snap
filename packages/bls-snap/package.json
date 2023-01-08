@@ -15,6 +15,7 @@
     "snap.manifest.json"
   ],
   "scripts": {
+    "setup": "yarn install --frozen-lockfile",
     "build": "mm-snap build",
     "build:clean": "yarn clean && yarn build",
     "clean": "rimraf build/*",

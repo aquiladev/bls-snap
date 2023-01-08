@@ -13,6 +13,7 @@
     "packages/*"
   ],
   "scripts": {
+    "setup": "yarn workspaces run setup",
     "build": "yarn workspaces foreach --parallel --topological --verbose run build",
     "clean": "yarn workspaces foreach --parallel --topological --verbose run clean",
     "lint": "yarn lint:eslint && yarn lint:misc --check",
