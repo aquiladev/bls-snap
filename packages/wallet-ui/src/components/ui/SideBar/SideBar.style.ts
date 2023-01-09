@@ -77,6 +77,10 @@ export const AccountDetailButton = styled(Button).attrs((props) => ({
   padding: 0px;
   border-radius: 0px;
   color: ${(props) => props.theme.colors.text.inverse}};
+
+  &:hover {
+    color: ${(props) => props.theme.colors.text.alternative}};
+  }
 `;
 
 export const PopInStyled = styled(PopIn)`
