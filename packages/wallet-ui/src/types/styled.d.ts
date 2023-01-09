@@ -185,6 +185,7 @@ declare module 'styled-components' {
       tiny: string;
       small: string;
       medium: string;
+      large: string;
     };
     modal: {
       base: string;

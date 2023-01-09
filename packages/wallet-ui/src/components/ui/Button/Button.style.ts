@@ -26,6 +26,7 @@ export const Wrapper = styled.button<IButtonProps>`
   justify-content: center;
   padding: 0px 26px;
   transition: 0.1s all;
+  margin: ${(props) => props.theme.spacing.tiny};
 
   :active {
     opacity: 0.5;

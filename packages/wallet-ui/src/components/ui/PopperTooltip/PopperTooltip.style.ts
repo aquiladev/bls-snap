@@ -10,10 +10,10 @@ export const Wrapper = styled.div`
 
 export const PopperContainer = styled.div<IDiv>`
   border-radius: ${(props) => props.theme.radii.small};
-  background-color: ${(props) => props.theme.colors.background};
-  padding: 4px;
+  background-color: ${(props) => props.theme.colors.background.inverse};
+  padding: ${(props) => props.theme.spacing.small};
   text-align: center;
-  box-shadow: 0px 0px 60px 0px rgba(106, 115, 125, 0.2);
+  box-shadow: 0px 0px 60px 0px rgba(106, 115, 125, 0.5);
 
   .arrow {
     position: absolute;
@@ -28,7 +28,7 @@ export const PopperContainer = styled.div<IDiv>`
       transform: rotate(45deg);
       width: 20px;
       height: 20px;
-      background-color: white;
+      background-color: ${(props) => props.theme.colors.background.inverse};
     }
   }
 
@@ -53,5 +53,5 @@ export const PopperContainer = styled.div<IDiv>`
 
 export const ToolTipContent = styled.div`
   font-size: ${(props) => props.theme.fontSizes};
-  color: ${(props) => props.theme.colors.text};
+  color: ${(props) => props.theme.colors.text.inverse};
 `;

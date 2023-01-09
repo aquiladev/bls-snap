@@ -15,7 +15,6 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   box-shadow: ${(props) => props.theme.shadow.dividerBottom.boxShadow};
-  background: ${(props) => props.theme.palette.grey.white};
   padding: ${(props) => props.theme.spacing.base};
   padding-top: ${(props) => props.theme.spacing.small};
   padding-bottom: ${(props) => props.theme.spacing.small};
@@ -24,6 +23,7 @@ export const Wrapper = styled.div`
     background-color: ${(props) => props.theme.palette.grey.grey4};
   }
   cursor: pointer;
+  background-color: ${(props) => props.theme.colors.background};
 `;
 
 export const Column = styled.div`

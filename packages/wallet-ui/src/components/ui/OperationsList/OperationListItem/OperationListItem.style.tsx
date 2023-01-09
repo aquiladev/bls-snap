@@ -15,7 +15,7 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   box-shadow: ${(props) => props.theme.shadow.dividerBottom.boxShadow};
-  background: ${(props) => props.theme.palette.grey.white};
+  background-color: ${(props) => props.theme.colors.background};
   padding: ${(props) => props.theme.spacing.base};
   padding-top: ${(props) => props.theme.spacing.small};
   padding-bottom: ${(props) => props.theme.spacing.small};
@@ -52,7 +52,7 @@ export const Label = styled.span`
 
 export const Description = styled.span`
   font-size: ${(props) => props.theme.typography.p2.fontSize};
-  color: ${(props) => props.theme.palette.grey.grey1};
+  color: ${(props) => props.theme.colors.text};
 `;
 
 export const Left = styled.div`

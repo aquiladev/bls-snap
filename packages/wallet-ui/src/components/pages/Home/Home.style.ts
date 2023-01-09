@@ -19,3 +19,12 @@ export const RightPart = styled.div`
   background-color: ${(props) => props.theme.colors.background};
   padding: ${(props) => props.theme.spacing.small};
 `;
+
+export const RightPartContent = styled.div`
+  padding: ${(props) => props.theme.spacing.small};
+`;
+
+export const RightPartContentHeader = styled.h1`
+  color: ${(props) => props.theme.colors.text};
+  font-size: ${({ theme }) => theme.fontSizes.text};
+`;

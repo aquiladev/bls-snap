@@ -203,6 +203,7 @@ export const theme = {
     tiny: '4px',
     small: '8px',
     medium: '16px',
+    large: '24px',
   },
   modal: {
     base: '328px',

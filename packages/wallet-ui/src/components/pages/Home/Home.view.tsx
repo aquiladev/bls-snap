@@ -6,7 +6,12 @@ import { Separator } from '../../ui/Header/SendModal/SendModal.style';
 import { OperationsList } from '../../ui/OperationsList';
 import { SideBar } from '../../ui/SideBar';
 import { BundlesList } from '../../ui/BundlesList';
-import { RightPart, Wrapper } from './Home.style';
+import {
+  RightPart,
+  RightPartContent,
+  RightPartContentHeader,
+  Wrapper,
+} from './Home.style';
 
 type Props = {
   address: string;
@@ -31,8 +36,8 @@ export const HomeView = ({ address }: Props) => {
         {Object.keys(erc20TokenBalanceSelected).length > 0 && (
           <Header address={address} />
         )}
-        <div>
-          <div>Operations</div>
+        <RightPartContent>
+          <RightPartContentHeader>Operations</RightPartContentHeader>
           <OperationsList />
           {Boolean(operations.length) && (
             <Buttons style={{ textAlign: 'center' }}>
@@ -41,12 +46,12 @@ export const HomeView = ({ address }: Props) => {
               </HeaderButton>
             </Buttons>
           )}
-        </div>
+        </RightPartContent>
         <Separator />
-        <div>
-          <div>Bundles</div>
+        <RightPartContent>
+          <RightPartContentHeader>Bundles</RightPartContentHeader>
           <BundlesList />
-        </div>
+        </RightPartContent>
       </RightPart>
     </Wrapper>
   );

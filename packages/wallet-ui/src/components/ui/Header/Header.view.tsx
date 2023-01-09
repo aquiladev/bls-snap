@@ -10,7 +10,7 @@ import { getAmountPrice } from '../../../utils/utils';
 import { useBLSSnap } from '../../../services/useBLSSnap';
 import { ReceiveModal } from './ReceiveModal';
 import { SendModal } from './SendModal';
-import { Buttons, HeaderButton, Wrapper } from './Header.style';
+import { Buttons, Wrapper } from './Header.style';
 
 type Props = {
   address: string;
@@ -76,9 +76,7 @@ export const HeaderView = ({ address }: Props) => {
         centered
       />
       <Buttons>
-        <HeaderButton onClick={() => setReceiveOpen(true)}>
-          Receive
-        </HeaderButton>
+        <Button onClick={() => setReceiveOpen(true)}>Receive</Button>
         <Button
           onClick={() => handleSendClick()}
           backgroundTransparent
@@ -90,7 +88,6 @@ export const HeaderView = ({ address }: Props) => {
           onClick={() => handleMintClick()}
           backgroundTransparent
           borderVisible
-          style={{ backgroundColor: 'grey', paddingLeft: 10 }}
         >
           Mint 1 token
         </Button>

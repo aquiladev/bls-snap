@@ -3,6 +3,7 @@ import {
   AccountImageStyled,
   AddressCopy,
   AddressQrCode,
+  ModalWrapper,
   Title,
   TitleDiv,
   Wrapper,
@@ -14,7 +15,7 @@ type Props = {
 
 export const AccountDetailsModalView = ({ address }: Props) => {
   return (
-    <div>
+    <ModalWrapper>
       <AccountImageDiv>
         <AccountImageStyled size={64} address={address} />
       </AccountImageDiv>
@@ -26,6 +27,6 @@ export const AccountDetailsModalView = ({ address }: Props) => {
         <AddressQrCode value={address} />
         <AddressCopy address={address} />
       </Wrapper>
-    </div>
+    </ModalWrapper>
   );
 };

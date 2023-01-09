@@ -81,10 +81,11 @@ export const AccountDetailButton = styled(Button).attrs((props) => ({
 }))`
   padding: 0px;
   border-radius: 0px;
+  color: ${(props) => props.theme.colors.text};
 `;
 
 export const PopInStyled = styled(PopIn)`
-  background-color: transparent;
+  background-color: ${(props) => props.theme.colors.background};
   .modal-close-button {
     transform: translateY(45px);
   }
