@@ -17,7 +17,6 @@ export const RightPart = styled.div`
   flex-direction: column;
   width: 100%;
   max-height: 100%;
-  overflow-y: scroll;
   background-color: ${(props) => props.theme.colors.background.default};
   padding: ${(props) => props.theme.spacing.small};
 
@@ -28,6 +27,7 @@ export const RightPart = styled.div`
 
 export const RightPartContent = styled.div`
   padding: ${(props) => props.theme.spacing.small};
+  overflow-y: scroll;
 `;
 
 export const RightPartContentHeader = styled.h1`

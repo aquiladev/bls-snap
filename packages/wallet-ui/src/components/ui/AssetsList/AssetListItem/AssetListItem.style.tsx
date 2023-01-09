@@ -33,7 +33,7 @@ export const LeftIcon = styled(FontAwesomeIcon)`
 `;
 
 export const Label = styled.span`
-  font-size: ${(props) => props.theme.typography.c1.fontSize};
+  font-size: ${(props) => props.theme.typography.p1.fontSize};
   font-weight: ${(props) => props.theme.typography.bold.fontWeight};
   color: ${(props) => props.theme.colors.text.default};
 `;

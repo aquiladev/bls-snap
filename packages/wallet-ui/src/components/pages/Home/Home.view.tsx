@@ -46,9 +46,7 @@ export const HomeView = ({ address }: Props) => {
               </HeaderButton>
             </Buttons>
           )}
-        </RightPartContent>
-        <Separator />
-        <RightPartContent>
+          <Separator />
           <RightPartContentHeader>Bundles</RightPartContentHeader>
           <BundlesList />
         </RightPartContent>
