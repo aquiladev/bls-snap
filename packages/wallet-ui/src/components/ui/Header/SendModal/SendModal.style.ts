@@ -6,7 +6,7 @@ import { Label } from '../../Label/Label.style';
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => props.theme.colors.background};
+  background-color: ${(props) => props.theme.colors.background.default};
   width: ${(props) => props.theme.modal.base};
   padding: ${(props) => props.theme.spacing.base};
   border-radius: 8px 8px 0px 0px;

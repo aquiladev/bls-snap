@@ -53,6 +53,6 @@ export const AddressQrCode = styled(QRCode).attrs(() => ({
 export const AddressCopy = styled(AccountAddress)``;
 
 export const ModalWrapper = styled.div`
-  background-color: ${(props) => props.theme.colors.background};
+  background-color: ${(props) => props.theme.colors.background.default};
   padding: ${(props) => props.theme.spacing.tiny2};
 `;

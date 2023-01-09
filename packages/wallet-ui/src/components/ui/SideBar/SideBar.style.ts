@@ -11,7 +11,7 @@ type IAddTokenButton = {
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => props.theme.colors.background};
+  background-color: ${(props) => props.theme.colors.background.default};
   min-width: 272px;
   border-right: 1px solid ${(props) => props.theme.colors.border.default};
   padding: ${(props) => props.theme.spacing.small};
@@ -80,7 +80,7 @@ export const AccountDetailButton = styled(Button).attrs((props) => ({
 `;
 
 export const PopInStyled = styled(PopIn)`
-  background-color: ${(props) => props.theme.colors.background};
+  background-color: ${(props) => props.theme.colors.background.default};
   .modal-close-button {
     transform: translateY(45px);
   }

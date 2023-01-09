@@ -20,12 +20,11 @@ export const Wrapper = styled.div`
   padding-bottom: ${(props) => props.theme.spacing.small};
   align-items: center;
   &:hover {
-    background-color: ${(props) => props.theme.palette.grey.grey4};
+    background-color: ${(props) => props.theme.colors.background.inverse};
     color: ${(props) => props.theme.colors.text.inverse}};
   }
   cursor: pointer;
-  background-color: ${(props) => props.theme.colors.background};
-  color: ${(props) => props.theme.colors.text.default}};
+  background-color: ${(props) => props.theme.colors.background.default};
 `;
 
 export const Column = styled.div`

@@ -11,7 +11,7 @@ export const Wrapper = styled.div<IDiv>`
   box-shadow: ${(props) => props.theme.colors.border.default};
   background-color: ${(props) =>
     props.selected
-      ? props.theme.colors.background
+      ? props.theme.colors.background.default
       : props.theme.colors.background.inverse};
   height: 64px;
   padding-left: 20px;
