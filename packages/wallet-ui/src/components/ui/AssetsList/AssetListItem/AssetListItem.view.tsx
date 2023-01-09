@@ -1,3 +1,4 @@
+import { ethers } from 'ethers';
 import { HTMLAttributes } from 'react';
 import { Erc20TokenBalance } from '../../../../types';
 import {
@@ -26,7 +27,8 @@ export const AssetListItemView = ({
         <Column>
           <Label>{asset.name}</Label>
           <Description>
-            {asset.name} {asset.symbol}
+            {ethers.utils.formatUnits(asset.amount, asset.decimals).toString()}{' '}
+            {asset.symbol}
           </Description>
         </Column>
       </Left>

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
-  color: ${(props) => props.theme.colors.text};
+  color: ${(props) => props.theme.colors.text.default}};
   font-size: ${(props) => props.theme.fontSizes.xLarge};
   font-weight: 900;
   line-height: 67.2px;

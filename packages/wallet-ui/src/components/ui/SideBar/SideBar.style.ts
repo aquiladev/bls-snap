@@ -11,9 +11,10 @@ type IAddTokenButton = {
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => props.theme.colors.background};
+  background-color: ${(props) => props.theme.colors.background.default};
   min-width: 272px;
   border-right: 1px solid ${(props) => props.theme.colors.border.default};
+  padding: ${(props) => props.theme.spacing.small};
 `;
 
 export const AccountLabel = styled.h3`
@@ -72,18 +73,18 @@ export const AccountDetailsContent = styled.div`
 export const AccountDetailButton = styled(Button).attrs((props) => ({
   backgroundTransparent: true,
   fontSize: props.theme.fontSizes.text,
-  // textStyle: {
-  //   color: props.theme.palette.grey.black,
-  //   fontWeight: props.theme.typography.p2.fontWeight,
-  //   textTransform: 'initial',
-  // },
 }))`
   padding: 0px;
   border-radius: 0px;
+  color: ${(props) => props.theme.colors.text.inverse}};
+
+  &:hover {
+    color: ${(props) => props.theme.colors.text.alternative}};
+  }
 `;
 
 export const PopInStyled = styled(PopIn)`
-  background-color: transparent;
+  background-color: ${(props) => props.theme.colors.background.default};
   .modal-close-button {
     transform: translateY(45px);
   }

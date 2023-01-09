@@ -18,7 +18,7 @@ export const Title = styled.div`
 `;
 
 export const Description = styled.div`
-  color: ${(props) => props.theme.colors.text};
+  color: ${(props) => props.theme.colors.text.default}};
 `;
 
 export const DescriptionCentered = styled(Description)`

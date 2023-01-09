@@ -7,8 +7,8 @@ import { AccountImage } from '../AccountImage';
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => props.theme.colors.background};
-  border-radius: 8px 8px 0px 0px;
+  border-radius-top-left: ${(props) => props.theme.radii.default};
+  border-radius-top-right: ${(props) => props.theme.radii.default};
   margin-top: -32px;
   padding-top: 56px;
   padding-bottom: 24px;
@@ -38,7 +38,7 @@ export const Title = styled.div`
 `;
 
 export const ModifyIcon = styled(FontAwesomeIcon).attrs((props) => ({
-  color: props.theme.colors.text,
+  color: props.theme.colors.text.default,
   icon: 'pen',
 }))`
   cursor: pointer;
@@ -51,3 +51,8 @@ export const AddressQrCode = styled(QRCode).attrs(() => ({
 `;
 
 export const AddressCopy = styled(AccountAddress)``;
+
+export const ModalWrapper = styled.div`
+  background-color: ${(props) => props.theme.colors.background.default};
+  padding: ${(props) => props.theme.spacing.tiny2};
+`;

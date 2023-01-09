@@ -8,15 +8,15 @@ type IDiv = {
 export const Wrapper = styled.div<IDiv>`
   display: flex;
   flex-direction: row;
-  box-shadow: ${(props) => props.theme.shadow.dividerBottom.boxShadow};
-  background: ${(props) =>
+  box-shadow: ${(props) => props.theme.colors.border.default};
+  background-color: ${(props) =>
     props.selected
-      ? props.theme.palette.grey.grey4
-      : props.theme.palette.grey.white};
+      ? props.theme.colors.background.default
+      : props.theme.colors.background.inverse};
   height: 64px;
   padding-left: 20px;
   align-items: center;
-  border-color: ${(props) => props.theme.palette.secondary.main};
+  border-color: ${(props) => props.theme.colors.border.default};
   border-width: 0px;
   border-right-width: ${(props) => (props.selected ? '2px' : '0px')};
   border-style: solid;
@@ -33,14 +33,14 @@ export const LeftIcon = styled(FontAwesomeIcon)`
 `;
 
 export const Label = styled.span`
-  font-size: ${(props) => props.theme.typography.c1.fontSize};
+  font-size: ${(props) => props.theme.typography.p1.fontSize};
   font-weight: ${(props) => props.theme.typography.bold.fontWeight};
-  font-family: ${(props) => props.theme.typography.bold.fontFamily};
+  color: ${(props) => props.theme.colors.text.default};
 `;
 
 export const Description = styled.span`
-  font-size: ${(props) => props.theme.typography.c1.fontSize};
-  color: ${(props) => props.theme.palette.grey.grey1};
+  font-size: ${(props) => props.theme.typography.c2.fontSize};
+  color: ${(props) => props.theme.colors.text.default}};
 `;
 
 export const Left = styled.div`

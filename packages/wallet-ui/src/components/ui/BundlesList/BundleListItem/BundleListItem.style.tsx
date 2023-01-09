@@ -15,15 +15,16 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   box-shadow: ${(props) => props.theme.shadow.dividerBottom.boxShadow};
-  background: ${(props) => props.theme.palette.grey.white};
   padding: ${(props) => props.theme.spacing.base};
   padding-top: ${(props) => props.theme.spacing.small};
   padding-bottom: ${(props) => props.theme.spacing.small};
   align-items: center;
   &:hover {
-    background-color: ${(props) => props.theme.palette.grey.grey4};
+    background-color: ${(props) => props.theme.colors.background.inverse};
+    color: ${(props) => props.theme.colors.text.inverse}};
   }
   cursor: pointer;
+  background-color: ${(props) => props.theme.colors.background.default};
 `;
 
 export const Column = styled.div`
@@ -47,7 +48,6 @@ export const IconStyled = styled(FontAwesomeIcon)<IIconeStyled>`
 export const Label = styled.span`
   font-size: ${(props) => props.theme.typography.p1.fontSize};
   font-weight: ${(props) => props.theme.typography.bold.fontWeight};
-  font-family: ${(props) => props.theme.typography.bold.fontFamily};
 `;
 
 export const Description = styled.span`

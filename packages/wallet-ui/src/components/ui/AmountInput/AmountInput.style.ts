@@ -68,7 +68,6 @@ export const Input = styled.input<IInput>`
   height: 50px;
   width: 8px;
   font-size: ${(props) => props.theme.typography.p2.fontSize};
-  font-family: ${(props) => props.theme.typography.p2.fontFamily};
   color: ${(props) =>
     getInputTextColorByState(
       props,

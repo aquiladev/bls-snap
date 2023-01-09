@@ -138,7 +138,9 @@ export const AmountInputView = ({
     <Wrapper>
       <RowWrapper>
         <Label error={error}>{label}</Label>
-        <MaxButton onClick={handleMaxClick}>Max</MaxButton>
+        <MaxButton iconLeft="money-bill" onClick={handleMaxClick}>
+          Max
+        </MaxButton>
       </RowWrapper>
 
       <InputContainer

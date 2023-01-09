@@ -203,6 +203,7 @@ export const theme = {
     tiny: '4px',
     small: '8px',
     medium: '16px',
+    large: '24px',
   },
   modal: {
     base: '328px',
@@ -303,7 +304,7 @@ export const GlobalStyle = createGlobalStyle`
   body {
     background-color: ${(props) => props.theme.colors.background.default};
     color: ${(props) => props.theme.colors.text.default};
-    font-family: ${(props) => props.theme.fonts.default};
+    font-family: ${(props) => props.theme.fonts.code};
     font-size: ${(props) => props.theme.fontSizes.text};
     margin: 0;
   }
@@ -321,7 +322,6 @@ export const GlobalStyle = createGlobalStyle`
 
   code {
     background-color: ${(props) => props.theme.colors.background.alternative};
-    font-family: ${(props) => props.theme.fonts.code};
     padding: 1.2rem;
     font-weight: normal;
     font-size: ${(props) => props.theme.fontSizes.text};

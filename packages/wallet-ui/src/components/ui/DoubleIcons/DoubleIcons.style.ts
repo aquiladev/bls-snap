@@ -26,7 +26,7 @@ export const Wrapper = styled.div<IDivProps>`
   span {
     border-radius: 100%;
     color: white;
-    font-size: 10px;
+    font-size: ${(props) => props.theme.fontSizes.small};
     height: 100%;
     width: 100%;
     text-align: center;

@@ -4,7 +4,7 @@ import { Button } from '../Button';
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => props.theme.palette.grey.white};
+  background-color: ${(props) => props.theme.colors.background.default};
   align-items: center;
   justify-content: center;
   box-shadow: ${(props) => props.theme.shadow.dividerBottom.boxShadow};

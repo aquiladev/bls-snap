@@ -16,5 +16,21 @@ export const RightPart = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  background-color: ${(props) => props.theme.colors.background};
+  max-height: 100%;
+  background-color: ${(props) => props.theme.colors.background.default};
+  padding: ${(props) => props.theme.spacing.small};
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+export const RightPartContent = styled.div`
+  padding: ${(props) => props.theme.spacing.small};
+  overflow-y: scroll;
+`;
+
+export const RightPartContentHeader = styled.h1`
+  color: ${(props) => props.theme.colors.text.default};
+  font-size: ${({ theme }) => theme.fontSizes.text};
 `;
