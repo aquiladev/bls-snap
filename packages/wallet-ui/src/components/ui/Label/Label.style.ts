@@ -11,6 +11,5 @@ export const Label = styled.span<ILabel>`
       ? props.theme.palette.error.main
       : props.theme.colors.text.default};
   font-weight: ${(props) => props.theme.typography.bold.fontWeight};
-  font-family: ${(props) => props.theme.typography.bold.fontFamily};
   margin-bottom: ${(props) => props.theme.spacing.tiny2};
 `;

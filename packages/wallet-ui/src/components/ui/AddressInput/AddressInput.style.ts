@@ -67,7 +67,6 @@ export const Input = styled.input.attrs((props) => ({
   height: 50px;
   width: ${(props) => (props.amountInputMode ? '8px' : '100%')};
   font-size: ${(props) => props.theme.typography.p2.fontSize};
-  font-family: ${(props) => props.theme.typography.p2.fontFamily};
   color: ${(props) =>
     getInputTextColorByState(
       props,

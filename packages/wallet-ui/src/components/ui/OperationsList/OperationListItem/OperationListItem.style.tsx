@@ -22,8 +22,10 @@ export const Wrapper = styled.div`
   align-items: center;
   &:hover {
     background-color: ${(props) => props.theme.palette.grey.grey4};
+    color: ${(props) => props.theme.colors.text.inverse}};
   }
   cursor: pointer;
+  color: ${(props) => props.theme.colors.text.default}};
 `;
 
 export const Column = styled.div`
@@ -47,12 +49,10 @@ export const IconStyled = styled(FontAwesomeIcon)<IIconeStyled>`
 export const Label = styled.span`
   font-size: ${(props) => props.theme.typography.p1.fontSize};
   font-weight: ${(props) => props.theme.typography.bold.fontWeight};
-  font-family: ${(props) => props.theme.typography.bold.fontFamily};
 `;
 
 export const Description = styled.span`
   font-size: ${(props) => props.theme.typography.p2.fontSize};
-  color: ${(props) => props.theme.colors.text.default}};
 `;
 
 export const Left = styled.div`

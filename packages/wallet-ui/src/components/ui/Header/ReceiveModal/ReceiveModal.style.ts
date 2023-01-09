@@ -17,7 +17,6 @@ export const Wrapper = styled.div`
 export const Title = styled.div`
   font-size: ${(props) => props.theme.typography.h3.fontSize};
   font-weight: ${(props) => props.theme.typography.h3.fontWeight};
-  font-family: ${(props) => props.theme.typography.h3.fontFamily};
   color: ${(props) => props.theme.colors.text.default}};
 `;
 

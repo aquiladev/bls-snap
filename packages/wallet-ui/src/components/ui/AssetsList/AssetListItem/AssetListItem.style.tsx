@@ -35,7 +35,6 @@ export const LeftIcon = styled(FontAwesomeIcon)`
 export const Label = styled.span`
   font-size: ${(props) => props.theme.typography.c1.fontSize};
   font-weight: ${(props) => props.theme.typography.bold.fontWeight};
-  font-family: ${(props) => props.theme.typography.bold.fontFamily};
   color: ${(props) => props.theme.colors.text.default};
 `;
 

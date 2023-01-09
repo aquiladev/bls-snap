@@ -22,7 +22,6 @@ export const Header = styled(Label)`
 export const Title = styled.div`
   font-size: ${(props) => props.theme.typography.h3.fontSize};
   font-weight: ${(props) => props.theme.typography.h3.fontWeight};
-  font-family: ${(props) => props.theme.typography.h3.fontFamily};
   color: ${(props) => props.theme.colors.text.default};
   width: 100%;
   text-align: center;
