@@ -16,8 +16,14 @@ export const RightPart = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  max-height: 100%;
+  overflow-y: scroll;
   background-color: ${(props) => props.theme.colors.background.default};
   padding: ${(props) => props.theme.spacing.small};
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const RightPartContent = styled.div`
