@@ -33,14 +33,6 @@ export const Network = styled.div`
   color: ${(props) => props.theme.colors.text.default};
 `;
 
-export const SeparatorSmall = styled.div`
-  width: 100%;
-  height: 1px;
-  background-color: ${(props) => props.theme.colors.border.default};
-  margin-top: ${(props) => props.theme.spacing.tiny};
-  margin-bottom: ${(props) => props.theme.spacing.tiny};
-`;
-
 export const Separator = styled.div`
   width: 100%;
   height: 1px;

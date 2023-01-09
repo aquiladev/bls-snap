@@ -9,7 +9,6 @@ import {
   ButtonStyled,
   Header,
   Network,
-  Separator,
   Title,
   Wrapper,
 } from './SendModal.style';
@@ -99,7 +98,6 @@ export const SendModalView = ({ closeModal }: Props) => {
               placeholder="Paste recipient address here"
               onChange={(value) => handleChange('address', value.target.value)}
             />
-            <Separator />
             <AmountInput
               label="Amount"
               onChangeCustom={(value) => handleChange('amount', value)}
