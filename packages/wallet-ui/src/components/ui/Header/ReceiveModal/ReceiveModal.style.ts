@@ -5,7 +5,7 @@ import { AccountAddress } from '../../AccountAddress';
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => props.theme.palette.grey.white};
+  background-color: ${(props) => props.theme.colors.background};
   width: ${(props) => props.theme.modal.base};
   padding: ${(props) => props.theme.spacing.base};
   border-radius: 8px;
@@ -18,6 +18,7 @@ export const Title = styled.div`
   font-size: ${(props) => props.theme.typography.h3.fontSize};
   font-weight: ${(props) => props.theme.typography.h3.fontWeight};
   font-family: ${(props) => props.theme.typography.h3.fontFamily};
+  color: ${(props) => props.theme.colors.text.default}};
 `;
 
 export const AddressQrCode = styled(QRCode).attrs(() => ({

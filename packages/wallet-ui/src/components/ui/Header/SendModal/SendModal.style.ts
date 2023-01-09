@@ -6,7 +6,7 @@ import { Label } from '../../Label/Label.style';
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => props.theme.palette.grey.white};
+  background-color: ${(props) => props.theme.colors.background};
   width: ${(props) => props.theme.modal.base};
   padding: ${(props) => props.theme.spacing.base};
   border-radius: 8px 8px 0px 0px;
@@ -23,12 +23,14 @@ export const Title = styled.div`
   font-size: ${(props) => props.theme.typography.h3.fontSize};
   font-weight: ${(props) => props.theme.typography.h3.fontWeight};
   font-family: ${(props) => props.theme.typography.h3.fontFamily};
+  color: ${(props) => props.theme.colors.text.default};
   width: 100%;
   text-align: center;
 `;
 
 export const Network = styled.div`
   margin-bottom: ${(props) => props.theme.spacing.small};
+  color: ${(props) => props.theme.colors.text.default};
 `;
 
 export const SeparatorSmall = styled.div`

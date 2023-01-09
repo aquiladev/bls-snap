@@ -73,15 +73,10 @@ export const AccountDetailsContent = styled.div`
 export const AccountDetailButton = styled(Button).attrs((props) => ({
   backgroundTransparent: true,
   fontSize: props.theme.fontSizes.text,
-  // textStyle: {
-  //   color: props.theme.palette.grey.black,
-  //   fontWeight: props.theme.typography.p2.fontWeight,
-  //   textTransform: 'initial',
-  // },
 }))`
   padding: 0px;
   border-radius: 0px;
-  color: ${(props) => props.theme.colors.text};
+  color: ${(props) => props.theme.colors.text.inverse}};
 `;
 
 export const PopInStyled = styled(PopIn)`

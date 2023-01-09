@@ -25,6 +25,6 @@ export const RightPartContent = styled.div`
 `;
 
 export const RightPartContentHeader = styled.h1`
-  color: ${(props) => props.theme.colors.text};
+  color: ${(props) => props.theme.colors.text.default};
   font-size: ${({ theme }) => theme.fontSizes.text};
 `;

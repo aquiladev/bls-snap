@@ -52,7 +52,7 @@ export const Label = styled.span`
 
 export const Description = styled.span`
   font-size: ${(props) => props.theme.typography.p2.fontSize};
-  color: ${(props) => props.theme.colors.text};
+  color: ${(props) => props.theme.colors.text.default}};
 `;
 
 export const Left = styled.div`

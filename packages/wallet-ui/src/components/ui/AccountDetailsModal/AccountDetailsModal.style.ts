@@ -38,7 +38,7 @@ export const Title = styled.div`
 `;
 
 export const ModifyIcon = styled(FontAwesomeIcon).attrs((props) => ({
-  color: props.theme.colors.text,
+  color: props.theme.colors.text.default,
   icon: 'pen',
 }))`
   cursor: pointer;
