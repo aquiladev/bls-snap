@@ -1,3 +1,6 @@
+import { useContext } from 'react';
+import { ThemeContext } from 'styled-components';
+
 import {
   AddressCopy,
   AddressQrCode,
@@ -10,10 +13,15 @@ type Props = {
 };
 
 export const ReceiveModalView = ({ address }: Props) => {
+  const themeContext = useContext(ThemeContext);
   return (
     <Wrapper>
       <Title>Receive</Title>
-      <AddressQrCode value={address} />
+      <AddressQrCode
+        value={address}
+        bgColor={themeContext.colors.background.default}
+        fgColor={themeContext.colors.text.default}
+      />
       <AddressCopy address={address} placement="top" />
     </Wrapper>
   );
