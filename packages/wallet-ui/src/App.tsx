@@ -18,6 +18,13 @@ const Wrapper = styled.div`
   width: 100%;
   min-height: 100vh;
   max-width: 100vw;
+  align-items: center;
+`;
+
+const WrapperContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 80%;
 `;
 
 function App() {
@@ -62,20 +69,22 @@ function App() {
     <ThemeProvider theme={darkTheme ? dark : light}>
       <GlobalStyle />
       <Wrapper>
-        <Header handleToggleClick={toggleTheme} />
-        <PopIn
-          isOpen={!loading && Boolean(hasMetamaskFlask) && !connected}
-          showClose={false}
-        >
-          <ConnectModal />
-        </PopIn>
-        <Home address={address} />
-        <Footer />
-        <PopIn isOpen={loading}>
-          {loading && (
-            <LoadingBackdrop>{loader.loadingMessage}</LoadingBackdrop>
-          )}
-        </PopIn>
+        <WrapperContent>
+          <Header handleToggleClick={toggleTheme} />
+          <PopIn
+            isOpen={!loading && Boolean(hasMetamaskFlask) && !connected}
+            showClose={false}
+          >
+            <ConnectModal />
+          </PopIn>
+          <Home address={address} />
+          <Footer />
+          <PopIn isOpen={loading}>
+            {loading && (
+              <LoadingBackdrop>{loader.loadingMessage}</LoadingBackdrop>
+            )}
+          </PopIn>
+        </WrapperContent>
       </Wrapper>
     </ThemeProvider>
   );
