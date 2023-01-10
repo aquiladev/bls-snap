@@ -17,7 +17,10 @@ export type Network = {
 
 export type BlsAccount = {
   address: string;
+  publicKey: string;
   privateKey: string;
+  derivationPath: string;
+  addressIndex: number;
 };
 
 export type Erc20Token = {

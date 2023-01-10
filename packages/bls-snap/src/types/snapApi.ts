@@ -6,6 +6,7 @@ export type ApiParams = {
   requestParams: ApiRequestParams;
   mutex: Mutex;
   wallet: any;
+  keyDeriver?: any;
 };
 
 export type BaseRequestParams = {
@@ -16,7 +17,9 @@ export type GetNetworksRequestParams = Omit<BaseRequestParams, 'chainId'>;
 
 export type RecoverAccountsRequestParams = BaseRequestParams;
 
-export type CreateAccountRequestParams = BaseRequestParams;
+export type CreateAccountRequestParams = {
+  addressIndex?: string | number;
+} & BaseRequestParams;
 
 export type GetErc20TokensRequestParams = BaseRequestParams;
 

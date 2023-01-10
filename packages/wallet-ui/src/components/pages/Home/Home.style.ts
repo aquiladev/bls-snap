@@ -4,12 +4,12 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   min-height: 609px;
+  max-height: 79vh;
+  border: 1px solid ${(props) => props.theme.colors.border.default};
 
   @media (max-height: 768px) {
     max-height: 609px;
   }
-
-  max-height: 79vh;
 `;
 
 export const RightPart = styled.div`

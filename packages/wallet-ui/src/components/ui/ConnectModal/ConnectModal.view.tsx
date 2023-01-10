@@ -1,7 +1,6 @@
 import { useBLSSnap } from '../../../services/useBLSSnap';
 import {
   ConnectButton,
-  Description,
   DescriptionCentered,
   FlaskIcon,
   Title,
@@ -24,10 +23,10 @@ export const ConnectModalView = () => {
       </DescriptionCentered>
       <WhatIsSnapDiv>
         <WhatIsSnap>What is a snap?</WhatIsSnap>
-        <Description>
+        <DescriptionCentered>
           Snaps extend the capabilities of MetaMask by adding new
           functionalities.
-        </Description>
+        </DescriptionCentered>
       </WhatIsSnapDiv>
       <ConnectButton customIconLeft={<FlaskIcon />} onClick={connectToSnap}>
         Connect with MetaMask Flask
