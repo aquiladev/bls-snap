@@ -4085,6 +4085,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/chai-as-promised@npm:^7.1.5":
+  version: 7.1.5
+  resolution: "@types/chai-as-promised@npm:7.1.5"
+  dependencies:
+    "@types/chai": "*"
+  checksum: 7c1345c6e32513d52d8e562ec173c23161648d6b792046525f18803a9932d7b3ad3dca8f0181e3c529ec42b106099f174e34edeb184d61dc93e32c98b5132fd4
+  languageName: node
+  linkType: hard
+
 "@types/chai@npm:*, @types/chai@npm:^4.3.4":
   version: 4.3.4
   resolution: "@types/chai@npm:4.3.4"
@@ -5751,6 +5760,7 @@ __metadata:
     "@metamask/snap-types": ^0.22.0
     "@metamask/snaps-cli": ^0.22.0
     "@types/chai": ^4.3.4
+    "@types/chai-as-promised": ^7.1.5
     "@types/sinon": ^10.0.13
     "@types/sinon-chai": ^3.2.9
     "@types/uuid": ^9.0.0
@@ -5759,6 +5769,7 @@ __metadata:
     async-mutex: ^0.4.0
     bls-wallet-clients: ^0.8.2
     chai: ^4.3.7
+    chai-as-promised: ^7.1.1
     deep-equal: ^2.2.0
     eslint: ^8.21.0
     eslint-config-prettier: ^8.1.0
@@ -6261,6 +6272,17 @@ __metadata:
   version: 2.4.0
   resolution: "case-sensitive-paths-webpack-plugin@npm:2.4.0"
   checksum: bcf469446eeee9ac0046e30860074ebb9aa4803aab9140e6bb72b600b23b1d70635690754be4504ce35cd99cdf05226bee8d894ba362a3f5485d5f6310fc6d02
+  languageName: node
+  linkType: hard
+
+"chai-as-promised@npm:^7.1.1":
+  version: 7.1.1
+  resolution: "chai-as-promised@npm:7.1.1"
+  dependencies:
+    check-error: ^1.0.2
+  peerDependencies:
+    chai: ">= 2.1.2 < 5"
+  checksum: 7262868a5b51a12af4e432838ddf97a893109266a505808e1868ba63a12de7ee1166e9d43b5c501a190c377c1b11ecb9ff8e093c89f097ad96c397e8ec0f8d6a
   languageName: node
   linkType: hard
 

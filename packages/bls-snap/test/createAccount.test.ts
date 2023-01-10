@@ -1,6 +1,8 @@
 /* eslint-disable import/no-named-as-default-member */
+import { expect } from 'chai';
 import { Mutex } from 'async-mutex';
 import { NetworkConfig } from 'bls-wallet-clients';
+import sinon from 'sinon';
 
 import { ApiParams, CreateAccountRequestParams } from '../src/types/snapApi';
 import { createAccount } from '../src/createAccount';
@@ -28,14 +30,16 @@ describe('createAccount', () => {
   };
 
   it('should create account correctly', async () => {
-    sinon
-      .stub(cryptoUtils, 'randomPrivateKey')
-      .returns(
+    sinon.stub(cryptoUtils, 'getPrivateKey').resolves({
+      privateKey:
         '0x0001020304050607080910111213141516171819202122232425262728293031',
-      );
+      derivationPath: `m / bip32:0' / bip32:0' / bip32:0' / bip32:0'`,
+      addressIndex: 0,
+    });
 
     const requestObject: CreateAccountRequestParams = { chainId: 421613 };
     apiParams.requestParams = requestObject;
+    apiParams.keyDeriver = { path: '' };
 
     const result = await createAccount(apiParams);
     console.log(result);
