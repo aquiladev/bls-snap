@@ -14,6 +14,7 @@ import { ApiParams, ApiRequestParams } from './types/snapApi';
 import { ARBITRUM_GOERLI_NETWORK } from './utils/constants';
 import { addTestToken, upsertNetwork } from './utils/snapUtils';
 import { getBundle } from './getBundle';
+import { getAddressKeyDeriver } from './utils/crypto';
 
 const mutex = new Mutex();
 
@@ -96,6 +97,7 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
     case 'bls_recoverAccounts':
       return recoverAccounts(apiParams);
     case 'bls_createAccount':
+      apiParams.keyDeriver = await getAddressKeyDeriver(wallet);
       return createAccount(apiParams);
     case 'bls_getErc20Tokens':
       return getErc20Tokens(apiParams);

@@ -1,6 +1,8 @@
 /* eslint-disable import/no-named-as-default-member */
+import { expect } from 'chai';
 import { Mutex } from 'async-mutex';
 import { NetworkConfig } from 'bls-wallet-clients';
+import sinon from 'sinon';
 
 import { ApiParams, GetNetworksRequestParams } from '../src/types/snapApi';
 import { getNetworks } from '../src/getNetworks';
@@ -47,14 +49,7 @@ describe('getNetworks', function () {
     const requestObject: GetNetworksRequestParams = {};
     apiParams.requestParams = requestObject;
 
-    let result;
-    try {
-      await getNetworks(apiParams);
-    } catch (err) {
-      result = err;
-    } finally {
-      expect(result).to.be.an('Error');
-    }
+    await expect(getNetworks(apiParams)).to.be.rejected;
     expect(walletStub.rpcStubs.snap_manageState).not.to.have.been.called;
   });
 });

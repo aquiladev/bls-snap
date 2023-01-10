@@ -6,7 +6,7 @@ import { NetworkConfig } from 'bls-wallet-clients';
 
 import { ApiParams, RecoverAccountsRequestParams } from '../src/types/snapApi';
 import { recoverAccounts } from '../src/recoverAccounts';
-import { SnapState } from '../src/types/snapState';
+import { BlsAccount, SnapState } from '../src/types/snapState';
 import * as snapUtils from '../src/utils/snapUtils';
 import { WalletMock } from './utils/wallet.mock';
 
@@ -25,7 +25,7 @@ describe('recoverAccounts', () => {
           address: '0xCCb80EE6f58cC9e87C8032BD908C59F475CCc435',
           privateKey:
             '0x0001020304050607080910111213141516171819202122232425262728293031',
-        },
+        } as BlsAccount,
       ],
     },
   };
@@ -57,13 +57,6 @@ describe('recoverAccounts', () => {
     };
     apiParams.requestParams = requestObject;
 
-    let result;
-    try {
-      await recoverAccounts(apiParams);
-    } catch (err) {
-      result = err;
-    } finally {
-      expect(result).to.be.an('Error');
-    }
+    await expect(recoverAccounts(apiParams)).to.be.rejected;
   });
 });

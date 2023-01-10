@@ -1,4 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
+import deepEqual from 'deep-equal';
 import { Mutex } from 'async-mutex';
 import { Aggregator } from 'bls-wallet-clients';
 import {
@@ -10,6 +11,7 @@ import {
   Bundle,
 } from '../types/snapState';
 import { ARBITRUM_GOERLI_NETWORK } from './constants';
+import { getPrivateKey } from './crypto';
 
 export async function upsertNetwork(
   network: Network,
@@ -28,7 +30,7 @@ export async function upsertNetwork(
 
     const _network = getNetwork(network.chainId, state);
     if (_network) {
-      if (JSON.stringify(_network) === JSON.stringify(network)) {
+      if (deepEqual(_network, network)) {
         console.log(
           `upsertNetwork: same network and hence skip calling snap state update: ${JSON.stringify(
             _network,
@@ -81,7 +83,7 @@ export async function upsertAccount(
 
     const _account = getAccount(account.address, chainId, state);
     if (_account) {
-      if (JSON.stringify(_account) === JSON.stringify(account)) {
+      if (deepEqual(_account, account)) {
         console.log(
           `upsertAccount: same account and hence skip calling snap state update: ${JSON.stringify(
             _account,
@@ -165,7 +167,7 @@ export async function upsertErc20Token(
 
     const _erc20Token = getErc20Token(erc20Token.address, chainId, state);
     if (_erc20Token) {
-      if (JSON.stringify(_erc20Token) === JSON.stringify(erc20Token)) {
+      if (deepEqual(_erc20Token, erc20Token)) {
         console.log(
           `upsertErc20Token: same Erc20 token and hence skip calling snap state update: ${JSON.stringify(
             _erc20Token,
@@ -374,6 +376,49 @@ export async function updateBundleStatus(
     await upsertBundle(bundle, chainId, wallet, mutex, state);
   }
 }
+
+export const getValidNumber = (
+  obj,
+  defaultValue: number,
+  minVal: number = Number.MIN_SAFE_INTEGER,
+  maxVal: number = Number.MAX_SAFE_INTEGER,
+) => {
+  const toNum = Number(obj);
+  return obj === '' || isNaN(toNum) || toNum > maxVal || toNum < minVal
+    ? defaultValue
+    : toNum;
+};
+
+export const getNextAddressIndex = (
+  chainId: number,
+  state: SnapState,
+  derivationPath: string,
+) => {
+  const accounts = (getAccounts(chainId, state) || []).filter(
+    (acc) => acc.derivationPath === derivationPath && acc.addressIndex >= 0,
+  );
+  console.log(
+    `getNextAddressIndex:\nAccount found from state:\n${JSON.stringify(
+      accounts,
+    )}`,
+  );
+  return accounts.length;
+};
+
+export const getKeysFromAddressIndex = async (
+  keyDeriver,
+  chainId: number,
+  state: SnapState,
+  index: number = undefined,
+) => {
+  let addressIndex = index;
+  if (isNaN(addressIndex) || addressIndex < 0) {
+    addressIndex = getNextAddressIndex(chainId, state, keyDeriver.path);
+    console.log(`getKeysFromAddressIndex: addressIndex found: ${addressIndex}`);
+  }
+
+  return getPrivateKey(keyDeriver, addressIndex);
+};
 
 function assertNetwork(chainId: number, state: SnapState) {
   if (!state[chainId]) {
