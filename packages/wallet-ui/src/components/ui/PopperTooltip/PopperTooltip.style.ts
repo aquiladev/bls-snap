@@ -5,7 +5,9 @@ type IDiv = {
 };
 
 export const Wrapper = styled.div`
-  width: fit-content;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 `;
 
 export const PopperContainer = styled.div<IDiv>`
