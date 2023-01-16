@@ -39,10 +39,7 @@ export async function createAccount(params: ApiParams) {
       netConfig.addresses.verificationGateway,
       new ethers.providers.JsonRpcProvider(
         constants.ARBITRUM_GOERLI_NETWORK.rpcUrl,
-        {
-          name: '',
-          chainId,
-        },
+        { name: '', chainId },
       ),
     );
 
