@@ -1,5 +1,11 @@
-import { useRef, useState } from 'react';
-import { useAppSelector } from '../../../hooks/redux';
+import { useCallback, useRef, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
+import { resetNetwork } from '../../../slices/networkSlice';
+import {
+  resetWallet,
+  setForceReconnect,
+  setWalletConnection,
+} from '../../../slices/walletSlice';
 import { AccountAddress } from '../AccountAddress';
 import { AccountDetailsModal } from '../AccountDetailsModal';
 import { AssetsList } from '../AssetsList';
@@ -23,8 +29,16 @@ type Props = {
 export const SideBarView = ({ address }: Props) => {
   const [accountDetailsOpen, setAccountDetailsOpen] = useState(false);
   const wallet = useAppSelector((state) => state.wallet);
+  const dispatch = useAppDispatch();
 
   const ref = useRef<HTMLDivElement>();
+
+  const disconnect = useCallback(() => {
+    dispatch(setWalletConnection(false));
+    dispatch(setForceReconnect(true));
+    dispatch(resetWallet());
+    dispatch(resetNetwork());
+  }, []);
 
   return (
     <Wrapper>
@@ -50,10 +64,7 @@ export const SideBarView = ({ address }: Props) => {
             <AccountDetailButton
               backgroundTransparent
               iconLeft="right-to-bracket"
-              onClick={() => {
-                // TEMP
-                console.log('disconnect');
-              }}
+              onClick={() => disconnect()}
             >
               Disconnect
             </AccountDetailButton>
