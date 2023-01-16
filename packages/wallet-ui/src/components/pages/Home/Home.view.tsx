@@ -43,9 +43,6 @@ export const HomeView = ({ address }: Props) => {
           <Header address={address} />
         )}
         <RightPartContent>
-          <RightPartContentHeader>Bundles</RightPartContentHeader>
-          <BundlesList />
-          <Separator />
           <RightPartContentHeader>Operations</RightPartContentHeader>
           <OperationsList />
           {Boolean(operations.length) && (
@@ -63,6 +60,9 @@ export const HomeView = ({ address }: Props) => {
               </HeaderButton>
             </Buttons>
           )}
+          <Separator />
+          <RightPartContentHeader>Bundles</RightPartContentHeader>
+          <BundlesList />
         </RightPartContent>
       </RightPart>
     </Wrapper>

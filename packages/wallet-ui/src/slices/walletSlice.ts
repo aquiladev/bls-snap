@@ -85,10 +85,10 @@ export const walletSlice = createSlice({
       }
     },
     setOperations: (state, { payload }) => {
-      state.operations = payload;
+      state.operations = (payload || []).reverse();
     },
     addOperation: (state, { payload }) => {
-      state.operations = [...state.operations, payload];
+      state.operations = [payload, ...state.operations];
     },
     removeOperations: (state, { payload }) => {
       const _operations = Array(payload).flat();
@@ -97,10 +97,10 @@ export const walletSlice = createSlice({
       });
     },
     setBundles: (state, { payload }) => {
-      state.bundles = payload;
+      state.bundles = (payload || []).reverse();
     },
     addBundle: (state, { payload }) => {
-      state.bundles = [...state.bundles, payload];
+      state.bundles = [payload, ...state.bundles];
     },
     updateBundle: (state, { payload }) => {
       state.bundles = state.bundles.map((bundle) => {
