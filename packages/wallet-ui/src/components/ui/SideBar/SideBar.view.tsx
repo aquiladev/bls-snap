@@ -47,6 +47,16 @@ export const SideBarView = ({ address }: Props) => {
             >
               Account details
             </AccountDetailButton>
+            <AccountDetailButton
+              backgroundTransparent
+              iconLeft="right-to-bracket"
+              onClick={() => {
+                // TEMP
+                console.log('disconnect');
+              }}
+            >
+              Disconnect
+            </AccountDetailButton>
           </AccountDetailsContent>
         }
       >
