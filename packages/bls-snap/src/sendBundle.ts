@@ -1,11 +1,11 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { ethers } from 'ethers';
 import { Aggregator, BlsWalletWrapper } from 'bls-wallet-clients';
 
 import { ApiParams, SendBundleRequestParams } from './types/snapApi';
-import { ARBITRUM_GOERLI_NETWORK } from './utils/constants';
+import * as constants from './utils/constants';
 import * as snapUtils from './utils/snapUtils';
 import { Bundle } from './types/snapState';
+import { getProvider } from './utils/evmUtils';
 
 export async function sendBundle(params: ApiParams) {
   try {
@@ -26,8 +26,8 @@ export async function sendBundle(params: ApiParams) {
       );
     }
 
-    const netConfig = ARBITRUM_GOERLI_NETWORK.config;
-    if (chainId !== ARBITRUM_GOERLI_NETWORK.chainId) {
+    const netConfig = constants.ARBITRUM_GOERLI_NETWORK.config;
+    if (chainId !== constants.ARBITRUM_GOERLI_NETWORK.chainId) {
       throw new Error(`ChainId not supported: ${chainId}`);
     }
 
@@ -36,10 +36,7 @@ export async function sendBundle(params: ApiParams) {
     const _account = await BlsWalletWrapper.connect(
       account.privateKey,
       netConfig.addresses.verificationGateway,
-      new ethers.providers.JsonRpcProvider(ARBITRUM_GOERLI_NETWORK.rpcUrl, {
-        name: '',
-        chainId,
-      }),
+      getProvider(constants.ARBITRUM_GOERLI_NETWORK),
     );
 
     const nonce = await _account.Nonce();

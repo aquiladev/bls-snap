@@ -1,5 +1,10 @@
 import { BlsWalletWrapper, NetworkConfig } from 'bls-wallet-clients';
-import { BlsAccount, Erc20Token, Network } from '../../src/types/snapState';
+import {
+  BlsAccount,
+  Erc20Token,
+  Network,
+  Operation,
+} from '../../src/types/snapState';
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
@@ -46,4 +51,12 @@ export const ERC20_TOKEN_ZERO: Erc20Token = {
   name: 'TestToken',
   symbol: 'TT',
   decimals: 18,
+};
+
+export const OPERATION_ZERO: Operation = {
+  id: 'id_0',
+  value: 0,
+  contractAddress: ERC20_TOKEN_ZERO.address,
+  senderAddress: ZERO_ADDRESS,
+  encodedFunction: '0x',
 };

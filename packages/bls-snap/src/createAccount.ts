@@ -1,5 +1,4 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { ethers } from 'ethers';
 import { BlsWalletWrapper } from 'bls-wallet-clients';
 
 import { ApiParams, CreateAccountRequestParams } from './types/snapApi';
@@ -10,6 +9,7 @@ import {
   upsertAccount,
 } from './utils/snapUtils';
 import { BlsAccount } from './types/snapState';
+import { getProvider } from './utils/evmUtils';
 
 export async function createAccount(params: ApiParams) {
   try {
@@ -37,10 +37,7 @@ export async function createAccount(params: ApiParams) {
     const account: BlsWalletWrapper = await BlsWalletWrapper.connect(
       privateKey,
       netConfig.addresses.verificationGateway,
-      new ethers.providers.JsonRpcProvider(
-        constants.ARBITRUM_GOERLI_NETWORK.rpcUrl,
-        { name: '', chainId },
-      ),
+      getProvider(constants.ARBITRUM_GOERLI_NETWORK),
     );
 
     const _acc: BlsAccount = {
