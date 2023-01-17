@@ -18,6 +18,7 @@ type Props = {
   iconStyle?: CSSProperties;
   customIconLeft?: ReactNode;
   customIconRight?: ReactNode;
+  onlyIcon?: boolean;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const ButtonView = ({
@@ -36,6 +37,7 @@ export const ButtonView = ({
   upperCaseOnly = true,
   textStyle,
   iconStyle,
+  onlyIcon,
   ...otherProps
 }: Props) => {
   const hasIcons = iconRight !== undefined || iconLeft !== undefined;
@@ -50,14 +52,16 @@ export const ButtonView = ({
     >
       {customIconLeft}
       {iconLeft && <LeftIcon icon={['fas', iconLeft]} style={iconStyle} />}
-      <TextWrapper
-        hasIcons={hasIcons}
-        fontSize={fontSize}
-        upperCaseOnly={upperCaseOnly}
-        style={textStyle}
-      >
-        {children}
-      </TextWrapper>
+      {!onlyIcon && (
+        <TextWrapper
+          hasIcons={hasIcons}
+          fontSize={fontSize}
+          upperCaseOnly={upperCaseOnly}
+          style={textStyle}
+        >
+          {children}
+        </TextWrapper>
+      )}
       {iconRight && <RightIcon icon={['fas', iconRight]} style={iconStyle} />}
       {customIconRight}
     </Wrapper>

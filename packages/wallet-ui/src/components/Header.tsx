@@ -1,7 +1,18 @@
+import { useCallback } from 'react';
 import styled, { useTheme } from 'styled-components';
+import { useAppDispatch } from '../hooks/redux';
+import { resetNetwork } from '../slices/networkSlice';
+import {
+  resetWallet,
+  setForceReconnect,
+  setWalletConnection,
+} from '../slices/walletSlice';
 import { getThemePreference } from '../utils';
 import { SnapLogo } from './SnapLogo';
 import { Toggle } from './Toggle';
+import { Button } from './ui/Button';
+import { PopperTooltip } from './ui/PopperTooltip';
+import { AccountDetailButton } from './ui/SideBar/SideBar.style';
 
 const HeaderWrapper = styled.header`
   display: flex;
@@ -39,6 +50,15 @@ export const Header = ({
   handleToggleClick(): void;
 }) => {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
+
+  const disconnect = useCallback(() => {
+    dispatch(setWalletConnection(false));
+    dispatch(setForceReconnect(true));
+    dispatch(resetWallet());
+    dispatch(resetNetwork());
+  }, []);
+
   return (
     <HeaderWrapper>
       <LogoWrapper>
@@ -50,6 +70,22 @@ export const Header = ({
           onToggle={handleToggleClick}
           defaultChecked={getThemePreference()}
         />
+        <PopperTooltip
+          arrowVisible={false}
+          closeTrigger="click"
+          offSet={[0, 0]}
+          content={
+            <AccountDetailButton
+              backgroundTransparent
+              iconLeft="right-to-bracket"
+              onClick={disconnect}
+            >
+              Disconnect
+            </AccountDetailButton>
+          }
+        >
+          <Button iconLeft="bars" onlyIcon />
+        </PopperTooltip>
       </RightContainer>
     </HeaderWrapper>
   );
