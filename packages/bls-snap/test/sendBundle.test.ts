@@ -28,7 +28,6 @@ describe('sendBundle', () => {
     [TEST_CHAIN_ID_ZERO]: {
       ...TEST_NETWORK_ZERO,
       accounts: [ACCOUNT_ZERO],
-      operations: [OPERATION_ZERO],
     },
   };
   const apiParams: ApiParams = {
@@ -37,6 +36,32 @@ describe('sendBundle', () => {
     wallet: walletStub,
     mutex: new Mutex(),
   };
+
+  it('should throw error if no account found', async function () {
+    sinon
+      .stub(snapConstants, 'ARBITRUM_GOERLI_NETWORK')
+      .value(TEST_NETWORK_ZERO);
+    const requestObject: SendBundleRequestParams = {
+      chainId: TEST_CHAIN_ID_ZERO,
+      senderAddress: ZERO_ADDRESS,
+    };
+    apiParams.requestParams = requestObject;
+
+    await expect(sendBundle(apiParams)).to.be.rejected;
+  });
+
+  it('should throw error if no operations found', async function () {
+    sinon
+      .stub(snapConstants, 'ARBITRUM_GOERLI_NETWORK')
+      .value(TEST_NETWORK_ZERO);
+    const requestObject: SendBundleRequestParams = {
+      chainId: TEST_CHAIN_ID_ZERO,
+      senderAddress: ACCOUNT_ZERO.address,
+    };
+    apiParams.requestParams = requestObject;
+
+    await expect(sendBundle(apiParams)).to.be.rejected;
+  });
 
   it('should create account correctly', async () => {
     sinon
@@ -49,6 +74,7 @@ describe('sendBundle', () => {
       senderAddress: ACCOUNT_ZERO.address,
     };
     apiParams.requestParams = requestObject;
+    apiParams.state[TEST_CHAIN_ID_ZERO].operations = [OPERATION_ZERO];
 
     const result = await sendBundle(apiParams);
 
