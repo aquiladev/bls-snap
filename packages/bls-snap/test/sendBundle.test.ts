@@ -3,27 +3,33 @@ import { expect } from 'chai';
 import { Mutex } from 'async-mutex';
 import sinon from 'sinon';
 
-import { ApiParams, CreateAccountRequestParams } from '../src/types/snapApi';
-import { createAccount } from '../src/createAccount';
+import { ApiParams, SendBundleRequestParams } from '../src/types/snapApi';
+import { sendBundle } from '../src/sendBundle';
 import { SnapState } from '../src/types/snapState';
 import * as snapConstants from '../src/utils/constants';
-import * as cryptoUtils from '../src/utils/crypto';
-import * as blsUtils from '../src/utils/blsUtils';
 import * as snapUtils from '../src/utils/snapUtils';
+import * as blsUtils from '../src/utils/blsUtils';
 import { WalletMock } from './utils/wallet.mock';
 import {
   ACCOUNT_ZERO,
+  AGGREGATOR_MOCK,
   BLS_ACCOUNT_ZERO,
-  PRIVATE_KEY_ZERO,
+  BUNDLE_ZERO,
+  OPERATION_ZERO,
   TEST_CHAIN_ID_ZERO,
   TEST_NETWORK_ZERO,
+  ZERO_ADDRESS,
 } from './utils/constants';
 
-describe('createAccount', () => {
+describe('sendBundle', () => {
   const walletStub = new WalletMock();
 
   const state: SnapState = {
-    [TEST_CHAIN_ID_ZERO]: TEST_NETWORK_ZERO,
+    [TEST_CHAIN_ID_ZERO]: {
+      ...TEST_NETWORK_ZERO,
+      accounts: [ACCOUNT_ZERO],
+      operations: [OPERATION_ZERO],
+    },
   };
   const apiParams: ApiParams = {
     state,
@@ -37,29 +43,29 @@ describe('createAccount', () => {
       .stub(snapConstants, 'ARBITRUM_GOERLI_NETWORK')
       .value(TEST_NETWORK_ZERO);
     sinon.stub(blsUtils, 'getWallet').resolves(BLS_ACCOUNT_ZERO);
-    sinon.stub(cryptoUtils, 'getPrivateKey').resolves(PRIVATE_KEY_ZERO);
-
-    const requestObject: CreateAccountRequestParams = {
+    sinon.stub(blsUtils, 'getAggregator').returns(AGGREGATOR_MOCK);
+    const requestObject: SendBundleRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
+      senderAddress: ACCOUNT_ZERO.address,
     };
     apiParams.requestParams = requestObject;
-    apiParams.keyDeriver = { path: '' };
 
-    const result = await createAccount(apiParams);
+    const result = await sendBundle(apiParams);
 
     expect(result).to.be.eql({
-      address: '0xCCb80EE6f58cC9e87C8032BD908C59F475CCc435',
+      ...BUNDLE_ZERO,
+      operations: [OPERATION_ZERO],
     });
-    expect(state[TEST_CHAIN_ID_ZERO].accounts).to.not.equal([ACCOUNT_ZERO]);
   });
 
-  it('should throw error if getAccounts failed', async function () {
-    sinon.stub(snapUtils, 'getKeysFromAddressIndex').throws(new Error());
-    const requestObject: CreateAccountRequestParams = {
+  it('should throw error if getAccount failed', async function () {
+    sinon.stub(snapUtils, 'getAccount').throws(new Error());
+    const requestObject: SendBundleRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
+      senderAddress: ZERO_ADDRESS,
     };
     apiParams.requestParams = requestObject;
 
-    await expect(createAccount(apiParams)).to.be.rejected;
+    await expect(sendBundle(apiParams)).to.be.rejected;
   });
 });

@@ -1,6 +1,4 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { BlsWalletWrapper } from 'bls-wallet-clients';
-
 import { ApiParams, CreateAccountRequestParams } from './types/snapApi';
 import * as constants from './utils/constants';
 import {
@@ -9,14 +7,14 @@ import {
   upsertAccount,
 } from './utils/snapUtils';
 import { BlsAccount } from './types/snapState';
-import { getProvider } from './utils/evmUtils';
+import { getWallet } from './utils/blsUtils';
 
 export async function createAccount(params: ApiParams) {
   try {
     const { state, mutex, wallet, requestParams, keyDeriver } = params;
     const { chainId, addressIndex } =
       requestParams as CreateAccountRequestParams;
-    const netConfig = constants.ARBITRUM_GOERLI_NETWORK.config;
+
     if (chainId !== constants.ARBITRUM_GOERLI_NETWORK.chainId) {
       throw new Error(`ChainId not supported: ${chainId}`);
     }
@@ -34,23 +32,22 @@ export async function createAccount(params: ApiParams) {
 
     // Note that if a wallet doesn't yet exist, it will be
     // lazily created on the first transaction.
-    const account: BlsWalletWrapper = await BlsWalletWrapper.connect(
+    const _wallet = await getWallet(
+      constants.ARBITRUM_GOERLI_NETWORK,
       privateKey,
-      netConfig.addresses.verificationGateway,
-      getProvider(constants.ARBITRUM_GOERLI_NETWORK),
     );
 
-    const _acc: BlsAccount = {
-      address: account.address,
-      publicKey: account.PublicKeyStr(),
-      privateKey: account.privateKey,
+    const account: BlsAccount = {
+      address: _wallet.address,
+      publicKey: _wallet.PublicKeyStr(),
+      privateKey: _wallet.privateKey,
       derivationPath,
       addressIndex: aIndex,
     };
-    await upsertAccount(_acc, chainId, wallet, mutex, state);
+    await upsertAccount(account, chainId, wallet, mutex, state);
 
     return {
-      address: account.address,
+      address: _wallet.address,
     };
   } catch (err) {
     console.error(`Problem found: ${err}`);

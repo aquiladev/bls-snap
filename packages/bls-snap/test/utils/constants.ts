@@ -1,6 +1,14 @@
-import { BlsWalletWrapper, NetworkConfig } from 'bls-wallet-clients';
+import {
+  BlsWalletWrapper,
+  NetworkConfig,
+  Bundle as BlsBundle,
+  Operation as BlsOperation,
+  Aggregator,
+} from 'bls-wallet-clients';
+import { BigNumber } from 'ethers';
 import {
   BlsAccount,
+  Bundle,
   Erc20Token,
   Network,
   Operation,
@@ -44,6 +52,10 @@ export const BLS_ACCOUNT_ZERO: BlsWalletWrapper = {
   address: ACCOUNT_ZERO.address,
   privateKey: ACCOUNT_ZERO.privateKey,
   PublicKeyStr: () => ACCOUNT_ZERO.publicKey,
+  Nonce: () => Promise.resolve(BigNumber.from(0)),
+  sign: (_: BlsOperation) => {
+    return {} as BlsBundle;
+  },
 } as BlsWalletWrapper;
 
 export const ERC20_TOKEN_ZERO: Erc20Token = {
@@ -57,6 +69,18 @@ export const OPERATION_ZERO: Operation = {
   id: 'id_0',
   value: 0,
   contractAddress: ERC20_TOKEN_ZERO.address,
-  senderAddress: ZERO_ADDRESS,
+  senderAddress: ACCOUNT_ZERO.address,
   encodedFunction: '0x',
 };
+
+export const BUNDLE_HASH_ZERO = '0x1234';
+
+export const BUNDLE_ZERO: Bundle = {
+  bundleHash: BUNDLE_HASH_ZERO,
+  senderAddress: ACCOUNT_ZERO.address,
+  operations: [OPERATION_ZERO],
+};
+
+export const AGGREGATOR_MOCK: Aggregator = {
+  add: (_: BlsBundle) => Promise.resolve({ hash: BUNDLE_HASH_ZERO }),
+} as Aggregator;

@@ -1,7 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import deepEqual from 'deep-equal';
 import { Mutex } from 'async-mutex';
-import { Aggregator } from 'bls-wallet-clients';
 import {
   BlsAccount,
   Erc20Token,
@@ -12,6 +11,7 @@ import {
 } from '../types/snapState';
 import { ARBITRUM_GOERLI_NETWORK } from './constants';
 import { getPrivateKey } from './crypto';
+import { getBundleReceipt } from './blsUtils';
 
 export async function upsertNetwork(
   network: Network,
@@ -360,8 +360,10 @@ export async function updateBundleStatus(
   mutex: Mutex,
   state: SnapState,
 ) {
-  const aggregator = new Aggregator(ARBITRUM_GOERLI_NETWORK.aggregator);
-  const receipt = await aggregator.lookupReceipt(bundle.bundleHash);
+  const receipt = await getBundleReceipt(
+    ARBITRUM_GOERLI_NETWORK,
+    bundle.bundleHash,
+  );
 
   console.log('BUNDLE STATUS', bundle.bundleHash, receipt);
   if (receipt) {

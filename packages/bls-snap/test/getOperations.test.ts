@@ -8,6 +8,7 @@ import { SnapState } from '../src/types/snapState';
 import { getOperations } from '../src/getOperations';
 import * as snapUtils from '../src/utils/snapUtils';
 import {
+  ACCOUNT_ZERO,
   OPERATION_ZERO,
   TEST_CHAIN_ID_ZERO,
   TEST_NETWORK_ZERO,
@@ -38,14 +39,13 @@ describe('getOperations', function () {
   it('should get the ERC20 tokens', async () => {
     const requestObject: GetOperationsRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
-      senderAddress: ZERO_ADDRESS,
+      senderAddress: ACCOUNT_ZERO.address,
     };
     apiParams.requestParams = requestObject;
 
     const result = await getOperations(apiParams);
 
     expect(walletStub.rpcStubs.snap_manageState).not.to.have.been.called;
-    expect(Object.keys(result).length).to.be.eq(1);
     expect(result).to.be.eql(state[TEST_CHAIN_ID_ZERO].operations);
   });
 
