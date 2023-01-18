@@ -1,7 +1,6 @@
 /* eslint-disable import/no-named-as-default-member */
 import { expect } from 'chai';
 import { Mutex } from 'async-mutex';
-import { NetworkConfig } from 'bls-wallet-clients';
 import sinon from 'sinon';
 
 import { ApiParams, GetNetworksRequestParams } from '../src/types/snapApi';
@@ -9,18 +8,13 @@ import { getNetworks } from '../src/getNetworks';
 import { SnapState } from '../src/types/snapState';
 import * as snapUtils from '../src/utils/snapUtils';
 import { WalletMock } from './utils/wallet.mock';
+import { TEST_CHAIN_ID_ZERO, TEST_NETWORK_ZERO } from './utils/constants';
 
 describe('getNetworks', function () {
   const walletStub = new WalletMock();
 
   const state: SnapState = {
-    212: {
-      name: 'Testnet',
-      chainId: 212,
-      rpcUrl: 'https://testnet-rpc.com',
-      aggregator: 'https://testnet-aggregator.com',
-      config: {} as NetworkConfig,
-    },
+    [TEST_CHAIN_ID_ZERO]: TEST_NETWORK_ZERO,
   };
   const apiParams: ApiParams = {
     state,

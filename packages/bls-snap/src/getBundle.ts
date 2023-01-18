@@ -4,7 +4,7 @@ import * as snapUtils from './utils/snapUtils';
 
 export async function getBundle(params: ApiParams) {
   try {
-    const { state, mutex, requestParams } = params;
+    const { state, mutex, requestParams, wallet } = params;
     const { bundleHash, chainId } = requestParams as GetBundleRequestParams;
 
     const bundles = await snapUtils.getBundle(

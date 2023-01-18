@@ -16,6 +16,8 @@ export async function addOperation(params: ApiParams) {
       contractAddress,
       encodedFunction,
     };
+    console.log('Operation:', operation);
+
     await upsertOperation(operation, chainId, wallet, mutex, state);
     return operation;
   } catch (err) {

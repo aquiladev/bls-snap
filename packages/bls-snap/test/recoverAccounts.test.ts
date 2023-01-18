@@ -2,31 +2,25 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
 import { Mutex } from 'async-mutex';
-import { NetworkConfig } from 'bls-wallet-clients';
 
 import { ApiParams, RecoverAccountsRequestParams } from '../src/types/snapApi';
 import { recoverAccounts } from '../src/recoverAccounts';
-import { BlsAccount, SnapState } from '../src/types/snapState';
+import { SnapState } from '../src/types/snapState';
 import * as snapUtils from '../src/utils/snapUtils';
 import { WalletMock } from './utils/wallet.mock';
+import {
+  ACCOUNT_ZERO,
+  TEST_CHAIN_ID_ZERO,
+  TEST_NETWORK_ZERO,
+} from './utils/constants';
 
 describe('recoverAccounts', () => {
   const walletStub = new WalletMock();
 
   const state: SnapState = {
-    212: {
-      name: 'Testnet',
-      chainId: 212,
-      rpcUrl: 'https://testnet-rpc.com',
-      aggregator: 'https://testnet-aggregator.com',
-      config: {} as NetworkConfig,
-      accounts: [
-        {
-          address: '0xCCb80EE6f58cC9e87C8032BD908C59F475CCc435',
-          privateKey:
-            '0x0001020304050607080910111213141516171819202122232425262728293031',
-        } as BlsAccount,
-      ],
+    [TEST_CHAIN_ID_ZERO]: {
+      ...TEST_NETWORK_ZERO,
+      accounts: [ACCOUNT_ZERO],
     },
   };
   const apiParams: ApiParams = {
@@ -37,7 +31,9 @@ describe('recoverAccounts', () => {
   };
 
   it('should recover accounts correctly', async () => {
-    const requestObject: RecoverAccountsRequestParams = { chainId: 212 };
+    const requestObject: RecoverAccountsRequestParams = {
+      chainId: TEST_CHAIN_ID_ZERO,
+    };
     apiParams.requestParams = requestObject;
 
     const result = await recoverAccounts(apiParams);
@@ -46,14 +42,14 @@ describe('recoverAccounts', () => {
     expect(walletStub.rpcStubs.snap_manageState).not.to.have.been.called;
     expect(result?.length).to.be.eq(1);
     expect(result).to.be.eql(
-      state[212].accounts?.map((a) => ({ address: a.address })),
+      state[TEST_CHAIN_ID_ZERO].accounts?.map((a) => ({ address: a.address })),
     );
   });
 
   it('should throw error if getAccounts failed', async function () {
     sinon.stub(snapUtils, 'getAccounts').throws(new Error());
     const requestObject: RecoverAccountsRequestParams = {
-      chainId: 212,
+      chainId: TEST_CHAIN_ID_ZERO,
     };
     apiParams.requestParams = requestObject;
 
