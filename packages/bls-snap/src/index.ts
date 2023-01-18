@@ -79,19 +79,6 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
   };
 
   switch (request.method) {
-    case 'hello':
-      return wallet.request({
-        method: 'snap_confirm',
-        params: [
-          {
-            prompt: getMessage(origin),
-            description:
-              'This custom confirmation is just for display purposes.',
-            textAreaContent:
-              'But you can edit the snap source code to make it do something, if you want to!',
-          },
-        ],
-      });
     case 'bls_getNetworks':
       return getNetworks(apiParams);
     case 'bls_recoverAccounts':
