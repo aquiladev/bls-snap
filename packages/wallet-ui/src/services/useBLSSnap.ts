@@ -345,7 +345,6 @@ export const useBLSSnap = () => {
   };
 
   const sendBundle = async (senderAddress: string, chainId: number) => {
-    dispatch(removeOperations(operations));
     const data = await ethereum.request({
       method: 'wallet_invokeSnap',
       params: [
@@ -360,6 +359,7 @@ export const useBLSSnap = () => {
       ],
     });
     console.log('sendBundle', data);
+    dispatch(removeOperations(operations));
     dispatch(addBundle({ bundleHash: data.hash }));
     return data;
   };

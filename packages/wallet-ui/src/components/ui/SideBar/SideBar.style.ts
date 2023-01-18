@@ -68,6 +68,7 @@ export const AccountDetailsContent = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0px;
+  align-items: flex-start;
 `;
 
 export const AccountDetailButton = styled(Button).attrs((props) => ({

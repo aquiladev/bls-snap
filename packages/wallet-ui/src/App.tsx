@@ -4,6 +4,7 @@ import { Footer, Header } from './components';
 import { Home } from './components/pages/Home';
 import { ConnectModal } from './components/ui/ConnectModal';
 import { LoadingBackdrop } from './components/ui/LoadingBackdrop';
+import { NoFlaskModal } from './components/ui/NoFlaskModal';
 import { PopIn } from './components/ui/PopIn';
 
 import { light, dark, GlobalStyle } from './config/theme';
@@ -76,6 +77,9 @@ function App() {
             showClose={false}
           >
             <ConnectModal />
+          </PopIn>
+          <PopIn isOpen={!hasMetamaskFlask} showClose={false}>
+            <NoFlaskModal />
           </PopIn>
           <Home address={address} />
           <Footer />

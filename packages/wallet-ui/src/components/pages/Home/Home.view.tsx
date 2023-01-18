@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { useAppSelector } from '../../../hooks/redux';
 import { useBLSSnap } from '../../../services/useBLSSnap';
 import { Header } from '../../ui/Header';
@@ -6,6 +8,7 @@ import { Separator } from '../../ui/Header/SendModal/SendModal.style';
 import { OperationsList } from '../../ui/OperationsList';
 import { SideBar } from '../../ui/SideBar';
 import { BundlesList } from '../../ui/BundlesList';
+import { LoadingSpinner } from '../../ui/LoadingSmall/LoadingSmall.style';
 import {
   RightPart,
   RightPartContent,
@@ -23,10 +26,13 @@ export const HomeView = ({ address }: Props) => {
     (state) => state.wallet,
   );
   const { sendBundle } = useBLSSnap();
+  const [isSendingBundle, setIsSendingBundle] = useState(false);
 
   const handleSendBundle = async () => {
     const { chainId } = networks.items[networks.activeNetwork];
+    setIsSendingBundle(true);
     await sendBundle(address, chainId);
+    setIsSendingBundle(false);
   };
 
   return (
@@ -41,7 +47,15 @@ export const HomeView = ({ address }: Props) => {
           <OperationsList />
           {Boolean(operations.length) && (
             <Buttons style={{ textAlign: 'center' }}>
-              <HeaderButton onClick={() => handleSendBundle()}>
+              <HeaderButton
+                onClick={() => handleSendBundle()}
+                disabled={isSendingBundle}
+                customIconLeft={
+                  isSendingBundle ? (
+                    <LoadingSpinner icon="spinner" pulse />
+                  ) : null
+                }
+              >
                 Send Bundle
               </HeaderButton>
             </Buttons>
