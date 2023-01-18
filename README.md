@@ -22,8 +22,8 @@ yarn test
 
 ## Vocabulary
 
-1. Action - ?
-2. Operation - Smart contract calldata (includes target contract, data and value).
+1. Action - Smart contract calldata (includes target contract, data and value).
+2. Operation - Ordered list of actions.
 3. Bundle - Ordered list of operations.
 4. Aggreegator - Service which accepts BLS signed transactions and bundles them into one for submission.
 
