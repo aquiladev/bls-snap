@@ -6,7 +6,7 @@ import sinon from 'sinon';
 import { ApiParams, CreateAccountRequestParams } from '../src/types/snapApi';
 import { createAccount } from '../src/createAccount';
 import { SnapState } from '../src/types/snapState';
-import * as snapConstants from '../src/utils/constants';
+import * as config from '../src/utils/config';
 import * as cryptoUtils from '../src/utils/crypto';
 import * as blsUtils from '../src/utils/blsUtils';
 import * as snapUtils from '../src/utils/snapUtils';
@@ -32,10 +32,12 @@ describe('createAccount', () => {
     mutex: new Mutex(),
   };
 
+  afterEach(function () {
+    walletStub.reset();
+  });
+
   it('should create account correctly', async () => {
-    sinon
-      .stub(snapConstants, 'ARBITRUM_GOERLI_NETWORK')
-      .value(TEST_NETWORK_ZERO);
+    sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
     sinon.stub(blsUtils, 'getWallet').resolves(BLS_ACCOUNT_ZERO);
     sinon.stub(cryptoUtils, 'getPrivateKey').resolves(PRIVATE_KEY_ZERO);
 

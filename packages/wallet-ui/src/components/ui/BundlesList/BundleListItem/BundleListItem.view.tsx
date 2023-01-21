@@ -3,18 +3,18 @@ import { Wrapper } from './BundleListItem.style';
 import { getBundleStatus } from './types';
 
 type Props = {
-  transaction: Bundle;
+  bundle: Bundle;
 };
 
-export const BundleListItemView = ({ transaction }: Props) => {
-  const status = getBundleStatus(transaction);
+export const BundleListItemView = ({ bundle }: Props) => {
+  const status = getBundleStatus(bundle);
   const statusColor = status.toLowerCase() === 'pending' ? 'orange' : 'green';
 
   return (
     <Wrapper>
-      {transaction.bundleHash}
+      {bundle.bundleHash}
       <span style={{ paddingLeft: 20, color: statusColor }}>{status}</span>
-      <span style={{ paddingLeft: 20 }}>{transaction.blockNumber}</span>
+      <span style={{ paddingLeft: 20 }}>{bundle.blockNumber}</span>
     </Wrapper>
   );
 };

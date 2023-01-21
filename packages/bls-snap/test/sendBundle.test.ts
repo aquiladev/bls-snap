@@ -6,7 +6,7 @@ import sinon from 'sinon';
 import { ApiParams, SendBundleRequestParams } from '../src/types/snapApi';
 import { sendBundle } from '../src/sendBundle';
 import { SnapState } from '../src/types/snapState';
-import * as snapConstants from '../src/utils/constants';
+import * as config from '../src/utils/config';
 import * as snapUtils from '../src/utils/snapUtils';
 import * as blsUtils from '../src/utils/blsUtils';
 import { WalletMock } from './utils/wallet.mock';
@@ -37,10 +37,12 @@ describe('sendBundle', () => {
     mutex: new Mutex(),
   };
 
+  afterEach(function () {
+    walletStub.reset();
+  });
+
   it('should throw error if no account found', async function () {
-    sinon
-      .stub(snapConstants, 'ARBITRUM_GOERLI_NETWORK')
-      .value(TEST_NETWORK_ZERO);
+    sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
     const requestObject: SendBundleRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       senderAddress: ZERO_ADDRESS,
@@ -51,9 +53,7 @@ describe('sendBundle', () => {
   });
 
   it('should throw error if no operations found', async function () {
-    sinon
-      .stub(snapConstants, 'ARBITRUM_GOERLI_NETWORK')
-      .value(TEST_NETWORK_ZERO);
+    sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
     const requestObject: SendBundleRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       senderAddress: ACCOUNT_ZERO.address,
@@ -64,9 +64,7 @@ describe('sendBundle', () => {
   });
 
   it('should create account correctly', async () => {
-    sinon
-      .stub(snapConstants, 'ARBITRUM_GOERLI_NETWORK')
-      .value(TEST_NETWORK_ZERO);
+    sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
     sinon.stub(blsUtils, 'getWallet').resolves(BLS_ACCOUNT_ZERO);
     sinon.stub(blsUtils, 'getAggregator').returns(AGGREGATOR_MOCK);
     const requestObject: SendBundleRequestParams = {

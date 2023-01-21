@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { ApiParams, CreateAccountRequestParams } from './types/snapApi';
-import * as constants from './utils/constants';
+import * as config from './utils/config';
 import {
   getKeysFromAddressIndex,
   getValidNumber,
@@ -15,7 +15,8 @@ export async function createAccount(params: ApiParams) {
     const { chainId, addressIndex } =
       requestParams as CreateAccountRequestParams;
 
-    if (chainId !== constants.ARBITRUM_GOERLI_NETWORK.chainId) {
+    const network = config.getNetwork(chainId);
+    if (!network) {
       throw new Error(`ChainId not supported: ${chainId}`);
     }
 
@@ -32,10 +33,7 @@ export async function createAccount(params: ApiParams) {
 
     // Note that if a wallet doesn't yet exist, it will be
     // lazily created on the first transaction.
-    const _wallet = await getWallet(
-      constants.ARBITRUM_GOERLI_NETWORK,
-      privateKey,
-    );
+    const _wallet = await getWallet(network, privateKey);
 
     const account: BlsAccount = {
       address: _wallet.address,

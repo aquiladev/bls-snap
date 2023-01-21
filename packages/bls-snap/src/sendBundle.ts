@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { ApiParams, SendBundleRequestParams } from './types/snapApi';
-import * as constants from './utils/constants';
+import * as config from './utils/config';
 import * as snapUtils from './utils/snapUtils';
 import { Bundle } from './types/snapState';
 import { getAggregator, getWallet } from './utils/blsUtils';
@@ -10,7 +10,8 @@ export async function sendBundle(params: ApiParams) {
     const { state, mutex, wallet, requestParams } = params;
     const { senderAddress, chainId } = requestParams as SendBundleRequestParams;
 
-    if (chainId !== constants.ARBITRUM_GOERLI_NETWORK.chainId) {
+    const network = config.getNetwork(chainId);
+    if (!network) {
       throw new Error(`ChainId not supported: ${chainId}`);
     }
 
@@ -30,10 +31,7 @@ export async function sendBundle(params: ApiParams) {
 
     // Note that if a wallet doesn't yet exist, it will be
     // lazily created on the first transaction.
-    const _wallet = await getWallet(
-      constants.ARBITRUM_GOERLI_NETWORK,
-      account.privateKey,
-    );
+    const _wallet = await getWallet(network, account.privateKey);
 
     // All of the actions in a bundle are atomic, if one
     // action fails they will all fail.
@@ -48,7 +46,7 @@ export async function sendBundle(params: ApiParams) {
       }),
     });
 
-    const aggregator = getAggregator(constants.ARBITRUM_GOERLI_NETWORK);
+    const aggregator = getAggregator(network);
     const addResult = await aggregator.add(_bundle);
 
     if ('failures' in addResult) {

@@ -99,7 +99,9 @@ export const useBLSSnap = () => {
     })) as Record<number, Network>;
 
     // TODO: Switch Wallet UI to use new storage structure
-    return Object.values(data);
+    // return Object.values(data);
+
+    return [data[421613]];
   };
 
   const oldVersionDetected = async () => {
@@ -238,10 +240,13 @@ export const useBLSSnap = () => {
     }
   };
 
-  const addOperation = async (address: string, chainId: number) => {
-    const erc20Address = '0x5081a39b8A5f0E35a8D959395a630b68B74Dd30f';
+  const addOperation = async (
+    erc20Address: string,
+    address: string,
+    chainId: number,
+  ) => {
     const erc20Abi = ['function mint(address to, uint amount) returns (bool)'];
-    const erc20 = new ethers.Contract(erc20Address, erc20Abi);
+    const erc20Contract = new ethers.Contract(erc20Address, erc20Abi);
 
     const response = await ethereum.request({
       method: 'wallet_invokeSnap',
@@ -252,10 +257,10 @@ export const useBLSSnap = () => {
           params: {
             senderAddress: address,
             contractAddress: erc20Address,
-            encodedFunction: erc20.interface.encodeFunctionData('mint', [
-              address,
-              ethers.utils.parseUnits('1', 18),
-            ]),
+            encodedFunction: erc20Contract.interface.encodeFunctionData(
+              'mint',
+              [address, ethers.utils.parseUnits('1', 18)],
+            ),
             chainId,
           },
         },
@@ -358,9 +363,8 @@ export const useBLSSnap = () => {
         },
       ],
     });
-    console.log('sendBundle', data);
     dispatch(removeOperations(operations));
-    dispatch(addBundle({ bundleHash: data.hash }));
+    dispatch(addBundle({ bundleHash: data.bundleHash }));
     return data;
   };
 

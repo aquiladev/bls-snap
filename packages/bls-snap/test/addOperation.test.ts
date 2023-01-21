@@ -28,6 +28,10 @@ describe('addOperation', () => {
     mutex: new Mutex(),
   };
 
+  afterEach(function () {
+    walletStub.reset();
+  });
+
   it('should create account correctly', async () => {
     const requestObject: AddOperationRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,

@@ -10,7 +10,7 @@ import {
 } from '../src/types/snapApi';
 import { SnapState } from '../src/types/snapState';
 import { getErc20TokenBalance } from '../src/getErc20TokenBalance';
-import * as snapConstants from '../src/utils/constants';
+import * as config from '../src/utils/config';
 import * as evmUtils from '../src/utils/evmUtils';
 import {
   ERC20_TOKEN_ZERO,
@@ -41,9 +41,7 @@ describe('getErc20TokenBalance', function () {
   });
 
   it('should get the ERC20 token balance', async () => {
-    sinon
-      .stub(snapConstants, 'ARBITRUM_GOERLI_NETWORK')
-      .value(TEST_NETWORK_ZERO);
+    sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
 
     sinon
       .stub(evmUtils, 'callContract')

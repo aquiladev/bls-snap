@@ -53,7 +53,11 @@ export const HeaderView = ({ address }: Props) => {
 
   const handleMintClick = async () => {
     const { chainId } = networks.items[networks.activeNetwork];
-    await addOperation(wallet.accounts[0].address, chainId);
+    await addOperation(
+      wallet.erc20TokenBalanceSelected.address,
+      wallet.accounts[0].address,
+      chainId,
+    );
   };
 
   const asset = wallet.erc20TokenBalanceSelected;
