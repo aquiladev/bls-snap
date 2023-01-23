@@ -2,12 +2,9 @@
 
 The MetaMask Snap for [BLS Wallet](https://blswallet.org/)
 
-<p align="center">
-  <video controls autoplay>
-    <source src=".github/bls-snap-demo.mov" type="video/mp4">
-  </video>
-  <br>
-</p>
+
+https://user-images.githubusercontent.com/1164492/214146350-eb910e0c-fcb3-4656-965d-6cbf19021675.mov
+
 
 ## Getting Started
 
