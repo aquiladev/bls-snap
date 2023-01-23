@@ -2,6 +2,13 @@
 
 The MetaMask Snap for [BLS Wallet](https://blswallet.org/)
 
+<p align="center">
+  <video controls autoplay>
+    <source src=".github/bls-snap-demo.mov" type="video/mp4">
+  </video>
+  <br>
+</p>
+
 ## Getting Started
 
 Clone the repository using and setup the development environment:
