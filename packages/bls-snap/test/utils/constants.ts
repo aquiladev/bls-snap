@@ -5,6 +5,7 @@ import {
   Operation as BlsOperation,
   Aggregator,
 } from 'bls-wallet-clients';
+import { BundleReceipt } from 'bls-wallet-clients/dist/src/Aggregator';
 import { BigNumber } from 'ethers';
 import {
   BlsAccount,
@@ -79,6 +80,14 @@ export const BUNDLE_ZERO: Bundle = {
   bundleHash: BUNDLE_HASH_ZERO,
   senderAddress: ACCOUNT_ZERO.address,
   operations: [OPERATION_ZERO],
+};
+
+export const BUNDLE_RECEIPT_ZERO: BundleReceipt = {
+  transactionIndex: 1,
+  transactionHash: '0x1234',
+  bundleHash: BUNDLE_HASH_ZERO,
+  blockHash: '0x1234',
+  blockNumber: 1,
 };
 
 export const AGGREGATOR_MOCK: Aggregator = {

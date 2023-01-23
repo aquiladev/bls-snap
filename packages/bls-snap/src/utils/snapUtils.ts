@@ -9,9 +9,9 @@ import {
   SnapState,
   Bundle,
 } from '../types/snapState';
-import { ARBITRUM_GOERLI_NETWORK } from './constants';
 import { getPrivateKey } from './crypto';
 import { getBundleReceipt } from './blsUtils';
+import * as config from './config';
 
 export async function upsertNetwork(
   network: Network,
@@ -138,13 +138,7 @@ export async function addTestToken(
     symbol: 'TOK',
     decimals: 18,
   };
-  await upsertErc20Token(
-    token,
-    ARBITRUM_GOERLI_NETWORK.chainId,
-    wallet,
-    mutex,
-    state,
-  );
+  await upsertErc20Token(token, network.chainId, wallet, mutex, state);
 }
 
 export async function upsertErc20Token(
@@ -360,10 +354,8 @@ export async function updateBundleStatus(
   mutex: Mutex,
   state: SnapState,
 ) {
-  const receipt = await getBundleReceipt(
-    ARBITRUM_GOERLI_NETWORK,
-    bundle.bundleHash,
-  );
+  const network = config.getNetwork(chainId);
+  const receipt = await getBundleReceipt(network, bundle.bundleHash);
 
   console.log('BUNDLE STATUS', bundle.bundleHash, receipt);
   if (receipt) {

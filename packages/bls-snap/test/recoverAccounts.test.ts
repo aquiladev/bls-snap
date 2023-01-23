@@ -30,6 +30,10 @@ describe('recoverAccounts', () => {
     mutex: new Mutex(),
   };
 
+  afterEach(function () {
+    walletStub.reset();
+  });
+
   it('should recover accounts correctly', async () => {
     const requestObject: RecoverAccountsRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,

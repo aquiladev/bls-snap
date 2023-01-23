@@ -35,8 +35,8 @@ export const BundlesListView = () => {
   return (
     <Wrapper<FC<IListProps<Bundle>>>
       data={wallet.bundles || []}
-      render={(transaction) => <BundleListItem transaction={transaction} />}
-      keyExtractor={(transaction) => transaction.bundleHash.toString()}
+      render={(bundle) => <BundleListItem bundle={bundle} />}
+      keyExtractor={(bundle) => bundle.bundleHash?.toString()}
     />
   );
 };

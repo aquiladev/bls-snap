@@ -1,7 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { ethers, utils, BigNumber } from 'ethers';
 import { ApiParams, GetErc20TokenBalanceRequestParams } from './types/snapApi';
-import * as constants from './utils/constants';
+import * as config from './utils/config';
 import { callContract } from './utils/evmUtils';
 
 export async function getErc20TokenBalance(params: ApiParams) {
@@ -26,7 +26,8 @@ export async function getErc20TokenBalance(params: ApiParams) {
       throw new Error(`The given user address is invalid: ${userAddress}`);
     }
 
-    if (chainId !== constants.ARBITRUM_GOERLI_NETWORK.chainId) {
+    const network = config.getNetwork(chainId);
+    if (!network) {
       throw new Error(`ChainId not supported: ${chainId}`);
     }
 
@@ -41,11 +42,7 @@ export async function getErc20TokenBalance(params: ApiParams) {
       userAddress.toLowerCase(),
     ]);
 
-    const result = await callContract(
-      constants.ARBITRUM_GOERLI_NETWORK,
-      tokenAddress,
-      calldata,
-    );
+    const result = await callContract(network, tokenAddress, calldata);
     const [balance] = utils.defaultAbiCoder.decode(['uint256'], result);
     console.log(`getErc20Balance:\nresp: ${JSON.stringify(balance)}`);
 

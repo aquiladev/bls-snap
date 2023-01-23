@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { ethers } from 'ethers';
+import { providers } from 'ethers';
 import { Network } from '../types/snapState';
 
 export async function callContract(
@@ -11,10 +11,8 @@ export async function callContract(
   return provider.call({ to, data });
 }
 
-export function getProvider(
-  network: Network,
-): ethers.providers.JsonRpcProvider {
-  return new ethers.providers.JsonRpcProvider(network.rpcUrl, {
+export function getProvider(network: Network): providers.JsonRpcProvider {
+  return new providers.JsonRpcProvider(network.rpcUrl, {
     name: network.name,
     chainId: network.chainId,
   });

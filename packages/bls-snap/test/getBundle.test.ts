@@ -9,7 +9,7 @@ import { getBundle } from '../src/getBundle';
 import * as snapUtils from '../src/utils/snapUtils';
 import * as blsUtils from '../src/utils/blsUtils';
 import {
-  AGGREGATOR_MOCK,
+  BUNDLE_RECEIPT_ZERO,
   BUNDLE_ZERO,
   TEST_CHAIN_ID_ZERO,
   TEST_NETWORK_ZERO,
@@ -22,7 +22,7 @@ describe('getBundle', function () {
   const state: SnapState = {
     [TEST_CHAIN_ID_ZERO]: {
       ...TEST_NETWORK_ZERO,
-      bundles: [BUNDLE_ZERO],
+      bundles: [{ ...BUNDLE_ZERO }],
     },
   };
   const apiParams: ApiParams = {
@@ -37,7 +37,7 @@ describe('getBundle', function () {
   });
 
   it('should get bundle', async () => {
-    sinon.stub(blsUtils, 'getAggregator').returns(AGGREGATOR_MOCK);
+    sinon.stub(blsUtils, 'getBundleReceipt').resolves(BUNDLE_RECEIPT_ZERO);
     const requestObject: GetBundleRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       bundleHash: BUNDLE_ZERO.bundleHash,
@@ -46,8 +46,11 @@ describe('getBundle', function () {
 
     const result = await getBundle(apiParams);
 
-    expect(walletStub.rpcStubs.snap_manageState).not.to.have.been.called;
-    expect(result).to.be.eql(BUNDLE_ZERO);
+    expect(walletStub.rpcStubs.snap_manageState).to.have.been.called;
+    expect(result).to.be.eql({
+      ...BUNDLE_ZERO,
+      ...BUNDLE_RECEIPT_ZERO,
+    });
   });
 
   it('should throw error if getBundle failed', async function () {

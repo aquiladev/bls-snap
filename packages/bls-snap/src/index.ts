@@ -11,7 +11,7 @@ import { getBundles } from './getBundles';
 import { recoverAccounts } from './recoverAccounts';
 import { sendBundle } from './sendBundle';
 import { ApiParams, ApiRequestParams } from './types/snapApi';
-import { ARBITRUM_GOERLI_NETWORK } from './utils/constants';
+import * as config from './utils/config';
 import { addTestToken, upsertNetwork } from './utils/snapUtils';
 import { getBundle } from './getBundle';
 import { getAddressKeyDeriver } from './utils/crypto';
@@ -63,8 +63,11 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
     });
   }
 
-  await upsertNetwork(ARBITRUM_GOERLI_NETWORK, wallet, mutex, state);
-  await addTestToken(ARBITRUM_GOERLI_NETWORK, wallet, mutex, state);
+  const networks = config.getNetworks();
+  for (const network of networks) {
+    await upsertNetwork(network, wallet, mutex, state);
+    await addTestToken(network, wallet, mutex, state);
+  }
 
   const requestParams = request?.params as unknown as ApiRequestParams;
   console.log(
