@@ -28,11 +28,11 @@ export type GetErc20TokenBalanceRequestParams = {
   userAddress: string;
 } & BaseRequestParams;
 
-export type GetOperationsRequestParams = {
+export type GetActionsRequestParams = {
   senderAddress: string;
 } & BaseRequestParams;
 
-export type AddOperationRequestParams = {
+export type AddActionRequestParams = {
   senderAddress: string;
   contractAddress: string;
   encodedFunction: string;
@@ -58,8 +58,8 @@ export type ApiRequestParams =
   | CreateAccountRequestParams
   | GetErc20TokensRequestParams
   | GetErc20TokenBalanceRequestParams
-  | GetOperationsRequestParams
-  | AddOperationRequestParams
+  | GetActionsRequestParams
+  | AddActionRequestParams
   | GetBundleRequestParams
   | GetBundlesRequestParams
   | SendBundleRequestParams;

@@ -21,7 +21,7 @@ export const HeaderView = ({ address }: Props) => {
   const [sendOpen, setSendOpen] = useState(false);
   const networks = useAppSelector((state) => state.networks);
   const wallet = useAppSelector((state) => state.wallet);
-  const { updateTokenBalance, addOperation } = useBLSSnap();
+  const { updateTokenBalance, addAction } = useBLSSnap();
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const timeoutHandle = useRef(setTimeout(() => {}));
 
@@ -53,7 +53,7 @@ export const HeaderView = ({ address }: Props) => {
 
   const handleMintClick = async () => {
     const { chainId } = networks.items[networks.activeNetwork];
-    await addOperation(
+    await addAction(
       wallet.erc20TokenBalanceSelected.address,
       wallet.accounts[0].address,
       chainId,

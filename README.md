@@ -58,8 +58,8 @@ await ethereum.request({
 - `bls_createAccount` - Creates and returns new account. Snap uses seedprase from MetaMask through its API `snap_getBip44Entropy` in order to generate accounts. It allows to re-create the same accounts after snap re-installation.
 - `bls_getErc20Tokens` - Returns list of ERC20 tokens from snap state.
 - `bls_getErc20TokenBalance` - Returns ERC20 token balance from snap state.
-- `bls_getOperations` - Returns list of operations from snap state.
-- `bls_addOperation` - Adds new operation to snap state.
+- `bls_getActions` - Returns list of actions from snap state.
+- `bls_addAction` - Adds new action to snap state.
 - `bls_getBundles` - Returns list of bundles from snap state.
 - `bls_getBundle` - Returns the bundle from snap state with status check.
 - `bls_sendBundle` - Signs and sends new bundle with ordered list of operations to an aggreegator.
@@ -74,8 +74,8 @@ await ethereum.request({
 | `bls_createAccount`        | `chainId`                                                                          | `addressIndex`                        |
 | `bls_getErc20Tokens`       | `chainId`                                                                          |
 | `bls_getErc20TokenBalance` | `chainId`,<br /> `tokenAddress`,<br /> `userAddress`                               |
-| `bls_getOperations`        | `chainId`,<br /> `senderAddress`                                                   |
-| `bls_addOperation`         | `chainId`,<br /> `senderAddress`,<br /> `contractAddress`,<br /> `encodedFunction` |
+| `bls_getActions`           | `chainId`,<br /> `senderAddress`                                                   |
+| `bls_addAction`            | `chainId`,<br /> `senderAddress`,<br /> `contractAddress`,<br /> `encodedFunction` |
 | `bls_getBundles`           | `chainId`,<br /> `senderAddress`                                                   | `contractAddress`,<br /> `bundleHash` |
 | `bls_getBundle`            | `chainId`,<br /> `bundleHash`                                                      |
 | `bls_sendBundle`           | `chainId`,<br /> `senderAddress`                                                   |

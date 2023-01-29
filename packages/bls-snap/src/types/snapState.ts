@@ -11,7 +11,7 @@ export type Network = {
 
   accounts?: BlsAccount[];
   erc20Tokens?: Erc20Token[];
-  operations?: Operation[];
+  actions?: Action[];
   bundles?: Bundle[];
 };
 
@@ -30,7 +30,7 @@ export type Erc20Token = {
   decimals: number;
 };
 
-export type Operation = {
+export type Action = {
   id: string;
   value: number;
   senderAddress: string;
@@ -40,7 +40,7 @@ export type Operation = {
 
 export type Bundle = {
   senderAddress: string;
-  operations: Operation[];
+  actions: Action[];
   bundleHash: string;
   error?: string;
   transactionHash?: string;

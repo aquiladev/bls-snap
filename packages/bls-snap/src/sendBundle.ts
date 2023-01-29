@@ -22,11 +22,9 @@ export async function sendBundle(params: ApiParams) {
       );
     }
 
-    const operations = snapUtils.getOperations(senderAddress, chainId, state);
-    if (!operations?.length) {
-      throw new Error(
-        `No operations found: ${senderAddress} chainId: ${chainId}`,
-      );
+    const actions = snapUtils.getActions(senderAddress, chainId, state);
+    if (!actions?.length) {
+      throw new Error(`No actions found: ${senderAddress} chainId: ${chainId}`);
     }
 
     // Note that if a wallet doesn't yet exist, it will be
@@ -37,7 +35,7 @@ export async function sendBundle(params: ApiParams) {
     // action fails they will all fail.
     const _bundle = _wallet.sign({
       nonce: await _wallet.Nonce(),
-      actions: operations.map((op) => {
+      actions: actions.map((op) => {
         return {
           ethValue: op.value,
           contractAddress: op.contractAddress,
@@ -56,12 +54,12 @@ export async function sendBundle(params: ApiParams) {
     const bundle: Bundle = {
       senderAddress,
       bundleHash: addResult.hash,
-      operations,
+      actions,
     };
     console.log('Bundle:', bundle);
 
     await snapUtils.upsertBundle(bundle, chainId, wallet, mutex, state);
-    await snapUtils.removeOperations(operations, chainId, wallet, mutex, state);
+    await snapUtils.removeActions(actions, chainId, wallet, mutex, state);
     return bundle;
   } catch (err) {
     console.error(`Problem found: ${err}`);
