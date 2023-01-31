@@ -36,11 +36,7 @@ export const walletSlice = createSlice({
       state.forceReconnect = payload;
     },
     setAccounts: (state, { payload }) => {
-      if (Array.isArray(payload)) {
-        state.accounts = payload.map((account) => account);
-      } else {
-        state.accounts.push(payload);
-      }
+      state.accounts = Array.isArray(payload) ? payload : [payload];
     },
     resetWallet: () => {
       return {
