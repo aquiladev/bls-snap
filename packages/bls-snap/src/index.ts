@@ -1,8 +1,8 @@
 import { OnRpcRequestHandler } from '@metamask/snap-types';
 import { Mutex } from 'async-mutex';
 
-import { addOperation } from './addOperation';
-import { getOperations } from './getOperations';
+import { addAction } from './addAction';
+import { getActions } from './getActions';
 import { createAccount } from './createAccount';
 import { getErc20TokenBalance } from './getErc20TokenBalance';
 import { getErc20Tokens } from './getErc20Tokens';
@@ -93,10 +93,10 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
       return getErc20Tokens(apiParams);
     case 'bls_getErc20TokenBalance':
       return getErc20TokenBalance(apiParams);
-    case 'bls_addOperation':
-      return addOperation(apiParams);
-    case 'bls_getOperations':
-      return getOperations(apiParams);
+    case 'bls_addAction':
+      return addAction(apiParams);
+    case 'bls_getActions':
+      return getActions(apiParams);
     case 'bls_getBundles':
       return getBundles(apiParams);
     case 'bls_getBundle':

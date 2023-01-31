@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Operation, Bundle } from 'bls-snap/src/types/snapState';
+import { Action, Bundle } from 'bls-snap/src/types/snapState';
 import { BigNumber } from 'ethers';
 import { Account, Erc20TokenBalance } from '../types';
 
@@ -10,7 +10,7 @@ export type WalletState = {
   accounts: Account[];
   erc20TokenBalances: Erc20TokenBalance[];
   erc20TokenBalanceSelected: Erc20TokenBalance;
-  operations: Operation[];
+  actions: Action[];
   bundles: Bundle[];
 };
 
@@ -21,7 +21,7 @@ const initialState: WalletState = {
   accounts: [],
   erc20TokenBalances: [],
   erc20TokenBalanceSelected: {} as Erc20TokenBalance,
-  operations: [],
+  actions: [],
   bundles: [],
 };
 
@@ -80,16 +80,16 @@ export const walletSlice = createSlice({
         }
       }
     },
-    setOperations: (state, { payload }) => {
-      state.operations = (payload || []).reverse();
+    setActions: (state, { payload }) => {
+      state.actions = (payload || []).reverse();
     },
-    addOperation: (state, { payload }) => {
-      state.operations = [payload, ...state.operations];
+    addAction: (state, { payload }) => {
+      state.actions = [payload, ...state.actions];
     },
-    removeOperations: (state, { payload }) => {
-      const _operations = Array(payload).flat();
-      state.operations = state.operations.filter((o) => {
-        return !_operations.find((op) => op.id === o.id);
+    removeActions: (state, { payload }) => {
+      const list = Array(payload).flat();
+      state.actions = state.actions.filter((o) => {
+        return !list.find((op) => op.id === o.id);
       });
     },
     setBundles: (state, { payload }) => {
@@ -117,9 +117,9 @@ export const {
   setErc20TokenBalances,
   setErc20TokenBalanceSelected,
   upsertErc20TokenBalance,
-  setOperations,
-  addOperation,
-  removeOperations,
+  setActions,
+  addAction,
+  removeActions,
   setBundles,
   addBundle,
   updateBundle,

@@ -12,10 +12,10 @@ import * as blsUtils from '../src/utils/blsUtils';
 import { WalletMock } from './utils/wallet.mock';
 import {
   ACCOUNT_ZERO,
+  ACTION_ZERO,
   AGGREGATOR_MOCK,
   BLS_ACCOUNT_ZERO,
   BUNDLE_ZERO,
-  OPERATION_ZERO,
   TEST_CHAIN_ID_ZERO,
   TEST_NETWORK_ZERO,
   ZERO_ADDRESS,
@@ -52,7 +52,7 @@ describe('sendBundle', () => {
     await expect(sendBundle(apiParams)).to.be.rejected;
   });
 
-  it('should throw error if no operations found', async function () {
+  it('should throw error if no actions found', async function () {
     sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
     const requestObject: SendBundleRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
@@ -72,13 +72,13 @@ describe('sendBundle', () => {
       senderAddress: ACCOUNT_ZERO.address,
     };
     apiParams.requestParams = requestObject;
-    apiParams.state[TEST_CHAIN_ID_ZERO].operations = [OPERATION_ZERO];
+    apiParams.state[TEST_CHAIN_ID_ZERO].actions = [ACTION_ZERO];
 
     const result = await sendBundle(apiParams);
 
     expect(result).to.be.eql({
       ...BUNDLE_ZERO,
-      operations: [OPERATION_ZERO],
+      actions: [ACTION_ZERO],
     });
   });
 

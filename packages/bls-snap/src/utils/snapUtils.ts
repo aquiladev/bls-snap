@@ -5,7 +5,7 @@ import {
   BlsAccount,
   Erc20Token,
   Network,
-  Operation,
+  Action,
   SnapState,
   Bundle,
 } from '../types/snapState';
@@ -203,8 +203,8 @@ export function getErc20Tokens(
   return state[chainId]?.erc20Tokens;
 }
 
-export async function upsertOperation(
-  operation: Operation,
+export async function upsertAction(
+  action: Action,
   chainId: number,
   wallet: any,
   mutex: Mutex,
@@ -221,12 +221,12 @@ export async function upsertOperation(
 
     assertNetwork(chainId, state);
 
-    if (!state[chainId]?.operations) {
-      state[chainId].operations = [];
+    if (!state[chainId]?.actions) {
+      state[chainId].actions = [];
     }
 
     // insert
-    state[chainId].operations?.push(operation);
+    state[chainId].actions?.push(action);
 
     await wallet.request({
       method: 'snap_manageState',
@@ -235,18 +235,19 @@ export async function upsertOperation(
   });
 }
 
-export function getOperations(
+export function getActions(
   senderAddress: string,
   chainId: number,
   state: SnapState,
-): Operation[] | undefined {
-  return state[chainId]?.operations?.filter(
-    (op) => op.senderAddress.toLowerCase() === senderAddress.toLowerCase(),
+): Action[] | undefined {
+  return state[chainId]?.actions?.filter(
+    (action) =>
+      action.senderAddress.toLowerCase() === senderAddress.toLowerCase(),
   );
 }
 
-export async function removeOperations(
-  operations: Operation[],
+export async function removeActions(
+  actions: Action[],
   chainId: number,
   wallet: any,
   mutex: Mutex,
@@ -263,8 +264,8 @@ export async function removeOperations(
 
     assertNetwork(chainId, state);
 
-    state[chainId].operations = state[chainId].operations?.filter((o) => {
-      return !operations.find((op) => op.id === o.id);
+    state[chainId].actions = state[chainId].actions?.filter((action) => {
+      return !actions.find((a) => a.id === action.id);
     });
 
     await wallet.request({
@@ -322,7 +323,8 @@ export function getBundles(
   state: SnapState,
 ): Bundle[] | undefined {
   return state[chainId]?.bundles?.filter(
-    (op) => op.senderAddress.toLowerCase() === senderAddress.toLowerCase(),
+    (bundle) =>
+      bundle.senderAddress.toLowerCase() === senderAddress.toLowerCase(),
   );
 }
 
@@ -334,7 +336,7 @@ export async function getBundle(
   state: SnapState,
 ): Promise<Bundle> {
   const bundle = state[chainId]?.bundles?.find(
-    (op) => op.bundleHash === bundleHash,
+    (bundle) => bundle.bundleHash === bundleHash,
   );
   if (!bundle) {
     throw new Error(`Bundle not found ${bundleHash}`);

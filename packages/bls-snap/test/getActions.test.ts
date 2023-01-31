@@ -3,26 +3,26 @@ import { expect } from 'chai';
 import { Mutex } from 'async-mutex';
 import sinon from 'sinon';
 
-import { ApiParams, GetOperationsRequestParams } from '../src/types/snapApi';
+import { ApiParams, GetActionsRequestParams } from '../src/types/snapApi';
 import { SnapState } from '../src/types/snapState';
-import { getOperations } from '../src/getOperations';
+import { getActions } from '../src/getActions';
 import * as snapUtils from '../src/utils/snapUtils';
 import {
   ACCOUNT_ZERO,
-  OPERATION_ZERO,
+  ACTION_ZERO,
   TEST_CHAIN_ID_ZERO,
   TEST_NETWORK_ZERO,
   ZERO_ADDRESS,
 } from './utils/constants';
 import { WalletMock } from './utils/wallet.mock';
 
-describe('getOperations', function () {
+describe('getActions', function () {
   const walletStub = new WalletMock();
 
   const state: SnapState = {
     [TEST_CHAIN_ID_ZERO]: {
       ...TEST_NETWORK_ZERO,
-      operations: [OPERATION_ZERO],
+      actions: [ACTION_ZERO],
     },
   };
   const apiParams: ApiParams = {
@@ -37,26 +37,26 @@ describe('getOperations', function () {
   });
 
   it('should get the ERC20 tokens', async () => {
-    const requestObject: GetOperationsRequestParams = {
+    const requestObject: GetActionsRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       senderAddress: ACCOUNT_ZERO.address,
     };
     apiParams.requestParams = requestObject;
 
-    const result = await getOperations(apiParams);
+    const result = await getActions(apiParams);
 
     expect(walletStub.rpcStubs.snap_manageState).not.to.have.been.called;
-    expect(result).to.be.eql(state[TEST_CHAIN_ID_ZERO].operations);
+    expect(result).to.be.eql(state[TEST_CHAIN_ID_ZERO].actions);
   });
 
-  it('should throw error if getOperations failed', async function () {
-    sinon.stub(snapUtils, 'getOperations').throws(new Error());
-    const requestObject: GetOperationsRequestParams = {
+  it('should throw error if getActions failed', async function () {
+    sinon.stub(snapUtils, 'getActions').throws(new Error());
+    const requestObject: GetActionsRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       senderAddress: ZERO_ADDRESS,
     };
     apiParams.requestParams = requestObject;
 
-    await expect(getOperations(apiParams)).to.be.rejected;
+    await expect(getActions(apiParams)).to.be.rejected;
   });
 });

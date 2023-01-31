@@ -1,10 +1,4 @@
-import {
-  BlsWalletWrapper,
-  NetworkConfig,
-  Bundle as BlsBundle,
-  Operation as BlsOperation,
-  Aggregator,
-} from 'bls-wallet-clients';
+import * as bls from 'bls-wallet-clients';
 import { BundleReceipt } from 'bls-wallet-clients/dist/src/Aggregator';
 import { BigNumber } from 'ethers';
 import {
@@ -12,7 +6,7 @@ import {
   Bundle,
   Erc20Token,
   Network,
-  Operation,
+  Action,
 } from '../../src/types/snapState';
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
@@ -28,7 +22,7 @@ export const TEST_NETWORK_ZERO: Network = {
     addresses: {
       verificationGateway: ZERO_ADDRESS,
     },
-  } as NetworkConfig,
+  } as bls.NetworkConfig,
 };
 
 export const PRIVATE_KEY_ZERO: {
@@ -49,15 +43,15 @@ export const ACCOUNT_ZERO: BlsAccount = {
   ...PRIVATE_KEY_ZERO,
 };
 
-export const BLS_ACCOUNT_ZERO: BlsWalletWrapper = {
+export const BLS_ACCOUNT_ZERO: bls.BlsWalletWrapper = {
   address: ACCOUNT_ZERO.address,
   privateKey: ACCOUNT_ZERO.privateKey,
   PublicKeyStr: () => ACCOUNT_ZERO.publicKey,
   Nonce: () => Promise.resolve(BigNumber.from(0)),
-  sign: (_: BlsOperation) => {
-    return {} as BlsBundle;
+  sign: (_: bls.Operation) => {
+    return {} as bls.Bundle;
   },
-} as BlsWalletWrapper;
+} as bls.BlsWalletWrapper;
 
 export const ERC20_TOKEN_ZERO: Erc20Token = {
   address: ZERO_ADDRESS,
@@ -66,7 +60,7 @@ export const ERC20_TOKEN_ZERO: Erc20Token = {
   decimals: 18,
 };
 
-export const OPERATION_ZERO: Operation = {
+export const ACTION_ZERO: Action = {
   id: 'id_0',
   value: 0,
   contractAddress: ERC20_TOKEN_ZERO.address,
@@ -79,7 +73,7 @@ export const BUNDLE_HASH_ZERO = '0x1234';
 export const BUNDLE_ZERO: Bundle = {
   bundleHash: BUNDLE_HASH_ZERO,
   senderAddress: ACCOUNT_ZERO.address,
-  operations: [OPERATION_ZERO],
+  actions: [ACTION_ZERO],
 };
 
 export const BUNDLE_RECEIPT_ZERO: BundleReceipt = {
@@ -90,6 +84,6 @@ export const BUNDLE_RECEIPT_ZERO: BundleReceipt = {
   blockNumber: 1,
 };
 
-export const AGGREGATOR_MOCK: Aggregator = {
-  add: (_: BlsBundle) => Promise.resolve({ hash: BUNDLE_HASH_ZERO }),
-} as Aggregator;
+export const AGGREGATOR_MOCK: bls.Aggregator = {
+  add: (_: bls.Bundle) => Promise.resolve({ hash: BUNDLE_HASH_ZERO }),
+} as bls.Aggregator;

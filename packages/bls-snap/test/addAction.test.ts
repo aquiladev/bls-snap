@@ -3,8 +3,8 @@ import { expect } from 'chai';
 import { Mutex } from 'async-mutex';
 import sinon from 'sinon';
 
-import { ApiParams, AddOperationRequestParams } from '../src/types/snapApi';
-import { addOperation } from '../src/addOperation';
+import { ApiParams, AddActionRequestParams } from '../src/types/snapApi';
+import { addAction } from '../src/addAction';
 import { SnapState } from '../src/types/snapState';
 import * as snapUtils from '../src/utils/snapUtils';
 import { WalletMock } from './utils/wallet.mock';
@@ -15,7 +15,7 @@ import {
   ZERO_ADDRESS,
 } from './utils/constants';
 
-describe('addOperation', () => {
+describe('addAction', () => {
   const walletStub = new WalletMock();
 
   const state: SnapState = {
@@ -33,7 +33,7 @@ describe('addOperation', () => {
   });
 
   it('should create account correctly', async () => {
-    const requestObject: AddOperationRequestParams = {
+    const requestObject: AddActionRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       senderAddress: ZERO_ADDRESS,
       contractAddress: ERC20_TOKEN_ZERO.address,
@@ -41,7 +41,7 @@ describe('addOperation', () => {
     };
     apiParams.requestParams = requestObject;
 
-    const result = await addOperation(apiParams);
+    const result = await addAction(apiParams);
 
     expect(result).to.be.includes({
       value: 0,
@@ -51,9 +51,9 @@ describe('addOperation', () => {
     });
   });
 
-  it('should throw error if upsertOperation failed', async function () {
-    sinon.stub(snapUtils, 'upsertOperation').throws(new Error());
-    const requestObject: AddOperationRequestParams = {
+  it('should throw error if upsertAction failed', async function () {
+    sinon.stub(snapUtils, 'upsertAction').throws(new Error());
+    const requestObject: AddActionRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       senderAddress: ZERO_ADDRESS,
       contractAddress: ERC20_TOKEN_ZERO.address,
@@ -61,6 +61,6 @@ describe('addOperation', () => {
     };
     apiParams.requestParams = requestObject;
 
-    await expect(addOperation(apiParams)).to.be.rejected;
+    await expect(addAction(apiParams)).to.be.rejected;
   });
 });

@@ -4,21 +4,8 @@ import Toastr from 'toastr2';
 import semver from 'semver/preload';
 import { Erc20Token, Bundle } from 'bls-snap/src/types/snapState';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
-import {
-  setForceReconnect,
-  setWalletConnection,
-  setAccounts,
-  setErc20TokenBalanceSelected,
-  setErc20TokenBalances,
-  upsertErc20TokenBalance,
-  addOperation as addOp,
-  removeOperations,
-  setOperations,
-  setBundles,
-  addBundle,
-  updateBundle,
-} from '../slices/walletSlice';
-import { Account, Erc20TokenBalance, Network, Operation } from '../types';
+import * as ws from '../slices/walletSlice';
+import { Account, Erc20TokenBalance, Network, Action } from '../types';
 import { disableLoading, enableLoadingWithMessage } from '../slices/UISlice';
 import { setNetworks } from '../slices/networkSlice';
 import { addMissingPropertiesToToken } from '../utils/utils';
@@ -27,7 +14,7 @@ import { getAssetPriceUSD } from './coinGecko';
 export const useBLSSnap = () => {
   const dispatch = useAppDispatch();
   const { activeNetwork } = useAppSelector((state) => state.networks);
-  const { erc20TokenBalances, operations } = useAppSelector(
+  const { erc20TokenBalances, actions } = useAppSelector(
     (state) => state.wallet,
   );
   const { loader } = useAppSelector((state) => state.UI);
@@ -55,11 +42,11 @@ export const useBLSSnap = () => {
         ],
       })
       .then(() => {
-        dispatch(setWalletConnection(true));
-        dispatch(setForceReconnect(false));
+        dispatch(ws.setWalletConnection(true));
+        dispatch(ws.setForceReconnect(false));
       })
       .catch(() => {
-        dispatch(setWalletConnection(false));
+        dispatch(ws.setWalletConnection(false));
         dispatch(disableLoading());
       });
   };
@@ -77,10 +64,10 @@ export const useBLSSnap = () => {
         ],
       })
       .then(() => {
-        dispatch(setWalletConnection(true));
+        dispatch(ws.setWalletConnection(true));
       })
       .catch((err: any) => {
-        dispatch(setWalletConnection(false));
+        dispatch(ws.setWalletConnection(false));
         dispatch(disableLoading());
         // eslint-disable-next-line no-console
         console.log(err);
@@ -184,7 +171,7 @@ export const useBLSSnap = () => {
   };
 
   const setErc20TokenBalance = (erc20TokenBalance: Erc20TokenBalance) => {
-    dispatch(setErc20TokenBalanceSelected(erc20TokenBalance));
+    dispatch(ws.setErc20TokenBalanceSelected(erc20TokenBalance));
   };
 
   const refreshTokensUSDPrice = async () => {
@@ -206,7 +193,7 @@ export const useBLSSnap = () => {
           };
         },
       );
-      dispatch(setErc20TokenBalances(tokensRefreshed));
+      dispatch(ws.setErc20TokenBalances(tokensRefreshed));
     }
   };
 
@@ -233,11 +220,11 @@ export const useBLSSnap = () => {
         tokenBalance,
         usdPrice,
       );
-      dispatch(upsertErc20TokenBalance(tokenWithBalance));
+      dispatch(ws.upsertErc20TokenBalance(tokenWithBalance));
     }
   };
 
-  const addOperation = async (
+  const addAction = async (
     erc20Address: string,
     address: string,
     chainId: number,
@@ -250,7 +237,7 @@ export const useBLSSnap = () => {
       params: [
         snapId,
         {
-          method: 'bls_addOperation',
+          method: 'bls_addAction',
           params: {
             senderAddress: address,
             contractAddress: erc20Address,
@@ -263,25 +250,25 @@ export const useBLSSnap = () => {
         },
       ],
     });
-    dispatch(addOp(response));
+    dispatch(ws.addAction(response));
     return response;
   };
 
-  const getOperations = async (address: string, chainId: number) => {
+  const getActions = async (address: string, chainId: number) => {
     const data = (await ethereum.request({
       method: 'wallet_invokeSnap',
       params: [
         snapId,
         {
-          method: 'bls_getOperations',
+          method: 'bls_getActions',
           params: {
             senderAddress: address,
             chainId,
           },
         },
       ],
-    })) as Operation[];
-    dispatch(setOperations(data));
+    })) as Action[];
+    dispatch(ws.setActions(data));
     return data;
   };
 
@@ -304,7 +291,7 @@ export const useBLSSnap = () => {
         },
       ],
     })) as Bundle[];
-    dispatch(setBundles(data));
+    dispatch(ws.setBundles(data));
     return data;
   };
 
@@ -333,7 +320,7 @@ export const useBLSSnap = () => {
       })) as Bundle | undefined;
 
       if (data) {
-        dispatch(updateBundle(data));
+        dispatch(ws.updateBundle(data));
       }
 
       if (showLoading) {
@@ -360,8 +347,8 @@ export const useBLSSnap = () => {
         },
       ],
     });
-    dispatch(removeOperations(operations));
-    dispatch(addBundle({ bundleHash: data.bundleHash }));
+    dispatch(ws.addBundle({ bundleHash: data.bundleHash }));
+    dispatch(ws.removeActions(actions));
     return data;
   };
 
@@ -375,7 +362,7 @@ export const useBLSSnap = () => {
       // eslint-disable-next-line require-atomic-updates
       account = await createAccount(chainId);
     }
-    dispatch(setAccounts(account));
+    dispatch(ws.setAccounts(account));
     const accountAddr = Array.isArray(account)
       ? account[0].address
       : account.address;
@@ -405,13 +392,13 @@ export const useBLSSnap = () => {
     if (networks) {
       dispatch(setNetworks(networks));
     }
-    dispatch(setErc20TokenBalances(tokensWithBalances));
+    dispatch(ws.setErc20TokenBalances(tokensWithBalances));
 
     if (tokensWithBalances.length > 0) {
       setErc20TokenBalance(tokensWithBalances[0]);
     }
 
-    await getOperations(accountAddr, chainId);
+    await getActions(accountAddr, chainId);
     await getBundles(accountAddr, chainId);
 
     // if (!Array.isArray(acc)) {
@@ -442,7 +429,7 @@ export const useBLSSnap = () => {
       if (err.code && err.code === 4100) {
         const toastr = new Toastr();
         toastr.error('Snap is unaccessible or unauthorized');
-        dispatch(setWalletConnection(false));
+        dispatch(ws.setWalletConnection(false));
       }
       // eslint-disable-next-line no-console
       console.error('Error while Initializing wallet', err);
@@ -461,8 +448,8 @@ export const useBLSSnap = () => {
     setErc20TokenBalance,
     refreshTokensUSDPrice,
     updateTokenBalance,
-    addOperation,
-    getOperations,
+    addAction,
+    getActions,
     getBundle,
     getBundles,
     sendBundle,

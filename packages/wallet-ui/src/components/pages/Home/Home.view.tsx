@@ -5,7 +5,7 @@ import { useBLSSnap } from '../../../services/useBLSSnap';
 import { Header } from '../../ui/Header';
 import { Buttons, HeaderButton } from '../../ui/Header/Header.style';
 import { Separator } from '../../ui/Header/SendModal/SendModal.style';
-import { OperationsList } from '../../ui/OperationsList';
+import { ActionsList } from '../../ui/ActionsList';
 import { SideBar } from '../../ui/SideBar';
 import { BundlesList } from '../../ui/BundlesList';
 import { LoadingSpinner } from '../../ui/LoadingSmall/LoadingSmall.style';
@@ -22,7 +22,7 @@ type Props = {
 
 export const HomeView = ({ address }: Props) => {
   const networks = useAppSelector((state) => state.networks);
-  const { erc20TokenBalanceSelected, operations } = useAppSelector(
+  const { erc20TokenBalanceSelected, actions } = useAppSelector(
     (state) => state.wallet,
   );
   const { sendBundle } = useBLSSnap();
@@ -43,9 +43,9 @@ export const HomeView = ({ address }: Props) => {
           <Header address={address} />
         )}
         <RightPartContent>
-          <RightPartContentHeader>Operations</RightPartContentHeader>
-          <OperationsList />
-          {Boolean(operations.length) && (
+          <RightPartContentHeader>Actions</RightPartContentHeader>
+          <ActionsList />
+          {Boolean(actions.length) && (
             <Buttons style={{ textAlign: 'center' }}>
               <HeaderButton
                 onClick={() => handleSendBundle()}

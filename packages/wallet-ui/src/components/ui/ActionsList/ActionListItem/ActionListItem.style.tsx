@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
-import { theme } from '../../../../config/theme';
 import { RoundedIcon } from '../../RoundedIcon';
 
 type ISpan = {
