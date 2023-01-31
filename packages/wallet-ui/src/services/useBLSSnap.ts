@@ -85,10 +85,7 @@ export const useBLSSnap = () => {
       ],
     })) as Record<number, Network>;
 
-    // TODO: Switch Wallet UI to use new storage structure
-    // return Object.values(data);
-
-    return [data[421613]];
+    return Object.values(data);
   };
 
   const oldVersionDetected = async () => {

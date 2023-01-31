@@ -1,13 +1,14 @@
 import { useCallback } from 'react';
 import styled, { useTheme } from 'styled-components';
-import { useAppDispatch } from '../hooks/redux';
-import { resetNetwork } from '../slices/networkSlice';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
+import { resetNetwork, setActiveNetwork } from '../slices/networkSlice';
 import {
   resetWallet,
   setForceReconnect,
   setWalletConnection,
 } from '../slices/walletSlice';
 import { getThemePreference } from '../utils';
+import { MenuItem, Select } from './Select';
 import { SnapLogo } from './SnapLogo';
 import { Toggle } from './Toggle';
 import { Button } from './ui/Button';
@@ -51,6 +52,7 @@ export const Header = ({
 }) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const networks = useAppSelector((state) => state.networks);
 
   const disconnect = useCallback(() => {
     dispatch(setWalletConnection(false));
@@ -66,6 +68,20 @@ export const Header = ({
         <Title>BLS Snap</Title>
       </LogoWrapper>
       <RightContainer>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={networks.activeNetwork}
+          onChange={(event) => {
+            dispatch(setActiveNetwork(event.target.value));
+          }}
+        >
+          {networks.items.map((network, index) => (
+            <MenuItem key={index} value={index}>
+              {network.name}
+            </MenuItem>
+          ))}
+        </Select>
         <Toggle
           onToggle={handleToggleClick}
           defaultChecked={getThemePreference()}
