@@ -12,6 +12,11 @@ const StyledSelect = styled(Select)`
     color: ${(props) => props.theme.colors.text.default} !important;
     font-size: ${(props) => props.theme.fontSizes.small} !important;
   }
+
+  & > div {
+    padding-top: 1.15rem;
+    padding-bottom: 1.15rem;
+  }
 `;
 
 const StyledMenuItem = styled(MenuItem)`
