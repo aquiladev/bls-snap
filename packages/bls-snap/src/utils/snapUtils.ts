@@ -1,6 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import deepEqual from 'deep-equal';
 import { Mutex } from 'async-mutex';
+import { utils } from 'ethers';
 import {
   BlsAccount,
   Erc20Token,
@@ -9,9 +10,54 @@ import {
   SnapState,
   Bundle,
 } from '../types/snapState';
+import { AddErc20TokenRequestParams } from '../types/snapApi';
 import { getPrivateKey } from './crypto';
 import { getBundleReceipt } from './blsUtils';
 import * as config from './config';
+
+export const DEFAULT_DECIMALS = 18;
+export const MAX_TOKEN_NAME_LENGTH = 64;
+export const MAX_TOKEN_SYMBOL_LENGTH = 16;
+
+function hasOnlyAsciiChars(value: string) {
+  // eslint-disable-next-line require-unicode-regexp
+  return /^[ -~]+$/.test(value);
+}
+
+function isValidAscii(value: string, maxLength: number) {
+  return (
+    hasOnlyAsciiChars(value) &&
+    value.trim().length > 0 &&
+    value.length <= maxLength
+  );
+}
+
+export function validateAddErc20TokenParams(
+  params: AddErc20TokenRequestParams,
+) {
+  if (!utils.isAddress(params.tokenAddress)) {
+    throw new Error(
+      `The given token address is invalid: ${params.tokenAddress}`,
+    );
+  }
+
+  const network = config.getNetwork(params.chainId);
+  if (!network) {
+    throw new Error(`ChainId not supported: ${params.chainId}`);
+  }
+
+  if (!isValidAscii(params.tokenName, MAX_TOKEN_NAME_LENGTH)) {
+    throw new Error(
+      `The given token name is invalid, needs to be in ASCII chars, not all spaces, and has length larger than ${MAX_TOKEN_NAME_LENGTH}: ${params.tokenName}`,
+    );
+  }
+
+  if (!isValidAscii(params.tokenSymbol, MAX_TOKEN_SYMBOL_LENGTH)) {
+    throw new Error(
+      `The given token symbol is invalid, needs to be in ASCII chars, not all spaces, and has length larger than ${MAX_TOKEN_SYMBOL_LENGTH}: ${params.tokenSymbol}`,
+    );
+  }
+}
 
 export async function upsertNetwork(
   network: Network,
@@ -137,6 +183,7 @@ export async function addTestToken(
     name: 'AnyToken',
     symbol: 'TOK',
     decimals: 18,
+    isInternal: true,
   };
   await upsertErc20Token(token, network.chainId, wallet, mutex, state);
 }
@@ -178,6 +225,35 @@ export async function upsertErc20Token(
       }
       state[chainId].erc20Tokens?.push(erc20Token);
     }
+
+    await wallet.request({
+      method: 'snap_manageState',
+      params: ['update', state],
+    });
+  });
+}
+
+export async function deleteErc20Token(
+  erc20Token: Erc20Token,
+  chainId: number,
+  wallet: any,
+  mutex: Mutex,
+  state: SnapState,
+) {
+  return mutex.runExclusive(async () => {
+    if (!state) {
+      // eslint-disable-next-line require-atomic-updates, no-param-reassign
+      state = await wallet.request({
+        method: 'snap_manageState',
+        params: ['get'],
+      });
+    }
+
+    assertNetwork(chainId, state);
+
+    state[chainId].erc20Tokens = state[chainId].erc20Tokens.filter((t) => {
+      return t.address !== erc20Token.address;
+    });
 
     await wallet.request({
       method: 'snap_manageState',

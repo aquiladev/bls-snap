@@ -21,7 +21,18 @@ export type CreateAccountRequestParams = {
   addressIndex?: string | number;
 } & BaseRequestParams;
 
+export type AddErc20TokenRequestParams = BaseRequestParams & {
+  tokenAddress: string;
+  tokenName: string;
+  tokenSymbol: string;
+  tokenDecimals?: number;
+};
+
 export type GetErc20TokensRequestParams = BaseRequestParams;
+
+export type RemoveErc20TokenRequestParams = BaseRequestParams & {
+  tokenAddress: string;
+};
 
 export type GetErc20TokenBalanceRequestParams = {
   tokenAddress: string;
@@ -56,7 +67,9 @@ export type ApiRequestParams =
   | GetNetworksRequestParams
   | RecoverAccountsRequestParams
   | CreateAccountRequestParams
+  | AddErc20TokenRequestParams
   | GetErc20TokensRequestParams
+  | RemoveErc20TokenRequestParams
   | GetErc20TokenBalanceRequestParams
   | GetActionsRequestParams
   | AddActionRequestParams
