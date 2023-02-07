@@ -1,7 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { v4 as uuidv4 } from 'uuid';
 import { ApiParams, AddActionRequestParams } from './types/snapApi';
-import { upsertAction } from './utils/snapUtils';
+import { insertAction } from './utils/snapUtils';
 
 export async function addAction(params: ApiParams) {
   try {
@@ -18,7 +18,7 @@ export async function addAction(params: ApiParams) {
     };
     console.log('Action:', action);
 
-    await upsertAction(action, chainId, wallet, mutex, state);
+    await insertAction(action, chainId, wallet, mutex, state);
     return action;
   } catch (err) {
     console.error(`Problem found: ${err}`);

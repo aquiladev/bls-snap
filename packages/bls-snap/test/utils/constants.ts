@@ -10,14 +10,30 @@ import {
 } from '../../src/types/snapState';
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+export const DUMMY1_ADDRESS = '0x0000000000000000000000000000000000000001';
+export const DUMMY2_ADDRESS = '0x0000000000000000000000000000000000000002';
 
 export const TEST_CHAIN_ID_ZERO = 111;
+export const TEST_CHAIN_ID_ONE = 222;
+export const TEST_CHAIN_ID_UNKNOWN = 999;
 
 export const TEST_NETWORK_ZERO: Network = {
-  name: 'Testnet',
+  name: 'Testnet0',
   chainId: TEST_CHAIN_ID_ZERO,
-  rpcUrl: 'https://testnet-rpc.com',
-  aggregator: 'https://testnet-aggregator.com',
+  rpcUrl: 'https://testnet0-rpc.com',
+  aggregator: 'https://testnet0-aggregator.com',
+  config: {
+    addresses: {
+      verificationGateway: ZERO_ADDRESS,
+    },
+  } as bls.NetworkConfig,
+};
+
+export const TEST_NETWORK_ONE: Network = {
+  name: 'Testnet1',
+  chainId: TEST_CHAIN_ID_ONE,
+  rpcUrl: 'https://testnet1-rpc.com',
+  aggregator: 'https://testnet1-aggregator.com',
   config: {
     addresses: {
       verificationGateway: ZERO_ADDRESS,
@@ -54,9 +70,16 @@ export const BLS_ACCOUNT_ZERO: bls.BlsWalletWrapper = {
 } as bls.BlsWalletWrapper;
 
 export const ERC20_TOKEN_ZERO: Erc20Token = {
-  address: ZERO_ADDRESS,
-  name: 'TestToken',
-  symbol: 'TT',
+  address: DUMMY1_ADDRESS,
+  name: 'TestToken0',
+  symbol: 'TT0',
+  decimals: 18,
+};
+
+export const ERC20_TOKEN_ONE: Erc20Token = {
+  address: DUMMY2_ADDRESS,
+  name: 'TestToken1',
+  symbol: 'TT1',
   decimals: 18,
 };
 
@@ -64,6 +87,14 @@ export const ACTION_ZERO: Action = {
   id: 'id_0',
   value: 0,
   contractAddress: ERC20_TOKEN_ZERO.address,
+  senderAddress: ACCOUNT_ZERO.address,
+  encodedFunction: '0x',
+};
+
+export const ACTION_ONE: Action = {
+  id: 'id_1',
+  value: 0,
+  contractAddress: ERC20_TOKEN_ONE.address,
   senderAddress: ACCOUNT_ZERO.address,
   encodedFunction: '0x',
 };

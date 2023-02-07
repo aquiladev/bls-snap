@@ -11,6 +11,7 @@ import * as blsUtils from '../src/utils/blsUtils';
 import {
   BUNDLE_RECEIPT_ZERO,
   BUNDLE_ZERO,
+  TEST_CHAIN_ID_UNKNOWN,
   TEST_CHAIN_ID_ZERO,
   TEST_NETWORK_ZERO,
 } from './utils/constants';
@@ -51,6 +52,16 @@ describe('getBundle', function () {
       ...BUNDLE_ZERO,
       ...BUNDLE_RECEIPT_ZERO,
     });
+  });
+
+  it('should throw error if bundle not found', async () => {
+    const requestObject: GetBundleRequestParams = {
+      chainId: TEST_CHAIN_ID_UNKNOWN,
+      bundleHash: BUNDLE_ZERO.bundleHash,
+    };
+    apiParams.requestParams = requestObject;
+
+    await expect(getBundle(apiParams)).to.be.rejected;
   });
 
   it('should throw error if getBundle failed', async function () {

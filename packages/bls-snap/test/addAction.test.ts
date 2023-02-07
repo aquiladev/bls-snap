@@ -10,6 +10,7 @@ import * as snapUtils from '../src/utils/snapUtils';
 import { WalletMock } from './utils/wallet.mock';
 import {
   ERC20_TOKEN_ZERO,
+  TEST_CHAIN_ID_UNKNOWN,
   TEST_CHAIN_ID_ZERO,
   TEST_NETWORK_ZERO,
   ZERO_ADDRESS,
@@ -32,7 +33,7 @@ describe('addAction', () => {
     walletStub.reset();
   });
 
-  it('should create account correctly', async () => {
+  it('should insert action correctly', async () => {
     const requestObject: AddActionRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       senderAddress: ZERO_ADDRESS,
@@ -51,8 +52,20 @@ describe('addAction', () => {
     });
   });
 
-  it('should throw error if upsertAction failed', async function () {
-    sinon.stub(snapUtils, 'upsertAction').throws(new Error());
+  it('should throw error when unknown chainId', async () => {
+    const requestObject: AddActionRequestParams = {
+      chainId: TEST_CHAIN_ID_UNKNOWN,
+      senderAddress: ZERO_ADDRESS,
+      contractAddress: ERC20_TOKEN_ZERO.address,
+      encodedFunction: '0x12345678',
+    };
+    apiParams.requestParams = requestObject;
+
+    await expect(addAction(apiParams)).to.be.rejected;
+  });
+
+  it('should throw error if insertAction failed', async function () {
+    sinon.stub(snapUtils, 'insertAction').throws(new Error());
     const requestObject: AddActionRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       senderAddress: ZERO_ADDRESS,

@@ -16,6 +16,7 @@ import {
   AGGREGATOR_MOCK,
   BLS_ACCOUNT_ZERO,
   BUNDLE_ZERO,
+  TEST_CHAIN_ID_UNKNOWN,
   TEST_CHAIN_ID_ZERO,
   TEST_NETWORK_ZERO,
   ZERO_ADDRESS,
@@ -82,7 +83,18 @@ describe('sendBundle', () => {
     });
   });
 
+  it('should throw error when unknown chainId', async () => {
+    const requestObject: SendBundleRequestParams = {
+      chainId: TEST_CHAIN_ID_UNKNOWN,
+      senderAddress: ACCOUNT_ZERO.address,
+    };
+    apiParams.requestParams = requestObject;
+
+    await expect(sendBundle(apiParams)).to.be.rejected;
+  });
+
   it('should throw error if getAccount failed', async function () {
+    sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
     sinon.stub(snapUtils, 'getAccount').throws(new Error());
     const requestObject: SendBundleRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
