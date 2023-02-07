@@ -14,6 +14,7 @@ import * as config from '../src/utils/config';
 import * as evmUtils from '../src/utils/evmUtils';
 import {
   ERC20_TOKEN_ZERO,
+  TEST_CHAIN_ID_UNKNOWN,
   TEST_CHAIN_ID_ZERO,
   TEST_NETWORK_ZERO,
   ZERO_ADDRESS,
@@ -62,7 +63,19 @@ describe('getErc20TokenBalance', function () {
     expect(result).to.be.eql(BigNumber.from(1).toHexString());
   });
 
+  it('should throw error when unknown chainId', async () => {
+    const requestObject: GetErc20TokenBalanceRequestParams = {
+      chainId: TEST_CHAIN_ID_UNKNOWN,
+      tokenAddress: ERC20_TOKEN_ZERO.address,
+      userAddress: ZERO_ADDRESS,
+    };
+    apiParams.requestParams = requestObject;
+
+    await expect(getErc20TokenBalance(apiParams)).to.be.rejected;
+  });
+
   it('should throw error if callContract failed', async function () {
+    sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
     sinon.stub(evmUtils, 'callContract').throws(new Error());
     const requestObject: GetErc20TokenBalanceRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,

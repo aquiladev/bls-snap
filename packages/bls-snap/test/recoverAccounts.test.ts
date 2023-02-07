@@ -10,7 +10,9 @@ import * as snapUtils from '../src/utils/snapUtils';
 import { WalletMock } from './utils/wallet.mock';
 import {
   ACCOUNT_ZERO,
+  TEST_CHAIN_ID_ONE,
   TEST_CHAIN_ID_ZERO,
+  TEST_NETWORK_ONE,
   TEST_NETWORK_ZERO,
 } from './utils/constants';
 
@@ -21,6 +23,9 @@ describe('recoverAccounts', () => {
     [TEST_CHAIN_ID_ZERO]: {
       ...TEST_NETWORK_ZERO,
       accounts: [ACCOUNT_ZERO],
+    },
+    [TEST_CHAIN_ID_ONE]: {
+      ...TEST_NETWORK_ONE,
     },
   };
   const apiParams: ApiParams = {
@@ -48,6 +53,19 @@ describe('recoverAccounts', () => {
     expect(result).to.be.eql(
       state[TEST_CHAIN_ID_ZERO].accounts?.map((a) => ({ address: a.address })),
     );
+  });
+
+  it('should recover no accounts when there are non', async () => {
+    const requestObject: RecoverAccountsRequestParams = {
+      chainId: TEST_CHAIN_ID_ONE,
+    };
+    apiParams.requestParams = requestObject;
+
+    const result = await recoverAccounts(apiParams);
+    console.log(result);
+
+    expect(walletStub.rpcStubs.snap_manageState).not.to.have.been.called;
+    expect(result).to.be.eql(undefined);
   });
 
   it('should throw error if getAccounts failed', async function () {

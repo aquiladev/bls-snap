@@ -8,13 +8,19 @@ import { getNetworks } from '../src/getNetworks';
 import { SnapState } from '../src/types/snapState';
 import * as snapUtils from '../src/utils/snapUtils';
 import { WalletMock } from './utils/wallet.mock';
-import { TEST_CHAIN_ID_ZERO, TEST_NETWORK_ZERO } from './utils/constants';
+import {
+  TEST_CHAIN_ID_ONE,
+  TEST_CHAIN_ID_ZERO,
+  TEST_NETWORK_ONE,
+  TEST_NETWORK_ZERO,
+} from './utils/constants';
 
 describe('getNetworks', function () {
   const walletStub = new WalletMock();
 
   const state: SnapState = {
     [TEST_CHAIN_ID_ZERO]: TEST_NETWORK_ZERO,
+    [TEST_CHAIN_ID_ONE]: TEST_NETWORK_ONE,
   };
   const apiParams: ApiParams = {
     state,
@@ -27,14 +33,14 @@ describe('getNetworks', function () {
     walletStub.reset();
   });
 
-  it('should get the networks', async () => {
+  it('should get networks', async () => {
     const requestObject: GetNetworksRequestParams = {};
     apiParams.requestParams = requestObject;
 
     const result = await getNetworks(apiParams);
 
     expect(walletStub.rpcStubs.snap_manageState).not.to.have.been.called;
-    expect(Object.keys(result).length).to.be.eq(1);
+    expect(Object.keys(result).length).to.be.eq(2);
     expect(result).to.be.eql(state);
   });
 

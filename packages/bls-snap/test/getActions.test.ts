@@ -9,8 +9,11 @@ import { getActions } from '../src/getActions';
 import * as snapUtils from '../src/utils/snapUtils';
 import {
   ACCOUNT_ZERO,
+  ACTION_ONE,
   ACTION_ZERO,
+  TEST_CHAIN_ID_ONE,
   TEST_CHAIN_ID_ZERO,
+  TEST_NETWORK_ONE,
   TEST_NETWORK_ZERO,
   ZERO_ADDRESS,
 } from './utils/constants';
@@ -24,6 +27,10 @@ describe('getActions', function () {
       ...TEST_NETWORK_ZERO,
       actions: [ACTION_ZERO],
     },
+    [TEST_CHAIN_ID_ONE]: {
+      ...TEST_NETWORK_ONE,
+      actions: [ACTION_ONE],
+    },
   };
   const apiParams: ApiParams = {
     state,
@@ -36,7 +43,7 @@ describe('getActions', function () {
     walletStub.reset();
   });
 
-  it('should get the ERC20 tokens', async () => {
+  it('should get actions', async () => {
     const requestObject: GetActionsRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       senderAddress: ACCOUNT_ZERO.address,
@@ -47,6 +54,32 @@ describe('getActions', function () {
 
     expect(walletStub.rpcStubs.snap_manageState).not.to.have.been.called;
     expect(result).to.be.eql(state[TEST_CHAIN_ID_ZERO].actions);
+  });
+
+  it('should get actions 1', async () => {
+    const requestObject: GetActionsRequestParams = {
+      chainId: TEST_CHAIN_ID_ONE,
+      senderAddress: ACCOUNT_ZERO.address,
+    };
+    apiParams.requestParams = requestObject;
+
+    const result = await getActions(apiParams);
+
+    expect(walletStub.rpcStubs.snap_manageState).not.to.have.been.called;
+    expect(result).to.be.eql(state[TEST_CHAIN_ID_ONE].actions);
+  });
+
+  it('should get no actions for unknown sender', async () => {
+    const requestObject: GetActionsRequestParams = {
+      chainId: TEST_CHAIN_ID_ONE,
+      senderAddress: ZERO_ADDRESS,
+    };
+    apiParams.requestParams = requestObject;
+
+    const result = await getActions(apiParams);
+
+    expect(walletStub.rpcStubs.snap_manageState).not.to.have.been.called;
+    expect(result).to.be.eql([]);
   });
 
   it('should throw error if getActions failed', async function () {

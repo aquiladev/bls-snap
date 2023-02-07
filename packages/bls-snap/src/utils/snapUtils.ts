@@ -279,7 +279,7 @@ export function getErc20Tokens(
   return state[chainId]?.erc20Tokens;
 }
 
-export async function upsertAction(
+export async function insertAction(
   action: Action,
   chainId: number,
   wallet: any,
