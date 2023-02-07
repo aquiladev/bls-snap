@@ -16,6 +16,7 @@ import * as config from './utils/config';
 import { addTestToken, upsertNetwork } from './utils/snapUtils';
 import { getBundle } from './getBundle';
 import { getAddressKeyDeriver } from './utils/crypto';
+import { removeErc20Token } from './removeErc20Token';
 
 const mutex = new Mutex();
 
