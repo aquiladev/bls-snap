@@ -56,7 +56,9 @@ await ethereum.request({
 - `bls_getNetworks` - Returns list of supported networks with their configurations.
 - `bls_recoverAccounts` - Returns list of accounts from snap state.
 - `bls_createAccount` - Creates and returns new account. Snap uses seedprase from MetaMask through its API `snap_getBip44Entropy` in order to generate accounts. It allows to re-create the same accounts after snap re-installation.
+- `bls_addErc20Token` - Adds ERC20 token to snap state.
 - `bls_getErc20Tokens` - Returns list of ERC20 tokens from snap state.
+- `bls_removeErc20Token` - Removes ERC20 token from snap state.
 - `bls_getErc20TokenBalance` - Returns ERC20 token balance from snap state.
 - `bls_getActions` - Returns list of actions from snap state.
 - `bls_addAction` - Adds new action to snap state.
@@ -72,7 +74,9 @@ await ethereum.request({
 | `bls_getNetworks`          |                                                                                    |
 | `bls_recoverAccounts`      | `chainId`                                                                          |
 | `bls_createAccount`        | `chainId`                                                                          | `addressIndex`                        |
+| `bls_addErc20Token`        | `chainId`,<br /> `tokenAddress`,<br /> `tokenName`,<br /> `tokenSymbol`            | `tokenDecimals` (default: 18)         |
 | `bls_getErc20Tokens`       | `chainId`                                                                          |
+| `bls_removeErc20Token`     | `chainId`,<br /> `tokenAddress`
 | `bls_getErc20TokenBalance` | `chainId`,<br /> `tokenAddress`,<br /> `userAddress`                               |
 | `bls_getActions`           | `chainId`,<br /> `senderAddress`                                                   |
 | `bls_addAction`            | `chainId`,<br /> `senderAddress`,<br /> `contractAddress`,<br /> `encodedFunction` |

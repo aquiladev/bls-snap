@@ -20,7 +20,8 @@ const HeaderWrapper = styled.header`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: ${(props) => props.theme.spacing.small};
+  padding-top: ${(props) => props.theme.spacing.small};
+  padding-bottom: ${(props) => props.theme.spacing.small};
 `;
 
 const Title = styled.p`
@@ -69,8 +70,8 @@ export const Header = ({
       </LogoWrapper>
       <RightContainer>
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
+          labelId="network-select-label"
+          id="network-select"
           value={networks.activeNetwork}
           onChange={(event) => {
             dispatch(setActiveNetwork(event.target.value));
