@@ -5,9 +5,7 @@ export type UIState = {
     isLoading: boolean;
     loadingMessage: string;
   };
-  newAccountDetailsInfoModal: {
-    visible: boolean;
-  };
+  infoModalVisible: boolean;
 };
 
 const initialState: UIState = {
@@ -15,9 +13,7 @@ const initialState: UIState = {
     isLoading: false,
     loadingMessage: '',
   },
-  newAccountDetailsInfoModal: {
-    visible: false,
-  },
+  infoModalVisible: false,
 };
 
 export const networkSlice = createSlice({
@@ -32,20 +28,13 @@ export const networkSlice = createSlice({
       state.loader.isLoading = false;
       state.loader.loadingMessage = '';
     },
-    showNewAccountDetailsInfoModal: (state) => {
-      state.newAccountDetailsInfoModal.visible = true;
-    },
-    hideNewAccountDetailsInfoModal: (state) => {
-      state.newAccountDetailsInfoModal.visible = false;
+    setInfoModalVisible: (state, action) => {
+      state.infoModalVisible = action.payload;
     },
   },
 });
 
-export const {
-  enableLoadingWithMessage,
-  disableLoading,
-  showNewAccountDetailsInfoModal,
-  hideNewAccountDetailsInfoModal,
-} = networkSlice.actions;
+export const { enableLoadingWithMessage, disableLoading, setInfoModalVisible } =
+  networkSlice.actions;
 
 export default networkSlice.reducer;

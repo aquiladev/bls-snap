@@ -35,9 +35,7 @@ function App() {
   const { connected, forceReconnect } = useAppSelector((state) => state.wallet);
   const { accounts } = useAppSelector((state) => state.wallet);
   const networks = useAppSelector((state) => state.networks);
-  const { loader, newAccountDetailsInfoModal } = useAppSelector(
-    (state) => state.UI,
-  );
+  const { loader, infoModalVisible } = useAppSelector((state) => state.UI);
   const { hasMetamaskFlask } = useHasMetamaskFlask();
 
   const address =
@@ -91,7 +89,7 @@ function App() {
               <LoadingBackdrop>{loader.loadingMessage}</LoadingBackdrop>
             )}
           </PopIn>
-          <PopIn isOpen={newAccountDetailsInfoModal.visible}>
+          <PopIn isOpen={infoModalVisible}>
             <NewAccountDetailsInfoModal address={address} />
           </PopIn>
         </WrapperContent>

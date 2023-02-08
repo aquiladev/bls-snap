@@ -9,7 +9,7 @@ import { Account, Erc20TokenBalance, Network, Action } from '../types';
 import {
   disableLoading,
   enableLoadingWithMessage,
-  showNewAccountDetailsInfoModal,
+  setInfoModalVisible,
 } from '../slices/UISlice';
 import { setNetworks } from '../slices/networkSlice';
 import { addMissingPropertiesToToken } from '../utils/utils';
@@ -357,7 +357,6 @@ export const useBLSSnap = () => {
   };
 
   const getWalletData = async (chainId: number, networks?: Network[]) => {
-    let isNewAccount = false;
     if (!loader.isLoading && !networks) {
       dispatch(enableLoadingWithMessage('Getting network data ...'));
     }
@@ -366,7 +365,6 @@ export const useBLSSnap = () => {
     if (!account || account.length === 0 || !account[0].address) {
       // eslint-disable-next-line require-atomic-updates
       account = await createAccount(chainId);
-      isNewAccount = true;
     }
     dispatch(ws.setAccounts(account));
     const accountAddr = Array.isArray(account)
@@ -407,12 +405,9 @@ export const useBLSSnap = () => {
     await getActions(accountAddr, chainId);
     await getBundles(accountAddr, chainId);
 
-    // if (!Array.isArray(acc)) {
-    //   dispatch(setInfoModalVisible(true));
-    // }
     dispatch(disableLoading());
-    if (isNewAccount) {
-      dispatch(showNewAccountDetailsInfoModal());
+    if (!Array.isArray(account)) {
+      dispatch(setInfoModalVisible(true));
     }
   };
 

@@ -1,13 +1,7 @@
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
-import { hideNewAccountDetailsInfoModal } from '../../../slices/UISlice';
+import { setInfoModalVisible } from '../../../slices/UISlice';
 import { Button } from '../Button';
-import {
-  AddressCopy,
-  ModalWrapper,
-  InfoRow,
-  InfoDiv,
-  Wrapper,
-} from './NewAccountDetailsInfoModal.style';
+import { Wrapper, Normal, Bold } from './NewAccountDetailsInfoModal.style';
 
 type Props = {
   address: string;
@@ -18,31 +12,25 @@ export const NewAccountDetailsInfoModalView = ({ address }: Props) => {
   const dispatch = useAppDispatch();
 
   return (
-    <ModalWrapper>
-      <Wrapper>
-        <InfoDiv>
-          <InfoRow>Network:</InfoRow>
-          <InfoRow>{networks?.items[networks?.activeNetwork]?.name}</InfoRow>
-        </InfoDiv>
+    <Wrapper>
+      <div>
+        <Normal>Network</Normal>
+        <Bold>{networks?.items[networks?.activeNetwork]?.name}</Bold>
+      </div>
 
-        <InfoDiv>
-          <InfoRow>Bls account:</InfoRow>
-          <InfoRow>
-            <AddressCopy address={address} />
-          </InfoRow>
-        </InfoDiv>
+      <div>
+        <Normal>Bls account</Normal>
+        <Bold>{address}</Bold>
+      </div>
 
-        <InfoDiv>
-          <InfoRow>Info:</InfoRow>
-          <InfoRow>
-            This account was generated with your MetaMask Secret Recovery Phrase
-          </InfoRow>
-        </InfoDiv>
+      <div>
+        <Normal>Info</Normal>
+        <Normal>
+          This account was generated with your MetaMask Secret Recovery Phrase
+        </Normal>
+      </div>
 
-        <Button onClick={() => dispatch(hideNewAccountDetailsInfoModal())}>
-          OK
-        </Button>
-      </Wrapper>
-    </ModalWrapper>
+      <Button onClick={() => dispatch(setInfoModalVisible(false))}>OK</Button>
+    </Wrapper>
   );
 };
