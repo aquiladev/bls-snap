@@ -6,7 +6,11 @@ import { Erc20Token, Bundle } from 'bls-snap/src/types/snapState';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import * as ws from '../slices/walletSlice';
 import { Account, Erc20TokenBalance, Network, Action } from '../types';
-import { disableLoading, enableLoadingWithMessage } from '../slices/UISlice';
+import {
+  disableLoading,
+  enableLoadingWithMessage,
+  showNewAccountDetailsInfoModal,
+} from '../slices/UISlice';
 import { setNetworks } from '../slices/networkSlice';
 import { addMissingPropertiesToToken } from '../utils/utils';
 import { getAssetPriceUSD } from './coinGecko';
@@ -353,6 +357,7 @@ export const useBLSSnap = () => {
   };
 
   const getWalletData = async (chainId: number, networks?: Network[]) => {
+    let isNewAccount = false;
     if (!loader.isLoading && !networks) {
       dispatch(enableLoadingWithMessage('Getting network data ...'));
     }
@@ -361,6 +366,7 @@ export const useBLSSnap = () => {
     if (!account || account.length === 0 || !account[0].address) {
       // eslint-disable-next-line require-atomic-updates
       account = await createAccount(chainId);
+      isNewAccount = true;
     }
     dispatch(ws.setAccounts(account));
     const accountAddr = Array.isArray(account)
@@ -405,6 +411,9 @@ export const useBLSSnap = () => {
     //   dispatch(setInfoModalVisible(true));
     // }
     dispatch(disableLoading());
+    if (isNewAccount) {
+      dispatch(showNewAccountDetailsInfoModal());
+    }
   };
 
   const initSnap = async () => {
