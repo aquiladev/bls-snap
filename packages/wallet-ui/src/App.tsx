@@ -4,6 +4,7 @@ import { Footer, Header } from './components';
 import { Home } from './components/pages/Home';
 import { ConnectModal } from './components/ui/ConnectModal';
 import { LoadingBackdrop } from './components/ui/LoadingBackdrop';
+import { NewAccountDetailsInfoModal } from './components/ui/NewAccountDetailsInfoModal';
 import { NoFlaskModal } from './components/ui/NoFlaskModal';
 import { PopIn } from './components/ui/PopIn';
 
@@ -34,7 +35,7 @@ function App() {
   const { connected, forceReconnect } = useAppSelector((state) => state.wallet);
   const { accounts } = useAppSelector((state) => state.wallet);
   const networks = useAppSelector((state) => state.networks);
-  const { loader } = useAppSelector((state) => state.UI);
+  const { loader, infoModalVisible } = useAppSelector((state) => state.UI);
   const { hasMetamaskFlask } = useHasMetamaskFlask();
 
   const address =
@@ -87,6 +88,9 @@ function App() {
             {loading && (
               <LoadingBackdrop>{loader.loadingMessage}</LoadingBackdrop>
             )}
+          </PopIn>
+          <PopIn isOpen={infoModalVisible}>
+            <NewAccountDetailsInfoModal address={address} />
           </PopIn>
         </WrapperContent>
       </Wrapper>

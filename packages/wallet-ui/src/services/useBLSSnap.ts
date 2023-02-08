@@ -6,7 +6,11 @@ import { Erc20Token, Bundle } from 'bls-snap/src/types/snapState';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import * as ws from '../slices/walletSlice';
 import { Account, Erc20TokenBalance, Network, Action } from '../types';
-import { disableLoading, enableLoadingWithMessage } from '../slices/UISlice';
+import {
+  disableLoading,
+  enableLoadingWithMessage,
+  setInfoModalVisible,
+} from '../slices/UISlice';
 import { setNetworks } from '../slices/networkSlice';
 import { addMissingPropertiesToToken } from '../utils/utils';
 import { getAssetPriceUSD } from './coinGecko';
@@ -401,10 +405,10 @@ export const useBLSSnap = () => {
     await getActions(accountAddr, chainId);
     await getBundles(accountAddr, chainId);
 
-    // if (!Array.isArray(acc)) {
-    //   dispatch(setInfoModalVisible(true));
-    // }
     dispatch(disableLoading());
+    if (!Array.isArray(account)) {
+      dispatch(setInfoModalVisible(true));
+    }
   };
 
   const initSnap = async () => {

@@ -5,6 +5,7 @@ export type UIState = {
     isLoading: boolean;
     loadingMessage: string;
   };
+  infoModalVisible: boolean;
 };
 
 const initialState: UIState = {
@@ -12,6 +13,7 @@ const initialState: UIState = {
     isLoading: false,
     loadingMessage: '',
   },
+  infoModalVisible: false,
 };
 
 export const networkSlice = createSlice({
@@ -26,10 +28,13 @@ export const networkSlice = createSlice({
       state.loader.isLoading = false;
       state.loader.loadingMessage = '';
     },
+    setInfoModalVisible: (state, action) => {
+      state.infoModalVisible = action.payload;
+    },
   },
 });
 
-export const { enableLoadingWithMessage, disableLoading } =
+export const { enableLoadingWithMessage, disableLoading, setInfoModalVisible } =
   networkSlice.actions;
 
 export default networkSlice.reducer;
