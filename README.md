@@ -5,7 +5,7 @@ The MetaMask Snap for [BLS Wallet](https://blswallet.org/)
 
 https://user-images.githubusercontent.com/1164492/214146350-eb910e0c-fcb3-4656-965d-6cbf19021675.mov
 
-## Vocabulary
+## Terminology
 
 1. Action - Smart contract calldata (includes target contract, data and value).
 2. Operation - Ordered list of actions.
@@ -31,7 +31,7 @@ https://user-images.githubusercontent.com/1164492/214146350-eb910e0c-fcb3-4656-9
     cd ./bls-snap
     git clone https://github.com/aquiladev/bls-snap.git .
     ```
-2. Install dependencies and start the project:
+2. Install dependencies
     ```
     yarn install
     ```
