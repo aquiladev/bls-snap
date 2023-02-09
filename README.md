@@ -5,31 +5,43 @@ The MetaMask Snap for [BLS Wallet](https://blswallet.org/)
 
 https://user-images.githubusercontent.com/1164492/214146350-eb910e0c-fcb3-4656-965d-6cbf19021675.mov
 
-
-## Getting Started
-
-Clone the repository using and setup the development environment:
-
-```
-yarn install && yarn start
-```
-
-`yarn start` runs snap and UI together.
-
-**Note:** If you have issues on the snap installation, take a look **Troubleshooting** block.
-
-Run tests:
-
-```
-yarn test
-```
-
-## Vocabulary
+## Terminology
 
 1. Action - Smart contract calldata (includes target contract, data and value).
 2. Operation - Ordered list of actions.
 3. Bundle - Ordered list of operations.
 4. Aggreegator - Service which accepts BLS signed transactions and bundles them into one for submission.
+
+## Prerequisites
+
+1. [Chrome browser](https://www.google.com/chrome/)
+2. [MetaMask Flask](https://metamask.io/flask/)
+
+    Install MetaMask Flask in your Chrome browser. If you have MetaMask installed, you need to disable it because MetaMask does not support Snaps and cannot work with MetaMask Flask at the same time. Take a look [FAQ](https://metamask.io/flask/#flask-fa-qs)
+3. [Node.js v16+](https://nodejs.org/download/release/v16.13.2/)
+4. [Yarn](https://yarnpkg.com/getting-started/install)
+
+## Getting Started
+
+1. Clone the repository
+    ```
+    mkdir ./bls-snap
+    cd ./bls-snap
+    git clone https://github.com/aquiladev/bls-snap.git .
+    ```
+2. Install dependencies
+    ```
+    yarn install
+    ```
+3. Run snap with UI
+    ```
+    yarn start
+    ```
+    **Note:** If you have issues on the snap installation, take a look **Troubleshooting** block.
+4. Run tests
+    ```
+    yarn test
+    ```
 
 ## Snap APIs
 
