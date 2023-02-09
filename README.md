@@ -21,8 +21,6 @@ https://user-images.githubusercontent.com/1164492/214146350-eb910e0c-fcb3-4656-9
 3. [Node.js v16+](https://nodejs.org/download/release/v16.13.2/)
 4. [Yarn](https://yarnpkg.com/getting-started/install)
 
-    You can optionally install VS Code.
-
 ## Getting Started
 
 1. Clone the repository
