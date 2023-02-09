@@ -5,6 +5,12 @@ The MetaMask Snap for [BLS Wallet](https://blswallet.org/)
 
 https://user-images.githubusercontent.com/1164492/214146350-eb910e0c-fcb3-4656-965d-6cbf19021675.mov
 
+## Vocabulary
+
+1. Action - Smart contract calldata (includes target contract, data and value).
+2. Operation - Ordered list of actions.
+3. Bundle - Ordered list of operations.
+4. Aggreegator - Service which accepts BLS signed transactions and bundles them into one for submission.
 
 ## Prerequisites
 
@@ -38,13 +44,6 @@ https://user-images.githubusercontent.com/1164492/214146350-eb910e0c-fcb3-4656-9
     ```
     yarn test
     ```
-
-## Vocabulary
-
-1. Action - Smart contract calldata (includes target contract, data and value).
-2. Operation - Ordered list of actions.
-3. Bundle - Ordered list of operations.
-4. Aggreegator - Service which accepts BLS signed transactions and bundles them into one for submission.
 
 ## Snap APIs
 
