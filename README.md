@@ -6,23 +6,38 @@ The MetaMask Snap for [BLS Wallet](https://blswallet.org/)
 https://user-images.githubusercontent.com/1164492/214146350-eb910e0c-fcb3-4656-965d-6cbf19021675.mov
 
 
+## Prerequisites
+
+1. [Chrome browser](https://www.google.com/chrome/)
+2. [MetaMask Flask](https://metamask.io/flask/)
+
+    Install MetaMask Flask in your Chrome browser. If you have MetaMask installed, you need to disable it because MetaMask does not support Snaps and cannot work with MetaMask Flask at the same time. Take a look [FAQ](https://metamask.io/flask/#flask-fa-qs)
+3. [Node.js v16+](https://nodejs.org/download/release/v16.13.2/)
+4. [Yarn](https://yarnpkg.com/getting-started/install)
+
+    You can optionally install VS Code.
+
 ## Getting Started
 
-Clone the repository using and setup the development environment:
-
-```
-yarn install && yarn start
-```
-
-`yarn start` runs snap and UI together.
-
-**Note:** If you have issues on the snap installation, take a look **Troubleshooting** block.
-
-Run tests:
-
-```
-yarn test
-```
+1. Clone the repository
+    ```
+    mkdir ./bls-snap
+    cd ./bls-snap
+    git clone https://github.com/aquiladev/bls-snap.git .
+    ```
+2. Install dependencies and start the project:
+    ```
+    yarn install
+    ```
+3. Run snap with UI
+    ```
+    yarn start
+    ```
+    **Note:** If you have issues on the snap installation, take a look **Troubleshooting** block.
+4. Run tests
+    ```
+    yarn test
+    ```
 
 ## Vocabulary
 
