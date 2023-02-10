@@ -1,8 +1,9 @@
 /* eslint-disable jsdoc/require-jsdoc */
+import { ethers } from 'ethers';
 import { v4 as uuidv4 } from 'uuid';
 import { ApiParams, AddActionRequestParams } from './types/snapApi';
 import { Action } from './types/snapState';
-import { insertAction } from './utils/snapUtils';
+import { getValidNumber, insertAction } from './utils/snapUtils';
 
 export async function addAction(params: ApiParams): Promise<Action> {
   try {
@@ -16,14 +17,19 @@ export async function addAction(params: ApiParams): Promise<Action> {
       functionFragment,
     } = requestParams as AddActionRequestParams;
 
-    const _value: number = value || 0;
-    if (_value < 0) {
-      throw new Error(`Value must be greater or equal 0`);
+    if (!ethers.utils.isAddress(senderAddress)) {
+      throw new Error(`The given sender address is invalid: ${senderAddress}`);
+    }
+
+    if (!ethers.utils.isAddress(contractAddress)) {
+      throw new Error(
+        `The given contract address is invalid: ${contractAddress}`,
+      );
     }
 
     const action: Action = {
       id: uuidv4(),
-      value: _value,
+      value: getValidNumber(value, 0, 0),
       senderAddress,
       contractAddress,
       encodedFunction,

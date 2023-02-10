@@ -80,13 +80,15 @@ export const HeaderView = ({ address }: Props) => {
         >
           Send
         </Button>
-        <Button
-          onClick={() => handleMintClick()}
-          backgroundTransparent
-          borderVisible
-        >
-          Mint 1 token
-        </Button>
+        {wallet.erc20TokenBalanceSelected.isInternal && (
+          <Button
+            onClick={() => handleMintClick()}
+            backgroundTransparent
+            borderVisible
+          >
+            Mint 1 token
+          </Button>
+        )}
       </Buttons>
       <PopIn isOpen={receiveOpen} setIsOpen={setReceiveOpen}>
         <ReceiveModal address={address} />

@@ -3,7 +3,7 @@ import { COINGECKO_API } from '../utils/constants';
 import { fetchWithTimeout } from '../utils/utils';
 
 export const getAssetPriceUSD = async (asset: Erc20Token) => {
-  const coingeckoId = 'dai';
+  const coingeckoId = asset.symbol.toLowerCase();
   const url = `${COINGECKO_API}/simple/price?ids=${coingeckoId}&vs_currencies=usd`;
   try {
     const result = await fetchWithTimeout(url);

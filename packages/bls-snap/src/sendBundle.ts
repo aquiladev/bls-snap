@@ -1,4 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
+import { ethers } from 'ethers';
 import { ApiParams, SendBundleRequestParams } from './types/snapApi';
 import * as config from './utils/config';
 import * as snapUtils from './utils/snapUtils';
@@ -9,6 +10,10 @@ export async function sendBundle(params: ApiParams): Promise<Bundle> {
   try {
     const { state, mutex, wallet, requestParams } = params;
     const { senderAddress, chainId } = requestParams as SendBundleRequestParams;
+
+    if (!ethers.utils.isAddress(senderAddress)) {
+      throw new Error(`The given sender address is invalid: ${senderAddress}`);
+    }
 
     const network = config.getNetwork(chainId);
     if (!network) {
