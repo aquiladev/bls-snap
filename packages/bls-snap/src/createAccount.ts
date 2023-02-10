@@ -6,10 +6,10 @@ import {
   getValidNumber,
   upsertAccount,
 } from './utils/snapUtils';
-import { BlsAccount } from './types/snapState';
+import { Account, BlsAccount } from './types/snapState';
 import { getWallet } from './utils/blsUtils';
 
-export async function createAccount(params: ApiParams) {
+export async function createAccount(params: ApiParams): Promise<Account> {
   try {
     const { state, mutex, wallet, requestParams, keyDeriver } = params;
     const { chainId, addressIndex } =

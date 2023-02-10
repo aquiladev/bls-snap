@@ -1,22 +1,23 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { ApiParams, GetBundleRequestParams } from './types/snapApi';
+import { Bundle } from './types/snapState';
 import * as snapUtils from './utils/snapUtils';
 
-export async function getBundle(params: ApiParams) {
+export async function getBundle(params: ApiParams): Promise<Bundle> {
   try {
     const { state, mutex, requestParams, wallet } = params;
     const { bundleHash, chainId } = requestParams as GetBundleRequestParams;
 
-    const bundles = await snapUtils.getBundle(
+    const bundle = await snapUtils.getBundle(
       bundleHash,
       chainId,
       wallet,
       mutex,
       state,
     );
-    console.log(`getBundle:\n${JSON.stringify(bundles, null, 2)}`);
+    console.log(`getBundle:\n${JSON.stringify(bundle, null, 2)}`);
 
-    return bundles || [];
+    return bundle;
   } catch (err) {
     console.error(`Problem found: ${err}`);
     throw err;

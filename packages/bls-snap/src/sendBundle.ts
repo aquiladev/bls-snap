@@ -5,7 +5,7 @@ import * as snapUtils from './utils/snapUtils';
 import { Bundle } from './types/snapState';
 import { getAggregator, getWallet } from './utils/blsUtils';
 
-export async function sendBundle(params: ApiParams) {
+export async function sendBundle(params: ApiParams): Promise<Bundle> {
   try {
     const { state, mutex, wallet, requestParams } = params;
     const { senderAddress, chainId } = requestParams as SendBundleRequestParams;
@@ -56,10 +56,10 @@ export async function sendBundle(params: ApiParams) {
       bundleHash: addResult.hash,
       actions,
     };
-    console.log('Bundle:', bundle);
-
     await snapUtils.upsertBundle(bundle, chainId, wallet, mutex, state);
     await snapUtils.removeActions(actions, chainId, wallet, mutex, state);
+
+    console.log(`sendBundle:\nbundle: ${JSON.stringify(bundle)}`);
     return bundle;
   } catch (err) {
     console.error(`Problem found: ${err}`);

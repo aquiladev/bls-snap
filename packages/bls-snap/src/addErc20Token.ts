@@ -8,7 +8,7 @@ import {
   validateAddErc20TokenParams,
 } from './utils/snapUtils';
 
-export async function addErc20Token(params: ApiParams) {
+export async function addErc20Token(params: ApiParams): Promise<Erc20Token> {
   try {
     const { state, wallet, mutex, requestParams } = params;
     const requestParamsObj = requestParams as AddErc20TokenRequestParams;

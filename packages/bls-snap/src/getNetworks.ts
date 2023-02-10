@@ -1,8 +1,9 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { ApiParams } from './types/snapApi';
+import { SnapState } from './types/snapState';
 import * as snapUtils from './utils/snapUtils';
 
-export async function getNetworks(params: ApiParams) {
+export async function getNetworks(params: ApiParams): Promise<SnapState> {
   try {
     const { state } = params;
 

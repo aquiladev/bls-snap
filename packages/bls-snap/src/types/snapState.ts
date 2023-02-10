@@ -23,6 +23,10 @@ export type BlsAccount = {
   addressIndex: number;
 };
 
+export type Account = {
+  address: string;
+};
+
 export type Erc20Token = {
   address: string;
   name: string;

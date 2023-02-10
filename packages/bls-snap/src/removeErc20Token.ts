@@ -1,8 +1,9 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { ApiParams, RemoveErc20TokenRequestParams } from './types/snapApi';
+import { Erc20Token } from './types/snapState';
 import { deleteErc20Token, getErc20Token } from './utils/snapUtils';
 
-export async function removeErc20Token(params: ApiParams) {
+export async function removeErc20Token(params: ApiParams): Promise<Erc20Token> {
   try {
     const { state, wallet, mutex, requestParams } = params;
     const requestParamsObj = requestParams as RemoveErc20TokenRequestParams;

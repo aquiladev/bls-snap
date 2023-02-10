@@ -1,8 +1,11 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { ApiParams, RecoverAccountsRequestParams } from './types/snapApi';
+import { Account } from './types/snapState';
 import { getAccounts } from './utils/snapUtils';
 
-export async function recoverAccounts(params: ApiParams) {
+export async function recoverAccounts(
+  params: ApiParams,
+): Promise<Account[] | undefined> {
   try {
     const { state, requestParams } = params;
     const { chainId } = requestParams as RecoverAccountsRequestParams;
