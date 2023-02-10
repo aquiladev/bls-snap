@@ -7,15 +7,27 @@ import { insertAction } from './utils/snapUtils';
 export async function addAction(params: ApiParams): Promise<Action> {
   try {
     const { state, mutex, requestParams, wallet } = params;
-    const { senderAddress, contractAddress, encodedFunction, chainId } =
-      requestParams as AddActionRequestParams;
-
-    const action: Action = {
-      id: uuidv4(),
-      value: 0,
+    const {
+      chainId,
+      value,
       senderAddress,
       contractAddress,
       encodedFunction,
+      functionFragment,
+    } = requestParams as AddActionRequestParams;
+
+    const _value: number = value || 0;
+    if (_value < 0) {
+      throw new Error(`Value must be greater or equal 0`);
+    }
+
+    const action: Action = {
+      id: uuidv4(),
+      value: _value,
+      senderAddress,
+      contractAddress,
+      encodedFunction,
+      functionFragment: functionFragment || '',
     };
     await insertAction(action, chainId, wallet, mutex, state);
 

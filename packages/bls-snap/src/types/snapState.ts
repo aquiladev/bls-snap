@@ -41,6 +41,7 @@ export type Action = {
   senderAddress: string;
   contractAddress: string;
   encodedFunction: string;
+  functionFragment: string;
 };
 
 export type Bundle = {
