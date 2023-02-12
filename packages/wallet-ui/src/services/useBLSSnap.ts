@@ -249,6 +249,9 @@ export const useBLSSnap = () => {
               'mint',
               [address, ethers.utils.parseUnits('1', 18)],
             ),
+            functionFragment: erc20Contract.interface
+              .getFunction('mint')
+              .format(),
             chainId,
           },
         },

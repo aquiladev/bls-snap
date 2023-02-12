@@ -91,7 +91,7 @@ await ethereum.request({
 | `bls_removeErc20Token`     | `chainId`,<br /> `tokenAddress`
 | `bls_getErc20TokenBalance` | `chainId`,<br /> `tokenAddress`,<br /> `userAddress`                               |
 | `bls_getActions`           | `chainId`,<br /> `senderAddress`                                                   |
-| `bls_addAction`            | `chainId`,<br /> `senderAddress`,<br /> `contractAddress`,<br /> `encodedFunction` |
+| `bls_addAction`            | `chainId`,<br /> `senderAddress`,<br /> `contractAddress`,<br /> `encodedFunction` | `value` (default: 0), <br /> `functionFragment` |
 | `bls_getBundles`           | `chainId`,<br /> `senderAddress`                                                   | `contractAddress`,<br /> `bundleHash` |
 | `bls_getBundle`            | `chainId`,<br /> `bundleHash`                                                      |
 | `bls_sendBundle`           | `chainId`,<br /> `senderAddress`                                                   |

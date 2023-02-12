@@ -6,7 +6,8 @@ export type Network = {
   name: string;
   chainId: number;
   rpcUrl: string;
-  aggregator: string;
+  explorerUrl: string;
+  aggregatorUrl: string;
   config: NetworkConfig;
 
   accounts?: BlsAccount[];
@@ -23,6 +24,10 @@ export type BlsAccount = {
   addressIndex: number;
 };
 
+export type Account = {
+  address: string;
+};
+
 export type Erc20Token = {
   address: string;
   name: string;
@@ -37,12 +42,15 @@ export type Action = {
   senderAddress: string;
   contractAddress: string;
   encodedFunction: string;
+  createdAt: number;
+  functionFragment?: string;
 };
 
 export type Bundle = {
   senderAddress: string;
-  actions: Action[];
+  nonce: number;
   bundleHash: string;
+  actions: Action[];
   error?: string;
   transactionHash?: string;
   transactionIndex?: number;

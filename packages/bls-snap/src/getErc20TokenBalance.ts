@@ -4,7 +4,7 @@ import { ApiParams, GetErc20TokenBalanceRequestParams } from './types/snapApi';
 import * as config from './utils/config';
 import { callContract } from './utils/evmUtils';
 
-export async function getErc20TokenBalance(params: ApiParams) {
+export async function getErc20TokenBalance(params: ApiParams): Promise<string> {
   try {
     const { requestParams } = params;
     const { tokenAddress, userAddress, chainId } =

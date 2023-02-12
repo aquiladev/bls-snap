@@ -1,8 +1,9 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { ApiParams, GetBundlesRequestParams } from './types/snapApi';
+import { Bundle } from './types/snapState';
 import * as snapUtils from './utils/snapUtils';
 
-export async function getBundles(params: ApiParams) {
+export async function getBundles(params: ApiParams): Promise<Bundle[]> {
   try {
     const { state, requestParams } = params;
     const { senderAddress, chainId } = requestParams as GetBundlesRequestParams;

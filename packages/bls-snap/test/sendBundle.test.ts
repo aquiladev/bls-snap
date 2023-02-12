@@ -64,7 +64,7 @@ describe('sendBundle', () => {
     await expect(sendBundle(apiParams)).to.be.rejected;
   });
 
-  it('should create account correctly', async () => {
+  it('should create bundle correctly', async () => {
     sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
     sinon.stub(blsUtils, 'getWallet').resolves(BLS_ACCOUNT_ZERO);
     sinon.stub(blsUtils, 'getAggregator').returns(AGGREGATOR_MOCK);

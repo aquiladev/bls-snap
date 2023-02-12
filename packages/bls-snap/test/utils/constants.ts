@@ -21,7 +21,8 @@ export const TEST_NETWORK_ZERO: Network = {
   name: 'Testnet0',
   chainId: TEST_CHAIN_ID_ZERO,
   rpcUrl: 'https://testnet0-rpc.com',
-  aggregator: 'https://testnet0-aggregator.com',
+  explorerUrl: 'https://testnet0-explorer.com',
+  aggregatorUrl: 'https://testnet0-aggregator.com',
   config: {
     addresses: {
       verificationGateway: ZERO_ADDRESS,
@@ -33,7 +34,8 @@ export const TEST_NETWORK_ONE: Network = {
   name: 'Testnet1',
   chainId: TEST_CHAIN_ID_ONE,
   rpcUrl: 'https://testnet1-rpc.com',
-  aggregator: 'https://testnet1-aggregator.com',
+  explorerUrl: 'https://testnet1-explorer.com',
+  aggregatorUrl: 'https://testnet1-aggregator.com',
   config: {
     addresses: {
       verificationGateway: ZERO_ADDRESS,
@@ -74,6 +76,7 @@ export const ERC20_TOKEN_ZERO: Erc20Token = {
   name: 'TestToken0',
   symbol: 'TT0',
   decimals: 18,
+  isInternal: false,
 };
 
 export const ERC20_TOKEN_ONE: Erc20Token = {
@@ -81,6 +84,7 @@ export const ERC20_TOKEN_ONE: Erc20Token = {
   name: 'TestToken1',
   symbol: 'TT1',
   decimals: 18,
+  isInternal: true,
 };
 
 export const ACTION_ZERO: Action = {
@@ -89,6 +93,7 @@ export const ACTION_ZERO: Action = {
   contractAddress: ERC20_TOKEN_ZERO.address,
   senderAddress: ACCOUNT_ZERO.address,
   encodedFunction: '0x',
+  createdAt: 0,
 };
 
 export const ACTION_ONE: Action = {
@@ -97,6 +102,7 @@ export const ACTION_ONE: Action = {
   contractAddress: ERC20_TOKEN_ONE.address,
   senderAddress: ACCOUNT_ZERO.address,
   encodedFunction: '0x',
+  createdAt: 1,
 };
 
 export const BUNDLE_HASH_ZERO = '0x1234';
@@ -104,6 +110,7 @@ export const BUNDLE_HASH_ZERO = '0x1234';
 export const BUNDLE_ZERO: Bundle = {
   bundleHash: BUNDLE_HASH_ZERO,
   senderAddress: ACCOUNT_ZERO.address,
+  nonce: 0,
   actions: [ACTION_ZERO],
 };
 

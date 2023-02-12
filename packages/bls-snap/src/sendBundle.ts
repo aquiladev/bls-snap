@@ -1,14 +1,19 @@
 /* eslint-disable jsdoc/require-jsdoc */
+import { ethers } from 'ethers';
 import { ApiParams, SendBundleRequestParams } from './types/snapApi';
 import * as config from './utils/config';
 import * as snapUtils from './utils/snapUtils';
 import { Bundle } from './types/snapState';
 import { getAggregator, getWallet } from './utils/blsUtils';
 
-export async function sendBundle(params: ApiParams) {
+export async function sendBundle(params: ApiParams): Promise<Bundle> {
   try {
     const { state, mutex, wallet, requestParams } = params;
     const { senderAddress, chainId } = requestParams as SendBundleRequestParams;
+
+    if (!ethers.utils.isAddress(senderAddress)) {
+      throw new Error(`The given sender address is invalid: ${senderAddress}`);
+    }
 
     const network = config.getNetwork(chainId);
     if (!network) {
@@ -30,11 +35,12 @@ export async function sendBundle(params: ApiParams) {
     // Note that if a wallet doesn't yet exist, it will be
     // lazily created on the first transaction.
     const _wallet = await getWallet(network, account.privateKey);
+    const nonce = await _wallet.Nonce();
 
     // All of the actions in a bundle are atomic, if one
     // action fails they will all fail.
     const _bundle = _wallet.sign({
-      nonce: await _wallet.Nonce(),
+      nonce,
       actions: actions.map((op) => {
         return {
           ethValue: op.value,
@@ -45,21 +51,22 @@ export async function sendBundle(params: ApiParams) {
     });
 
     const aggregator = getAggregator(network);
-    const addResult = await aggregator.add(_bundle);
+    const result = await aggregator.add(_bundle);
 
-    if ('failures' in addResult) {
-      throw new Error(addResult.failures.join('\n'));
+    if ('failures' in result) {
+      throw new Error(result.failures.join('\n'));
     }
 
     const bundle: Bundle = {
       senderAddress,
-      bundleHash: addResult.hash,
+      bundleHash: result.hash,
+      nonce: nonce.toNumber(),
       actions,
     };
-    console.log('Bundle:', bundle);
-
     await snapUtils.upsertBundle(bundle, chainId, wallet, mutex, state);
     await snapUtils.removeActions(actions, chainId, wallet, mutex, state);
+
+    console.log(`sendBundle:\nbundle: ${JSON.stringify(bundle)}`);
     return bundle;
   } catch (err) {
     console.error(`Problem found: ${err}`);

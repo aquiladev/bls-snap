@@ -1,8 +1,9 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { ApiParams, GetActionsRequestParams } from './types/snapApi';
+import { Action } from './types/snapState';
 import * as snapUtils from './utils/snapUtils';
 
-export async function getActions(params: ApiParams) {
+export async function getActions(params: ApiParams): Promise<Action[]> {
   try {
     const { state, requestParams } = params;
     const { senderAddress, chainId } = requestParams as GetActionsRequestParams;

@@ -1,24 +1,44 @@
 /* eslint-disable jsdoc/require-jsdoc */
+import { ethers } from 'ethers';
 import { v4 as uuidv4 } from 'uuid';
 import { ApiParams, AddActionRequestParams } from './types/snapApi';
-import { insertAction } from './utils/snapUtils';
+import { Action } from './types/snapState';
+import { getValidNumber, insertAction } from './utils/snapUtils';
 
-export async function addAction(params: ApiParams) {
+export async function addAction(params: ApiParams): Promise<Action> {
   try {
     const { state, mutex, requestParams, wallet } = params;
-    const { senderAddress, contractAddress, encodedFunction, chainId } =
-      requestParams as AddActionRequestParams;
-
-    const action = {
-      id: uuidv4(),
-      value: 0,
+    const {
+      chainId,
+      value,
       senderAddress,
       contractAddress,
       encodedFunction,
-    };
-    console.log('Action:', action);
+      functionFragment,
+    } = requestParams as AddActionRequestParams;
 
+    if (!ethers.utils.isAddress(senderAddress)) {
+      throw new Error(`The given sender address is invalid: ${senderAddress}`);
+    }
+
+    if (!ethers.utils.isAddress(contractAddress)) {
+      throw new Error(
+        `The given contract address is invalid: ${contractAddress}`,
+      );
+    }
+
+    const action: Action = {
+      id: uuidv4(),
+      value: getValidNumber(value, 0, 0),
+      senderAddress,
+      contractAddress,
+      encodedFunction,
+      functionFragment,
+      createdAt: Date.now(),
+    };
     await insertAction(action, chainId, wallet, mutex, state);
+
+    console.log(`addAction:\naction: ${JSON.stringify(action)}`);
     return action;
   } catch (err) {
     console.error(`Problem found: ${err}`);

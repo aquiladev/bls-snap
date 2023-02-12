@@ -44,9 +44,11 @@ export type GetActionsRequestParams = {
 } & BaseRequestParams;
 
 export type AddActionRequestParams = {
+  value?: number;
   senderAddress: string;
   contractAddress: string;
   encodedFunction: string;
+  functionFragment?: string;
 } & BaseRequestParams;
 
 export type GetBundleRequestParams = {
