@@ -7,7 +7,8 @@ const ARBITRUM_GOERLI_NETWORK: Network = {
   name: 'Arbitrum-Goerli',
   chainId: 421613,
   rpcUrl: 'https://goerli-rollup.arbitrum.io/rpc',
-  aggregator: 'https://arbitrum-goerli.blswallet.org',
+  explorerUrl: 'https://goerli.arbiscan.io',
+  aggregatorUrl: 'https://arbitrum-goerli.blswallet.org',
   config: validateConfig(arbitrumGoerliConfig),
 };
 
@@ -15,7 +16,8 @@ const OPTIMISM_GOERLI_NETWORK: Network = {
   name: 'Optimism-Goerli',
   chainId: 420,
   rpcUrl: 'https://goerli.optimism.io',
-  aggregator: 'https://optimism-goerli.blswallet.org',
+  explorerUrl: 'https://goerli-optimism.etherscan.io',
+  aggregatorUrl: 'https://optimism-goerli.blswallet.org',
   config: validateConfig(optimismGoerliConfig),
 };
 

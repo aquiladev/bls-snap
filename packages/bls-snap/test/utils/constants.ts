@@ -21,7 +21,8 @@ export const TEST_NETWORK_ZERO: Network = {
   name: 'Testnet0',
   chainId: TEST_CHAIN_ID_ZERO,
   rpcUrl: 'https://testnet0-rpc.com',
-  aggregator: 'https://testnet0-aggregator.com',
+  explorerUrl: 'https://testnet0-explorer.com',
+  aggregatorUrl: 'https://testnet0-aggregator.com',
   config: {
     addresses: {
       verificationGateway: ZERO_ADDRESS,
@@ -33,7 +34,8 @@ export const TEST_NETWORK_ONE: Network = {
   name: 'Testnet1',
   chainId: TEST_CHAIN_ID_ONE,
   rpcUrl: 'https://testnet1-rpc.com',
-  aggregator: 'https://testnet1-aggregator.com',
+  explorerUrl: 'https://testnet1-explorer.com',
+  aggregatorUrl: 'https://testnet1-aggregator.com',
   config: {
     addresses: {
       verificationGateway: ZERO_ADDRESS,

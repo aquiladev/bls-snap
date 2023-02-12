@@ -6,7 +6,8 @@ export type Network = {
   name: string;
   chainId: number;
   rpcUrl: string;
-  aggregator: string;
+  explorerUrl: string;
+  aggregatorUrl: string;
   config: NetworkConfig;
 
   accounts?: BlsAccount[];

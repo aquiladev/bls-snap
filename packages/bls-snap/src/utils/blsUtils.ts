@@ -19,7 +19,7 @@ export function getWallet(
 }
 
 export function getAggregator(network: Network): Aggregator {
-  return new Aggregator(network.aggregator);
+  return new Aggregator(network.aggregatorUrl);
 }
 
 export function getBundleReceipt(
