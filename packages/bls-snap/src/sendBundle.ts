@@ -35,11 +35,12 @@ export async function sendBundle(params: ApiParams): Promise<Bundle> {
     // Note that if a wallet doesn't yet exist, it will be
     // lazily created on the first transaction.
     const _wallet = await getWallet(network, account.privateKey);
+    const nonce = await _wallet.Nonce();
 
     // All of the actions in a bundle are atomic, if one
     // action fails they will all fail.
     const _bundle = _wallet.sign({
-      nonce: await _wallet.Nonce(),
+      nonce,
       actions: actions.map((op) => {
         return {
           ethValue: op.value,
@@ -50,15 +51,16 @@ export async function sendBundle(params: ApiParams): Promise<Bundle> {
     });
 
     const aggregator = getAggregator(network);
-    const addResult = await aggregator.add(_bundle);
+    const result = await aggregator.add(_bundle);
 
-    if ('failures' in addResult) {
-      throw new Error(addResult.failures.join('\n'));
+    if ('failures' in result) {
+      throw new Error(result.failures.join('\n'));
     }
 
     const bundle: Bundle = {
       senderAddress,
-      bundleHash: addResult.hash,
+      bundleHash: result.hash,
+      nonce: nonce.toNumber(),
       actions,
     };
     await snapUtils.upsertBundle(bundle, chainId, wallet, mutex, state);

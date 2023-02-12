@@ -74,6 +74,7 @@ export const ERC20_TOKEN_ZERO: Erc20Token = {
   name: 'TestToken0',
   symbol: 'TT0',
   decimals: 18,
+  isInternal: false,
 };
 
 export const ERC20_TOKEN_ONE: Erc20Token = {
@@ -81,6 +82,7 @@ export const ERC20_TOKEN_ONE: Erc20Token = {
   name: 'TestToken1',
   symbol: 'TT1',
   decimals: 18,
+  isInternal: true,
 };
 
 export const ACTION_ZERO: Action = {
@@ -89,6 +91,7 @@ export const ACTION_ZERO: Action = {
   contractAddress: ERC20_TOKEN_ZERO.address,
   senderAddress: ACCOUNT_ZERO.address,
   encodedFunction: '0x',
+  createdAt: 0,
 };
 
 export const ACTION_ONE: Action = {
@@ -97,6 +100,7 @@ export const ACTION_ONE: Action = {
   contractAddress: ERC20_TOKEN_ONE.address,
   senderAddress: ACCOUNT_ZERO.address,
   encodedFunction: '0x',
+  createdAt: 1,
 };
 
 export const BUNDLE_HASH_ZERO = '0x1234';
@@ -104,6 +108,7 @@ export const BUNDLE_HASH_ZERO = '0x1234';
 export const BUNDLE_ZERO: Bundle = {
   bundleHash: BUNDLE_HASH_ZERO,
   senderAddress: ACCOUNT_ZERO.address,
+  nonce: 0,
   actions: [ACTION_ZERO],
 };
 

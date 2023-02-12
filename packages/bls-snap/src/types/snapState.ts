@@ -41,13 +41,15 @@ export type Action = {
   senderAddress: string;
   contractAddress: string;
   encodedFunction: string;
-  functionFragment: string;
+  createdAt: number;
+  functionFragment?: string;
 };
 
 export type Bundle = {
   senderAddress: string;
-  actions: Action[];
+  nonce: number;
   bundleHash: string;
+  actions: Action[];
   error?: string;
   transactionHash?: string;
   transactionIndex?: number;

@@ -33,7 +33,8 @@ export async function addAction(params: ApiParams): Promise<Action> {
       senderAddress,
       contractAddress,
       encodedFunction,
-      functionFragment: functionFragment || '',
+      functionFragment,
+      createdAt: Date.now(),
     };
     await insertAction(action, chainId, wallet, mutex, state);
 
