@@ -24,9 +24,7 @@ describe('recoverAccounts', () => {
       ...TEST_NETWORK_ZERO,
       accounts: [ACCOUNT_ZERO],
     },
-    [TEST_CHAIN_ID_ONE]: {
-      ...TEST_NETWORK_ONE,
-    },
+    [TEST_CHAIN_ID_ONE]: TEST_NETWORK_ONE,
   };
   const apiParams: ApiParams = {
     state,

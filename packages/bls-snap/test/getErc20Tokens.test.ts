@@ -24,9 +24,7 @@ describe('getErc20Tokens', () => {
       ...TEST_NETWORK_ZERO,
       erc20Tokens: [ERC20_TOKEN_ZERO],
     },
-    [TEST_CHAIN_ID_ONE]: {
-      ...TEST_NETWORK_ONE,
-    },
+    [TEST_CHAIN_ID_ONE]: TEST_NETWORK_ONE,
   };
   const apiParams: ApiParams = {
     state,
