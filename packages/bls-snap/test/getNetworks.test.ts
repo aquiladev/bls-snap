@@ -15,7 +15,7 @@ import {
   TEST_NETWORK_ZERO,
 } from './utils/constants';
 
-describe('getNetworks', function () {
+describe('getNetworks', () => {
   const walletStub = new WalletMock();
 
   const state: SnapState = {
@@ -29,7 +29,7 @@ describe('getNetworks', function () {
     mutex: new Mutex(),
   };
 
-  afterEach(function () {
+  afterEach(() => {
     walletStub.reset();
   });
 
@@ -44,7 +44,7 @@ describe('getNetworks', function () {
     expect(result).to.be.eql(state);
   });
 
-  it('should throw error if getNetworks failed', async function () {
+  it('should throw error if getNetworks failed', async () => {
     sinon.stub(snapUtils, 'getNetworks').throws(new Error());
     const requestObject: GetNetworksRequestParams = {};
     apiParams.requestParams = requestObject;

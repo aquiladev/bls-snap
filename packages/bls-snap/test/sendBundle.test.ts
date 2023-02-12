@@ -38,11 +38,11 @@ describe('sendBundle', () => {
     mutex: new Mutex(),
   };
 
-  afterEach(function () {
+  afterEach(() => {
     walletStub.reset();
   });
 
-  it('should throw error if no account found', async function () {
+  it('should throw error if no account found', async () => {
     sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
     const requestObject: SendBundleRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
@@ -53,7 +53,7 @@ describe('sendBundle', () => {
     await expect(sendBundle(apiParams)).to.be.rejected;
   });
 
-  it('should throw error if no actions found', async function () {
+  it('should throw error if no actions found', async () => {
     sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
     const requestObject: SendBundleRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
@@ -93,7 +93,7 @@ describe('sendBundle', () => {
     await expect(sendBundle(apiParams)).to.be.rejected;
   });
 
-  it('should throw error if getAccount failed', async function () {
+  it('should throw error if getAccount failed', async () => {
     sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
     sinon.stub(snapUtils, 'getAccount').throws(new Error());
     const requestObject: SendBundleRequestParams = {

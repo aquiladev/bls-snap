@@ -35,7 +35,7 @@ describe('recoverAccounts', () => {
     mutex: new Mutex(),
   };
 
-  afterEach(function () {
+  afterEach(() => {
     walletStub.reset();
   });
 
@@ -68,7 +68,7 @@ describe('recoverAccounts', () => {
     expect(result).to.be.eql(undefined);
   });
 
-  it('should throw error if getAccounts failed', async function () {
+  it('should throw error if getAccounts failed', async () => {
     sinon.stub(snapUtils, 'getAccounts').throws(new Error());
     const requestObject: RecoverAccountsRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
