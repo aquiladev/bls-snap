@@ -1,0 +1,55 @@
+name: Snap Release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: {}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    concurrency: bls-snap-release
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: 'Extract current package version'
+        run: node -p -e '`PACKAGE_VERSION=${"v" + require("./package.json").version}`' >> $GITHUB_ENV
+
+      - uses: oprypin/find-latest-tag@v1
+        with:
+          repository: aquiladev/bls-snap
+        id: latesttag
+
+      - name: Print current package version
+        run: echo "${{ env.PACKAGE_VERSION }}"
+      - name: Print latest repository tag
+        run: echo "${{ steps.latesttag.outputs.tag }}"
+
+      - run: echo "No new version found... Skipping"
+        if: steps.latesttag.outputs.tag == env.PACKAGE_VERSION
+
+      - uses: actions/setup-node@v2
+        if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
+        with:
+          node-version: 16.x
+
+      - uses: actions/cache@v3
+        id: cache
+        if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
+        with:
+          path: '**/node_modules'
+          key: uns-yarn-${{ hashFiles('**/yarn.lock') }}
+
+      - run: yarn install
+        if: steps.cache.outputs.cache-hit != 'true' && steps.latesttag.outputs.tag != env.PACKAGE_VERSION
+
+      - run: yarn build
+        if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
+
+      - name: Upload to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
+        with:
+          github_token: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          publish_dir: ./packages/wallet-ui/build
