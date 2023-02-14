@@ -29,7 +29,7 @@ describe('addAction', () => {
     mutex: new Mutex(),
   };
 
-  afterEach(function () {
+  afterEach(() => {
     walletStub.reset();
   });
 
@@ -64,7 +64,7 @@ describe('addAction', () => {
     await expect(addAction(apiParams)).to.be.rejected;
   });
 
-  it('should throw error if insertAction failed', async function () {
+  it('should throw error if insertAction failed', async () => {
     sinon.stub(snapUtils, 'insertAction').throws(new Error());
     const requestObject: AddActionRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,

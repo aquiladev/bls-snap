@@ -8,7 +8,6 @@ import { SnapState } from '../src/types/snapState';
 import { getErc20Tokens } from '../src/getErc20Tokens';
 import * as snapUtils from '../src/utils/snapUtils';
 import {
-  ERC20_TOKEN_ONE,
   ERC20_TOKEN_ZERO,
   TEST_CHAIN_ID_ONE,
   TEST_CHAIN_ID_ZERO,
@@ -17,7 +16,7 @@ import {
 } from './utils/constants';
 import { WalletMock } from './utils/wallet.mock';
 
-describe('getErc20Tokens', function () {
+describe('getErc20Tokens', () => {
   const walletStub = new WalletMock();
 
   const state: SnapState = {
@@ -25,9 +24,7 @@ describe('getErc20Tokens', function () {
       ...TEST_NETWORK_ZERO,
       erc20Tokens: [ERC20_TOKEN_ZERO],
     },
-    [TEST_CHAIN_ID_ONE]: {
-      ...TEST_NETWORK_ONE,
-    },
+    [TEST_CHAIN_ID_ONE]: TEST_NETWORK_ONE,
   };
   const apiParams: ApiParams = {
     state,
@@ -36,7 +33,7 @@ describe('getErc20Tokens', function () {
     mutex: new Mutex(),
   };
 
-  afterEach(function () {
+  afterEach(() => {
     walletStub.reset();
   });
 
@@ -66,7 +63,7 @@ describe('getErc20Tokens', function () {
     expect(result).to.be.eql([]);
   });
 
-  it('should throw error if getErc20Tokens failed', async function () {
+  it('should throw error if getErc20Tokens failed', async () => {
     sinon.stub(snapUtils, 'getErc20Tokens').throws(new Error());
     const requestObject: GetErc20TokensRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,

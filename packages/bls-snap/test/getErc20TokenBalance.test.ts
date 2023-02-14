@@ -21,7 +21,7 @@ import {
 } from './utils/constants';
 import { WalletMock } from './utils/wallet.mock';
 
-describe('getErc20TokenBalance', function () {
+describe('getErc20TokenBalance', () => {
   const walletStub = new WalletMock();
 
   const state: SnapState = {
@@ -37,7 +37,7 @@ describe('getErc20TokenBalance', function () {
     mutex: new Mutex(),
   };
 
-  afterEach(function () {
+  afterEach(() => {
     walletStub.reset();
   });
 
@@ -74,7 +74,7 @@ describe('getErc20TokenBalance', function () {
     await expect(getErc20TokenBalance(apiParams)).to.be.rejected;
   });
 
-  it('should throw error if callContract failed', async function () {
+  it('should throw error if callContract failed', async () => {
     sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
     sinon.stub(evmUtils, 'callContract').throws(new Error());
     const requestObject: GetErc20TokenBalanceRequestParams = {

@@ -33,7 +33,7 @@ describe('createAccount', () => {
     mutex: new Mutex(),
   };
 
-  afterEach(function () {
+  afterEach(() => {
     walletStub.reset();
   });
 
@@ -70,7 +70,7 @@ describe('createAccount', () => {
     await expect(createAccount(apiParams)).to.be.rejected;
   });
 
-  it('should throw error if getAccounts failed', async function () {
+  it('should throw error if getAccounts failed', async () => {
     sinon.stub(snapUtils, 'getKeysFromAddressIndex').throws(new Error());
     const requestObject: CreateAccountRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,

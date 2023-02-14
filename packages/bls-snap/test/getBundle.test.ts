@@ -17,7 +17,7 @@ import {
 } from './utils/constants';
 import { WalletMock } from './utils/wallet.mock';
 
-describe('getBundle', function () {
+describe('getBundle', () => {
   const walletStub = new WalletMock();
 
   const state: SnapState = {
@@ -33,7 +33,7 @@ describe('getBundle', function () {
     mutex: new Mutex(),
   };
 
-  afterEach(function () {
+  afterEach(() => {
     walletStub.reset();
   });
 
@@ -64,7 +64,7 @@ describe('getBundle', function () {
     await expect(getBundle(apiParams)).to.be.rejected;
   });
 
-  it('should throw error if getBundle failed', async function () {
+  it('should throw error if getBundle failed', async () => {
     sinon.stub(snapUtils, 'getBundle').throws(new Error());
     const requestObject: GetBundleRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
