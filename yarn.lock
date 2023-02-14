@@ -11727,9 +11727,9 @@ __metadata:
   linkType: hard
 
 "mcl-wasm@npm:^1.0.0":
-  version: 1.0.3
-  resolution: "mcl-wasm@npm:1.0.3"
-  checksum: ad008d643e4ef978d35fb5faeb079ce12bbc3bcc0a299770027d8b4733f55031eb28c209f4deecce25898bdecad985525cadec768a8e78bdadf6a08189501469
+  version: 1.0.6
+  resolution: "mcl-wasm@npm:1.0.6"
+  checksum: 1dae65869b1e4f29fdf6de68043e89470b264e28e78c6dcb249f688c1e97e5b5fd52d933a8c0584f084a0fa0ef140d99a702aeb2f36838f35c054bf2b90c5f5b
   languageName: node
   linkType: hard
 
