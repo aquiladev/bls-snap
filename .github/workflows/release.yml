@@ -52,7 +52,9 @@ jobs:
           key: uns-yarn-${{ hashFiles('**/yarn.lock') }}
         if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
 
-      - run: yarn install
+      - run: yarn install --immutable
+        env:
+          CI: true
         if: steps.cache.outputs.cache-hit != 'true' && steps.latesttag.outputs.tag != env.PACKAGE_VERSION
 
       - name: Publish to NPM
@@ -71,13 +73,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./packages/wallet-ui/build
-        if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
-
-      - name: Auto-tag
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Automatic tag ${{ env.PACKAGE_VERSION }}
-          commit_options: '--no-verify'
-          tagging_message: '${{ env.PACKAGE_VERSION }}'
-          skip_dirty_check: false
         if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
