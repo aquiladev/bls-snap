@@ -56,7 +56,7 @@ jobs:
       - name: Publish to NPM
         run: |
           yarn workspace @aquiladev/bls-snap build
-          yarn workspace @aquiladev/bls-snap npm publish --tag latest --access public
+          yarn workspace @aquiladev/bls-snap npm publish --tag latest --access public 2>&1 > /dev/null || :
         if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
 
       - name: Build UI
@@ -69,4 +69,12 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./packages/wallet-ui/build
+        if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Automatic tag ${{ env.PACKAGE_VERSION }}
+          commit_options: '--no-verify'
+          tagging_message: '${{ env.PACKAGE_VERSION }}'
+          skip_dirty_check: false
         if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
