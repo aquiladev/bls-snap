@@ -26,18 +26,26 @@ jobs:
       - run: echo "No new version found... Skipping"
         if: steps.latesttag.outputs.tag == env.PACKAGE_VERSION
 
-      - uses: actions/setup-node@v2
-        if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
+      - uses: actions/setup-node@v3
         with:
           node-version: 16.x
-          registry-url: 'https://registry.npmjs.org'
+        if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
+
+      - name: Setup .yarnrc.yml
+        run: |
+          yarn config set npmRegistryServer "https://registry.npmjs.org"
+          yarn config set npmAlwaysAuth true
+          yarn config set npmAuthToken $NPM_AUTH_TOKEN
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
 
       - uses: actions/cache@v3
         id: cache
-        if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
         with:
           path: '**/node_modules'
           key: uns-yarn-${{ hashFiles('**/yarn.lock') }}
+        if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
 
       - run: yarn install
         if: steps.cache.outputs.cache-hit != 'true' && steps.latesttag.outputs.tag != env.PACKAGE_VERSION
@@ -46,13 +54,11 @@ jobs:
         run: |
           yarn workspace @aquiladev/bls-snap build
           yarn workspace @aquiladev/bls-snap npm publish --tag latest --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
 
       - name: Upload to gh-pages
         uses: peaceiris/actions-gh-pages@v3
-        if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./packages/wallet-ui/build
+        if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
