@@ -1,6 +1,9 @@
 name: Snap Release
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch: {}
 
 jobs:
@@ -50,10 +53,15 @@ jobs:
       - run: yarn install
         if: steps.cache.outputs.cache-hit != 'true' && steps.latesttag.outputs.tag != env.PACKAGE_VERSION
 
-      - name: Publish
+      - name: Publish to NPM
         run: |
           yarn workspace @aquiladev/bls-snap build
           yarn workspace @aquiladev/bls-snap npm publish --tag latest --access public
+        if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
+
+      - name: Build UI
+        run: |
+          REACT_APP_SNAP_ID=npm:@aquiladev/bls-snap yarn workspace wallet-ui build
         if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
 
       - name: Upload to gh-pages
