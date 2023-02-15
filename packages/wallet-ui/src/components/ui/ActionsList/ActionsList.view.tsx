@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Action } from 'bls-snap/src/types/snapState';
+import { Action } from '@aquiladev/bls-snap/src/types/snapState';
 import { useAppSelector } from '../../../hooks/redux';
 import { IListProps } from '../List/List.view';
 import { Wrapper } from './ActionsList.style';

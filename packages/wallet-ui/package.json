@@ -28,6 +28,7 @@
     ]
   },
   "dependencies": {
+    "@aquiladev/bls-snap": "workspace:packages/bls-snap",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@fortawesome/fontawesome-svg-core": "^6.2.0",
@@ -41,7 +42,6 @@
     "@mui/material": "^5.10.8",
     "@reduxjs/toolkit": "^1.8.5",
     "@types/semver": "^7.3.12",
-    "bls-snap": "workspace:packages/bls-snap",
     "buffer": "^6.0.3",
     "console-browserify": "^1.2.0",
     "crypto-browserify": "^3.12.0",

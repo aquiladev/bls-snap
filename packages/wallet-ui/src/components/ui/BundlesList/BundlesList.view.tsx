@@ -1,4 +1,4 @@
-import { Bundle } from 'bls-snap/src/types/snapState';
+import { Bundle } from '@aquiladev/bls-snap/src/types/snapState';
 import { FC, useEffect, useRef } from 'react';
 import { useAppSelector } from '../../../hooks/redux';
 import { useBLSSnap } from '../../../services/useBLSSnap';

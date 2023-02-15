@@ -1,4 +1,4 @@
-import { Erc20Token } from 'bls-snap/src/types/snapState';
+import { Erc20Token } from '@aquiladev/bls-snap/src/types/snapState';
 import { ethers } from 'ethers';
 import { KeyboardEvent } from 'react';
 import { Erc20TokenBalance } from '../types';

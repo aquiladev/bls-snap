@@ -1,4 +1,4 @@
-import { Bundle } from 'bls-snap/src/types/snapState';
+import { Bundle } from '@aquiladev/bls-snap/src/types/snapState';
 import { Wrapper } from './BundleListItem.style';
 import { getBundleStatus } from './types';
 

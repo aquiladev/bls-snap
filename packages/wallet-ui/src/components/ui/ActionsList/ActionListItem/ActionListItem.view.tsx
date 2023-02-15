@@ -1,4 +1,4 @@
-import { Action } from 'bls-snap/src/types/snapState';
+import { Action } from '@aquiladev/bls-snap/src/types/snapState';
 import { Column, Description, Wrapper } from './ActionListItem.style';
 
 type Props = {

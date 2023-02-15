@@ -1,9 +1,6 @@
 name: Snap Release
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch: {}
 
 jobs:
@@ -44,8 +41,17 @@ jobs:
       - run: yarn install
         if: steps.cache.outputs.cache-hit != 'true' && steps.latesttag.outputs.tag != env.PACKAGE_VERSION
 
-      - run: yarn build
-        if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
+      - name: Publish
+        run: |
+          VERSION=$(node -p "require('./packages/bls-snap/package.json').version")
+
+          yarn workspace @aquiladev/bls-snap version --new-version ${VERSION} --no-git-tag-version
+          yarn workspace @aquiladev/bls-snap build
+          
+          yarn workspace @aquiladev/bls-snap publish --tag latest --access public 2>&1 > /dev/null || :
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        if: inputs.environment == 'production' && steps.latesttag.outputs.tag != env.PACKAGE_VERSION
 
       - name: Upload to gh-pages
         uses: peaceiris/actions-gh-pages@v3

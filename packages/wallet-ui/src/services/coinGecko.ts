@@ -1,4 +1,4 @@
-import { Erc20Token } from 'bls-snap/src/types/snapState';
+import { Erc20Token } from '@aquiladev/bls-snap/src/types/snapState';
 import { COINGECKO_API } from '../utils/constants';
 import { fetchWithTimeout } from '../utils/utils';
 

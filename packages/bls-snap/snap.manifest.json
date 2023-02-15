@@ -1,7 +1,7 @@
 {
   "version": "0.1.0",
-  "description": "An example Snap written in TypeScript.",
-  "proposedName": "BLS Snap",
+  "description": "BLS Snap",
+  "proposedName": "@aquiladev/bls-snap",
   "repository": {
     "type": "git",
     "url": "https://github.com/aquiladev/bls-snap.git"
@@ -12,7 +12,7 @@
       "npm": {
         "filePath": "dist/bundle.js",
         "iconPath": "images/icon.svg",
-        "packageName": "bls-snap",
+        "packageName": "@aquiladev/bls-snap",
         "registry": "https://registry.npmjs.org/"
       }
     }

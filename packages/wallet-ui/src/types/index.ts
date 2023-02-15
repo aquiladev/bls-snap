@@ -1,4 +1,4 @@
-import * as Types from 'bls-snap/src/types/snapState';
+import * as Types from '@aquiladev/bls-snap/src/types/snapState';
 import { BigNumber } from 'ethers';
 
 export { type GetSnapsResponse, type Snap } from './snap';

@@ -2,7 +2,7 @@
 import { ethers, BigNumber } from 'ethers';
 import Toastr from 'toastr2';
 import semver from 'semver/preload';
-import { Erc20Token, Bundle } from 'bls-snap/src/types/snapState';
+import { Erc20Token, Bundle } from '@aquiladev/bls-snap/src/types/snapState';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import * as ws from '../slices/walletSlice';
 import { Account, Erc20TokenBalance, Network, Action } from '../types';

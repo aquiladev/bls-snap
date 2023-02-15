@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Action, Bundle } from 'bls-snap/src/types/snapState';
+import { Action, Bundle } from '@aquiladev/bls-snap/src/types/snapState';
 import { BigNumber } from 'ethers';
 import { Account, Erc20TokenBalance } from '../types';
 
