@@ -10,11 +10,10 @@ jobs:
   release:
     runs-on: ubuntu-latest
     concurrency: bls-snap-release
-    permissions:
-      # Give the default GITHUB_TOKEN write permission to commit and push the changed files back to the repository.
-      contents: write
     steps:
       - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PAT }}
 
       - name: 'Extract current package version'
         run: node -p -e '`PACKAGE_VERSION=${"v" + require("./package.json").version}`' >> $GITHUB_ENV
@@ -74,7 +73,8 @@ jobs:
           publish_dir: ./packages/wallet-ui/build
         if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
 
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - name: Auto-tag
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Automatic tag ${{ env.PACKAGE_VERSION }}
           commit_options: '--no-verify'
