@@ -30,6 +30,7 @@ jobs:
         if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
         with:
           node-version: 16.x
+          registry-url: 'https://registry.npmjs.org'
 
       - uses: actions/cache@v3
         id: cache
