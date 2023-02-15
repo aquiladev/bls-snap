@@ -65,7 +65,7 @@ export const Header = ({
   return (
     <HeaderWrapper>
       <LogoWrapper>
-        <SnapLogo color={theme.colors.icon.default} size={36} />
+        {/* <SnapLogo color={theme.colors.icon.default} size={36} /> */}
         <Title>BLS Snap</Title>
       </LogoWrapper>
       <RightContainer>
