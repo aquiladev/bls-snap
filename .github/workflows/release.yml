@@ -45,7 +45,6 @@ jobs:
         run: |
           VERSION=$(node -p "require('./packages/bls-snap/package.json').version")
 
-          yarn workspace @aquiladev/bls-snap version --new-version ${VERSION} --no-git-tag-version
           yarn workspace @aquiladev/bls-snap build
           
           yarn workspace @aquiladev/bls-snap publish --tag latest --access public 2>&1 > /dev/null || :
