@@ -37,7 +37,7 @@ jobs:
           yarn config set npmAlwaysAuth true
           yarn config set npmAuthToken $NPM_AUTH_TOKEN
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
 
       - uses: actions/cache@v3
