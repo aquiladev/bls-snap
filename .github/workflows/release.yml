@@ -43,11 +43,8 @@ jobs:
 
       - name: Publish
         run: |
-          VERSION=$(node -p "require('./packages/bls-snap/package.json').version")
-
           yarn workspace @aquiladev/bls-snap build
-          
-          yarn workspace @aquiladev/bls-snap publish --tag latest --access public 2>&1 > /dev/null || :
+          yarn workspace @aquiladev/bls-snap npm publish --tag latest --access public 2>&1 > /dev/null || :
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
