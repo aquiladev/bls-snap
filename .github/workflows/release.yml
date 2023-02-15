@@ -51,7 +51,7 @@ jobs:
           yarn workspace @aquiladev/bls-snap publish --tag latest --access public 2>&1 > /dev/null || :
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        if: inputs.environment == 'production' && steps.latesttag.outputs.tag != env.PACKAGE_VERSION
+        if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
 
       - name: Upload to gh-pages
         uses: peaceiris/actions-gh-pages@v3
