@@ -5,9 +5,9 @@ import {
 } from '@metamask/key-tree';
 
 export async function getAddressKeyDeriver(
-  wallet,
+  snap,
 ): Promise<BIP44AddressKeyDeriver> {
-  const bip44Node = await wallet.request({
+  const bip44Node = await snap.request({
     method: 'snap_getBip44Entropy',
     params: {
       coinType: 9001,

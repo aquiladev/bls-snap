@@ -7,7 +7,7 @@ import { getValidNumber, insertAction } from './utils/snapUtils';
 
 export async function addAction(params: ApiParams): Promise<Action> {
   try {
-    const { state, mutex, requestParams, wallet } = params;
+    const { state, mutex, requestParams, snap } = params;
     const {
       chainId,
       value,
@@ -36,7 +36,7 @@ export async function addAction(params: ApiParams): Promise<Action> {
       functionFragment,
       createdAt: Date.now(),
     };
-    await insertAction(action, chainId, wallet, mutex, state);
+    await insertAction(action, chainId, snap, mutex, state);
 
     console.log(`addAction:\naction: ${JSON.stringify(action)}`);
     return action;

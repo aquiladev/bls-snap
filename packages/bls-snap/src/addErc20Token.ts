@@ -10,7 +10,7 @@ import {
 
 export async function addErc20Token(params: ApiParams): Promise<Erc20Token> {
   try {
-    const { state, wallet, mutex, requestParams } = params;
+    const { state, snap, mutex, requestParams } = params;
     const requestParamsObj = requestParams as AddErc20TokenRequestParams;
 
     if (
@@ -42,7 +42,7 @@ export async function addErc20Token(params: ApiParams): Promise<Erc20Token> {
     await upsertErc20Token(
       erc20Token,
       requestParamsObj.chainId,
-      wallet,
+      snap,
       mutex,
       state,
     );

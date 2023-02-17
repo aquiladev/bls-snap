@@ -1,4 +1,4 @@
-import { OnRpcRequestHandler } from '@metamask/snap-types';
+import { OnRpcRequestHandler } from '@metamask/snaps-types';
 import { Mutex } from 'async-mutex';
 
 import { addAction } from './addAction';
@@ -18,16 +18,8 @@ import { getBundle } from './getBundle';
 import { getAddressKeyDeriver } from './utils/crypto';
 import { removeErc20Token } from './removeErc20Token';
 
+declare const snap;
 const mutex = new Mutex();
-
-/**
- * Get a message from the origin. For demonstration purposes only.
- *
- * @param originString - The origin string.
- * @returns A message based on the origin.
- */
-export const getMessage = (originString: string): string =>
-  `Hello, ${originString}!`;
 
 /**
  * Handle incoming JSON-RPC requests, sent through `wallet_invokeSnap`.
@@ -38,7 +30,6 @@ export const getMessage = (originString: string): string =>
  * @param args.request - A validated JSON-RPC request object.
  * @returns `null` if the request succeeded.
  * @throws If the request method is not valid for this snap.
- * @throws If the `snap_confirm` call failed.
  */
 export const onRpcRequest: OnRpcRequestHandler = async ({
   origin,
@@ -50,25 +41,30 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
     return 'pong';
   }
 
-  let state = await wallet.request({
+  let state = await snap.request({
     method: 'snap_manageState',
-    params: ['get'],
+    params: {
+      operation: 'get',
+    },
   });
 
   if (!state) {
     state = {};
 
     // initialize state if empty and set default data
-    await wallet.request({
+    await snap.request({
       method: 'snap_manageState',
-      params: ['update', state],
+      params: {
+        operation: 'update',
+        newState: state,
+      },
     });
   }
 
   const networks = config.getNetworks();
   for (const network of networks) {
-    await upsertNetwork(network, wallet, mutex, state);
-    await addTestToken(network, wallet, mutex, state);
+    await upsertNetwork(network, snap, mutex, state);
+    await addTestToken(network, snap, mutex, state);
   }
 
   const requestParams = request?.params as unknown as ApiRequestParams;
@@ -79,7 +75,7 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
   const apiParams: ApiParams = {
     state,
     requestParams,
-    wallet,
+    snap,
     mutex,
   };
 
@@ -89,7 +85,7 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
     case 'bls_recoverAccounts':
       return recoverAccounts(apiParams);
     case 'bls_createAccount':
-      apiParams.keyDeriver = await getAddressKeyDeriver(wallet);
+      apiParams.keyDeriver = await getAddressKeyDeriver(snap);
       return createAccount(apiParams);
     case 'bls_addErc20Token':
       return addErc20Token(apiParams);

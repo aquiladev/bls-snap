@@ -52,13 +52,13 @@ A dapp must request MetaMask, in order to invoke snap API
 ```
 await ethereum.request({
   method: 'wallet_invokeSnap',
-  params: [
+  params: {
     snapId,
-    {
+    request: {
       method: {SNAP_API},
       params: {SNAP_API_PARAMS},
     },
-  ],
+  },
 })
 ```
 

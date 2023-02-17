@@ -1,5 +1,5 @@
 {
-  "version": "0.1.1-alpha.0",
+  "version": "0.2.0",
   "description": "BLS Snap",
   "proposedName": "@aquiladev/bls-snap",
   "repository": {
@@ -7,7 +7,7 @@
     "url": "https://github.com/aquiladev/bls-snap.git"
   },
   "source": {
-    "shasum": "L2Lm8KyoBCzCPwGnZEk5kerfPA/9jo4pKvWeAe91Q4g=",
+    "shasum": "EblDhTb4aBWZdWEdxlO6et+cKHP7GyNvqwB2E6wZsuI=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
@@ -18,14 +18,17 @@
     }
   },
   "initialPermissions": {
-    "snap_confirm": {},
     "snap_manageState": {},
     "snap_getBip44Entropy": [
       {
         "coinType": 9001
       }
     ],
-    "endowment:network-access": {}
+    "endowment:network-access": {},
+    "endowment:rpc": {
+      "snaps": true,
+      "dapps": true
+    }
   },
   "manifestVersion": "0.1"
 }

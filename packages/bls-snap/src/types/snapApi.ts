@@ -1,12 +1,13 @@
 import { Mutex } from 'async-mutex';
+import { BIP44AddressKeyDeriver } from '@metamask/key-tree';
 import { SnapState } from './snapState';
 
 export type ApiParams = {
   state: SnapState;
   requestParams: ApiRequestParams;
   mutex: Mutex;
-  wallet: any;
-  keyDeriver?: any;
+  snap: any;
+  keyDeriver?: BIP44AddressKeyDeriver;
 };
 
 export type BaseRequestParams = {

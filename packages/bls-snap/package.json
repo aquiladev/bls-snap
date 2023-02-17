@@ -1,6 +1,6 @@
 {
   "name": "@aquiladev/bls-snap",
-  "version": "0.1.1-alpha.0",
+  "version": "0.2.0",
   "license": "(MIT-0 OR Apache-2.0)",
   "main": "src/index.ts",
   "files": [
@@ -25,7 +25,7 @@
     "test": "ts-mocha --config ./.mocharc.js \"test/**/*.test.ts\""
   },
   "dependencies": {
-    "@metamask/key-tree": "^6.0.0",
+    "@metamask/key-tree": "^6.2.1",
     "async-mutex": "^0.4.0",
     "bls-wallet-clients": "^0.8.2",
     "deep-equal": "^2.2.0",
@@ -38,8 +38,8 @@
     "@metamask/eslint-config-jest": "^10.0.0",
     "@metamask/eslint-config-nodejs": "^10.0.0",
     "@metamask/eslint-config-typescript": "^10.0.0",
-    "@metamask/snap-types": "^0.22.0",
-    "@metamask/snaps-cli": "^0.22.0",
+    "@metamask/snaps-cli": "^0.29.0",
+    "@metamask/snaps-types": "^0.29.0",
     "@types/chai": "^4.3.4",
     "@types/chai-as-promised": "^7.1.5",
     "@types/sinon": "^10.0.13",
