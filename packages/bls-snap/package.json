@@ -1,6 +1,6 @@
 {
   "name": "@aquiladev/bls-snap",
-  "version": "0.2.0-alpha.0",
+  "version": "0.2.0",
   "license": "(MIT-0 OR Apache-2.0)",
   "main": "src/index.ts",
   "files": [
