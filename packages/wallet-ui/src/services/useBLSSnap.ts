@@ -38,12 +38,10 @@ export const useBLSSnap = () => {
     dispatch(enableLoadingWithMessage('Connecting...'));
     ethereum
       .request({
-        method: 'wallet_enable',
-        params: [
-          {
-            wallet_snap: { [snapId]: { version: snapVersion } },
-          },
-        ],
+        method: 'wallet_requestSnaps',
+        params: {
+          [snapId]: { version: snapVersion },
+        },
       })
       .then(() => {
         dispatch(ws.setWalletConnection(true));
@@ -60,12 +58,12 @@ export const useBLSSnap = () => {
     ethereum
       .request({
         method: 'wallet_invokeSnap',
-        params: [
+        params: {
           snapId,
-          {
+          request: {
             method: 'ping',
           },
-        ],
+        },
       })
       .then(() => {
         dispatch(ws.setWalletConnection(true));
@@ -81,12 +79,12 @@ export const useBLSSnap = () => {
   const getNetworks = async () => {
     const data = (await ethereum.request({
       method: 'wallet_invokeSnap',
-      params: [
+      params: {
         snapId,
-        {
+        request: {
           method: 'bls_getNetworks',
         },
-      ],
+      },
     })) as Record<number, Network>;
 
     return Object.values(data);
@@ -104,15 +102,15 @@ export const useBLSSnap = () => {
     dispatch(enableLoadingWithMessage('Recovering accounts...'));
     const data = (await ethereum.request({
       method: 'wallet_invokeSnap',
-      params: [
+      params: {
         snapId,
-        {
+        request: {
           method: 'bls_recoverAccounts',
           params: {
             chainId,
           },
         },
-      ],
+      },
     })) as Account[];
     console.log('RecoverAccounts', data);
     return data;
@@ -122,15 +120,15 @@ export const useBLSSnap = () => {
     dispatch(enableLoadingWithMessage('Creating account...'));
     const data = (await ethereum.request({
       method: 'wallet_invokeSnap',
-      params: [
+      params: {
         snapId,
-        {
+        request: {
           method: 'bls_createAccount',
           params: {
             chainId,
           },
         },
-      ],
+      },
     })) as Account;
     console.log('CreateAccount', data);
     return data;
@@ -139,15 +137,15 @@ export const useBLSSnap = () => {
   const getTokens = async (chainId: number) => {
     const tokens = (await ethereum.request({
       method: 'wallet_invokeSnap',
-      params: [
+      params: {
         snapId,
-        {
+        request: {
           method: 'bls_getErc20Tokens',
           params: {
             chainId,
           },
         },
-      ],
+      },
     })) as Erc20Token[];
     return tokens;
   };
@@ -159,9 +157,9 @@ export const useBLSSnap = () => {
   ) => {
     const response = await ethereum.request({
       method: 'wallet_invokeSnap',
-      params: [
+      params: {
         snapId,
-        {
+        request: {
           method: 'bls_getErc20TokenBalance',
           params: {
             tokenAddress,
@@ -169,7 +167,7 @@ export const useBLSSnap = () => {
             chainId,
           },
         },
-      ],
+      },
     });
     return response;
   };
@@ -238,9 +236,9 @@ export const useBLSSnap = () => {
 
     const response = await ethereum.request({
       method: 'wallet_invokeSnap',
-      params: [
+      params: {
         snapId,
-        {
+        request: {
           method: 'bls_addAction',
           params: {
             senderAddress: address,
@@ -255,7 +253,7 @@ export const useBLSSnap = () => {
             chainId,
           },
         },
-      ],
+      },
     });
     dispatch(ws.addAction(response));
     return response;
@@ -264,16 +262,16 @@ export const useBLSSnap = () => {
   const getActions = async (address: string, chainId: number) => {
     const data = (await ethereum.request({
       method: 'wallet_invokeSnap',
-      params: [
+      params: {
         snapId,
-        {
+        request: {
           method: 'bls_getActions',
           params: {
             senderAddress: address,
             chainId,
           },
         },
-      ],
+      },
     })) as Action[];
     dispatch(ws.setActions(data));
     return data;
@@ -286,9 +284,9 @@ export const useBLSSnap = () => {
   ) => {
     const data = (await ethereum.request({
       method: 'wallet_invokeSnap',
-      params: [
+      params: {
         snapId,
-        {
+        request: {
           method: 'bls_getBundles',
           params: {
             senderAddress,
@@ -296,7 +294,7 @@ export const useBLSSnap = () => {
             chainId,
           },
         },
-      ],
+      },
     })) as Bundle[];
     dispatch(ws.setBundles(data));
     return data;
@@ -314,16 +312,16 @@ export const useBLSSnap = () => {
     try {
       const data = (await ethereum.request({
         method: 'wallet_invokeSnap',
-        params: [
+        params: {
           snapId,
-          {
+          request: {
             method: 'bls_getBundle',
             params: {
               bundleHash,
               chainId,
             },
           },
-        ],
+        },
       })) as Bundle | undefined;
 
       if (data) {
@@ -343,16 +341,16 @@ export const useBLSSnap = () => {
   const sendBundle = async (senderAddress: string, chainId: number) => {
     const data = await ethereum.request({
       method: 'wallet_invokeSnap',
-      params: [
+      params: {
         snapId,
-        {
+        request: {
           method: 'bls_sendBundle',
           params: {
             senderAddress,
             chainId,
           },
         },
-      ],
+      },
     });
     dispatch(ws.addBundle({ bundleHash: data.bundleHash }));
     dispatch(ws.removeActions(actions));

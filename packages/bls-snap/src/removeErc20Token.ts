@@ -5,7 +5,7 @@ import { deleteErc20Token, getErc20Token } from './utils/snapUtils';
 
 export async function removeErc20Token(params: ApiParams): Promise<Erc20Token> {
   try {
-    const { state, wallet, mutex, requestParams } = params;
+    const { state, snap, mutex, requestParams } = params;
     const requestParamsObj = requestParams as RemoveErc20TokenRequestParams;
 
     if (!requestParamsObj.tokenAddress) {
@@ -32,7 +32,7 @@ export async function removeErc20Token(params: ApiParams): Promise<Erc20Token> {
     await deleteErc20Token(
       _erc20Token,
       requestParamsObj.chainId,
-      wallet,
+      snap,
       mutex,
       state,
     );

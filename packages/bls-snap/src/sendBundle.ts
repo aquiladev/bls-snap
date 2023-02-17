@@ -8,7 +8,7 @@ import { getAggregator, getWallet } from './utils/blsUtils';
 
 export async function sendBundle(params: ApiParams): Promise<Bundle> {
   try {
-    const { state, mutex, wallet, requestParams } = params;
+    const { state, mutex, snap, requestParams } = params;
     const { senderAddress, chainId } = requestParams as SendBundleRequestParams;
 
     if (!ethers.utils.isAddress(senderAddress)) {
@@ -34,12 +34,12 @@ export async function sendBundle(params: ApiParams): Promise<Bundle> {
 
     // Note that if a wallet doesn't yet exist, it will be
     // lazily created on the first transaction.
-    const _wallet = await getWallet(network, account.privateKey);
-    const nonce = await _wallet.Nonce();
+    const wallet = await getWallet(network, account.privateKey);
+    const nonce = await wallet.Nonce();
 
     // All of the actions in a bundle are atomic, if one
     // action fails they will all fail.
-    const _bundle = _wallet.sign({
+    const _bundle = wallet.sign({
       nonce,
       actions: actions.map((op) => {
         return {
@@ -63,8 +63,8 @@ export async function sendBundle(params: ApiParams): Promise<Bundle> {
       nonce: nonce.toNumber(),
       actions,
     };
-    await snapUtils.upsertBundle(bundle, chainId, wallet, mutex, state);
-    await snapUtils.removeActions(actions, chainId, wallet, mutex, state);
+    await snapUtils.upsertBundle(bundle, chainId, snap, mutex, state);
+    await snapUtils.removeActions(actions, chainId, snap, mutex, state);
 
     console.log(`sendBundle:\nbundle: ${JSON.stringify(bundle)}`);
     return bundle;

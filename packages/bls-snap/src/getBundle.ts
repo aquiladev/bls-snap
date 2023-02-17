@@ -5,13 +5,13 @@ import * as snapUtils from './utils/snapUtils';
 
 export async function getBundle(params: ApiParams): Promise<Bundle> {
   try {
-    const { state, mutex, requestParams, wallet } = params;
+    const { state, mutex, requestParams, snap } = params;
     const { bundleHash, chainId } = requestParams as GetBundleRequestParams;
 
     const bundle = await snapUtils.getBundle(
       bundleHash,
       chainId,
-      wallet,
+      snap,
       mutex,
       state,
     );

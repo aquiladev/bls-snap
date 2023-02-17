@@ -61,16 +61,18 @@ export function validateAddErc20TokenParams(
 
 export async function upsertNetwork(
   network: Network,
-  wallet: any,
+  snap: any,
   mutex: Mutex,
   state: SnapState,
 ) {
   return mutex.runExclusive(async () => {
     if (!state) {
       // eslint-disable-next-line require-atomic-updates, no-param-reassign
-      state = await wallet.request({
+      state = await snap.request({
         method: 'snap_manageState',
-        params: ['get'],
+        params: {
+          operation: 'get',
+        },
       });
     }
 
@@ -94,9 +96,12 @@ export async function upsertNetwork(
       state[network.chainId] = network;
     }
 
-    await wallet.request({
+    await snap.request({
       method: 'snap_manageState',
-      params: ['update', state],
+      params: {
+        operation: 'update',
+        newState: state,
+      },
     });
   });
 }
@@ -112,16 +117,18 @@ export function getNetworks(state: SnapState) {
 export async function upsertAccount(
   account: BlsAccount,
   chainId: number,
-  wallet: any,
+  snap: any,
   mutex: Mutex,
   state: SnapState,
 ) {
   return mutex.runExclusive(async () => {
     if (!state) {
       // eslint-disable-next-line require-atomic-updates, no-param-reassign
-      state = await wallet.request({
+      state = await snap.request({
         method: 'snap_manageState',
-        params: ['get'],
+        params: {
+          operation: 'get',
+        },
       });
     }
 
@@ -144,9 +151,12 @@ export async function upsertAccount(
       state[chainId].accounts?.push(account);
     }
 
-    await wallet.request({
+    await snap.request({
       method: 'snap_manageState',
-      params: ['update', state],
+      params: {
+        operation: 'update',
+        newState: state,
+      },
     });
   });
 }
@@ -170,7 +180,7 @@ export function getAccounts(
 
 export async function addTestToken(
   network: Network,
-  wallet: any,
+  snap: any,
   mutex: Mutex,
   state: SnapState,
 ) {
@@ -185,22 +195,24 @@ export async function addTestToken(
     decimals: 18,
     isInternal: true,
   };
-  await upsertErc20Token(token, network.chainId, wallet, mutex, state);
+  await upsertErc20Token(token, network.chainId, snap, mutex, state);
 }
 
 export async function upsertErc20Token(
   erc20Token: Erc20Token,
   chainId: number,
-  wallet: any,
+  snap: any,
   mutex: Mutex,
   state: SnapState,
 ) {
   return mutex.runExclusive(async () => {
     if (!state) {
       // eslint-disable-next-line require-atomic-updates, no-param-reassign
-      state = await wallet.request({
+      state = await snap.request({
         method: 'snap_manageState',
-        params: ['get'],
+        params: {
+          operation: 'get',
+        },
       });
     }
 
@@ -226,9 +238,12 @@ export async function upsertErc20Token(
       state[chainId].erc20Tokens?.push(erc20Token);
     }
 
-    await wallet.request({
+    await snap.request({
       method: 'snap_manageState',
-      params: ['update', state],
+      params: {
+        operation: 'update',
+        newState: state,
+      },
     });
   });
 }
@@ -236,16 +251,18 @@ export async function upsertErc20Token(
 export async function deleteErc20Token(
   erc20Token: Erc20Token,
   chainId: number,
-  wallet: any,
+  snap: any,
   mutex: Mutex,
   state: SnapState,
 ) {
   return mutex.runExclusive(async () => {
     if (!state) {
       // eslint-disable-next-line require-atomic-updates, no-param-reassign
-      state = await wallet.request({
+      state = await snap.request({
         method: 'snap_manageState',
-        params: ['get'],
+        params: {
+          operation: 'get',
+        },
       });
     }
 
@@ -255,9 +272,12 @@ export async function deleteErc20Token(
       return t.address !== erc20Token.address;
     });
 
-    await wallet.request({
+    await snap.request({
       method: 'snap_manageState',
-      params: ['update', state],
+      params: {
+        operation: 'update',
+        newState: state,
+      },
     });
   });
 }
@@ -282,16 +302,18 @@ export function getErc20Tokens(
 export async function insertAction(
   action: Action,
   chainId: number,
-  wallet: any,
+  snap: any,
   mutex: Mutex,
   state: SnapState,
 ) {
   return mutex.runExclusive(async () => {
     if (!state) {
       // eslint-disable-next-line require-atomic-updates, no-param-reassign
-      state = await wallet.request({
+      state = await snap.request({
         method: 'snap_manageState',
-        params: ['get'],
+        params: {
+          operation: 'get',
+        },
       });
     }
 
@@ -304,9 +326,12 @@ export async function insertAction(
     // insert
     state[chainId].actions?.push(action);
 
-    await wallet.request({
+    await snap.request({
       method: 'snap_manageState',
-      params: ['update', state],
+      params: {
+        operation: 'update',
+        newState: state,
+      },
     });
   });
 }
@@ -325,16 +350,18 @@ export function getActions(
 export async function removeActions(
   actions: Action[],
   chainId: number,
-  wallet: any,
+  snap: any,
   mutex: Mutex,
   state: SnapState,
 ) {
   return mutex.runExclusive(async () => {
     if (!state) {
       // eslint-disable-next-line require-atomic-updates, no-param-reassign
-      state = await wallet.request({
+      state = await snap.request({
         method: 'snap_manageState',
-        params: ['get'],
+        params: {
+          operation: 'get',
+        },
       });
     }
 
@@ -344,9 +371,12 @@ export async function removeActions(
       return !actions.find((a) => a.id === action.id);
     });
 
-    await wallet.request({
+    await snap.request({
       method: 'snap_manageState',
-      params: ['update', state],
+      params: {
+        operation: 'update',
+        newState: state,
+      },
     });
   });
 }
@@ -354,16 +384,18 @@ export async function removeActions(
 export async function upsertBundle(
   bundle: Bundle,
   chainId: number,
-  wallet: any,
+  snap: any,
   mutex: Mutex,
   state: SnapState,
 ) {
   return mutex.runExclusive(async () => {
     if (!state) {
       // eslint-disable-next-line require-atomic-updates, no-param-reassign
-      state = await wallet.request({
+      state = await snap.request({
         method: 'snap_manageState',
-        params: ['get'],
+        params: {
+          operation: 'get',
+        },
       });
     }
 
@@ -386,9 +418,12 @@ export async function upsertBundle(
       state[chainId].bundles?.push(bundle);
     }
 
-    await wallet.request({
+    await snap.request({
       method: 'snap_manageState',
-      params: ['update', state],
+      params: {
+        operation: 'update',
+        newState: state,
+      },
     });
   });
 }

@@ -11,7 +11,7 @@ import { getWallet } from './utils/blsUtils';
 
 export async function createAccount(params: ApiParams): Promise<Account> {
   try {
-    const { state, mutex, wallet, requestParams, keyDeriver } = params;
+    const { state, mutex, snap, requestParams, keyDeriver } = params;
     const { chainId, addressIndex } =
       requestParams as CreateAccountRequestParams;
 
@@ -33,19 +33,19 @@ export async function createAccount(params: ApiParams): Promise<Account> {
 
     // Note that if a wallet doesn't yet exist, it will be
     // lazily created on the first transaction.
-    const _wallet = await getWallet(network, privateKey);
+    const wallet = await getWallet(network, privateKey);
 
     const account: BlsAccount = {
-      address: _wallet.address,
-      publicKey: _wallet.PublicKeyStr(),
-      privateKey: _wallet.privateKey,
+      address: wallet.address,
+      publicKey: wallet.PublicKeyStr(),
+      privateKey: wallet.privateKey,
       derivationPath,
       addressIndex: aIndex,
     };
-    await upsertAccount(account, chainId, wallet, mutex, state);
+    await upsertAccount(account, chainId, snap, mutex, state);
 
     return {
-      address: _wallet.address,
+      address: wallet.address,
     };
   } catch (err) {
     console.error(`Problem found: ${err}`);
