@@ -34,7 +34,7 @@ describe('getBundles', () => {
   const apiParams: ApiParams = {
     state,
     requestParams: {},
-    wallet: walletStub,
+    snap: walletStub,
     mutex: new Mutex(),
   };
 
