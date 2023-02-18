@@ -1,4 +1,4 @@
-# BLS Snap
+# BLS Snap &middot; [![npm version](https://img.shields.io/npm/v/@aquiladev/bls-snap.svg?style=flat)](https://www.npmjs.com/package/@aquiladev/bls-snap)
 
 The MetaMask Snap for [BLS Wallet](https://blswallet.org/)
 
