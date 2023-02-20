@@ -10,12 +10,10 @@ type Props = {
   bundle: Bundle;
 };
 
-export const BundleListItemView = (props) => {
-  const { bundle } = props;
+export const BundleListItemView = ({ bundle }: Props) => {
   const [showActions, setShowActions] = useState(false);
   const status = getBundleStatus(bundle);
   const statusColor = status.toLowerCase() === 'pending' ? 'orange' : 'green';
-  console.log(props);
 
   return (
     <>
