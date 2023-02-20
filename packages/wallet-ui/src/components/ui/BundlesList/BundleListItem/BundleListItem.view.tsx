@@ -15,6 +15,16 @@ export const BundleListItemView = ({ bundle }: Props) => {
       {bundle.bundleHash}
       <span style={{ paddingLeft: 20, color: statusColor }}>{status}</span>
       <span style={{ paddingLeft: 20 }}>{bundle.blockNumber}</span>
+      {bundle.transactionHash && (
+        <a
+          href={`https://blockscout.com/optimism/goerli/tx/${bundle.transactionHash}`}
+          style={{ paddingLeft: 20, textDecoration: 'none' }}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          View on explorer
+        </a>
+      )}
     </Wrapper>
   );
 };
