@@ -121,17 +121,19 @@ export const AmountInputView = ({
   };
 
   const handleMaxClick = () => {
-    if (inputRef.current && asset.usdPrice) {
-      const amountFloat = parseFloat(
-        ethers.utils.formatUnits(asset.amount, asset.decimals).toString(),
-      );
-      inputRef.current.value = usdMode
-        ? getAmountPrice(asset, amountFloat, false)
-        : amountFloat.toString();
-      fetchTotalPrice(inputRef.current.value);
-      resizeInput();
-      triggerOnChange(inputRef.current.value);
+    if (!inputRef.current) {
+      return;
     }
+
+    const amountFloat = parseFloat(
+      ethers.utils.formatUnits(asset.amount, asset.decimals).toString(),
+    );
+    inputRef.current.value = usdMode
+      ? getAmountPrice(asset, amountFloat, false)
+      : amountFloat.toString();
+    fetchTotalPrice(inputRef.current.value);
+    resizeInput();
+    triggerOnChange(inputRef.current.value);
   };
 
   return (

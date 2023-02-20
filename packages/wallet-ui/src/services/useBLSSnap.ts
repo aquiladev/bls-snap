@@ -1,5 +1,4 @@
 /* eslint-disable consistent-return */
-import { ethers, BigNumber } from 'ethers';
 import Toastr from 'toastr2';
 import semver from 'semver/preload';
 import { Erc20Token, Bundle } from '@aquiladev/bls-snap/src/types/snapState';
@@ -206,7 +205,7 @@ export const useBLSSnap = () => {
   ) => {
     const foundTokenWithBalance = erc20TokenBalances.find(
       (tokenBalance) =>
-        BigNumber.from(tokenBalance.address).eq(BigNumber.from(tokenAddress)) &&
+        tokenBalance.address.toLowerCase() === tokenAddress.toLowerCase() &&
         tokenBalance.chainId === chainId,
     );
     if (foundTokenWithBalance) {
@@ -227,13 +226,12 @@ export const useBLSSnap = () => {
   };
 
   const addAction = async (
-    erc20Address: string,
-    address: string,
+    senderAddress: string,
+    contractAddress: string,
+    encodedFunction: string,
+    functionFragment: string,
     chainId: number,
   ) => {
-    const erc20Abi = ['function mint(address to, uint amount) returns (bool)'];
-    const erc20Contract = new ethers.Contract(erc20Address, erc20Abi);
-
     const response = await ethereum.request({
       method: 'wallet_invokeSnap',
       params: {
@@ -241,15 +239,10 @@ export const useBLSSnap = () => {
         request: {
           method: 'bls_addAction',
           params: {
-            senderAddress: address,
-            contractAddress: erc20Address,
-            encodedFunction: erc20Contract.interface.encodeFunctionData(
-              'mint',
-              [address, ethers.utils.parseUnits('1', 18)],
-            ),
-            functionFragment: erc20Contract.interface
-              .getFunction('mint')
-              .format(),
+            senderAddress,
+            contractAddress,
+            encodedFunction,
+            functionFragment,
             chainId,
           },
         },

@@ -1,7 +1,6 @@
 import { ethers } from 'ethers';
 import { useEffect, useRef, useState } from 'react';
 import { TOKEN_BALANCE_REFRESH_FREQUENCY } from '../../../utils/constants';
-// import { TransactionStatus } from 'types';
 import { AssetQuantity } from '../AssetQuantity';
 import { PopIn } from '../PopIn';
 import { Button } from '../Button';
@@ -53,9 +52,24 @@ export const HeaderView = ({ address }: Props) => {
 
   const handleMintClick = async () => {
     const { chainId } = networks.items[networks.activeNetwork];
+    const senderAddress = wallet.accounts[0].address;
+    const contractAddress = wallet.erc20TokenBalanceSelected.address;
+
+    const erc20Abi = ['function mint(address to, uint amount) returns (bool)'];
+    const erc20Contract = new ethers.Contract(contractAddress, erc20Abi);
+    const encodedFunction = erc20Contract.interface.encodeFunctionData('mint', [
+      senderAddress,
+      ethers.utils.parseUnits('0.5', 18),
+    ]);
+    const functionFragment = erc20Contract.interface
+      .getFunction('mint')
+      .format();
+
     await addAction(
-      wallet.erc20TokenBalanceSelected.address,
-      wallet.accounts[0].address,
+      senderAddress,
+      contractAddress,
+      encodedFunction,
+      functionFragment,
       chainId,
     );
   };
@@ -81,12 +95,8 @@ export const HeaderView = ({ address }: Props) => {
           Send
         </Button>
         {wallet.erc20TokenBalanceSelected.isInternal && (
-          <Button
-            onClick={() => handleMintClick()}
-            backgroundTransparent
-            borderVisible
-          >
-            Mint 1 token
+          <Button onClick={() => handleMintClick()} borderVisible>
+            (Faucet) Mint 0.5 tokens
           </Button>
         )}
       </Buttons>

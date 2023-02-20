@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { ethers } from 'ethers';
 import { useAppSelector } from '../../../../hooks/redux';
-import { SendSummaryModal } from '../SendSummaryModal';
 import { AmountInput } from '../../AmountInput';
 import { AddressInput } from '../../AddressInput';
+import { useBLSSnap } from '../../../../services/useBLSSnap';
 import {
   Buttons,
   ButtonStyled,
@@ -19,8 +19,8 @@ type Props = {
 
 export const SendModalView = ({ closeModal }: Props) => {
   const networks = useAppSelector((state) => state.networks);
-  const wallet = useAppSelector((state) => state.wallet);
-  const [summaryModalOpen, setSummaryModalOpen] = useState(false);
+  const wallet = useAppSelector((state) => state.wallet); // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { addAction } = useBLSSnap();
   const [fields, setFields] = useState({
     amount: '',
     address: '',
@@ -82,57 +82,71 @@ export const SendModalView = ({ closeModal }: Props) => {
     );
   };
 
-  return (
-    <>
-      {!summaryModalOpen && (
-        <div>
-          <Wrapper>
-            <Header>
-              <Title>Send</Title>
-            </Header>
-            <Network>
-              Network {networks.items[networks.activeNetwork].name}
-            </Network>
-            <AddressInput
-              label="To"
-              placeholder="Paste recipient address here"
-              onChange={(value) => handleChange('address', value.target.value)}
-            />
-            <AmountInput
-              label="Amount"
-              onChangeCustom={(value) => handleChange('amount', value)}
-              error={errors.amount !== ''}
-              helperText={errors.amount}
-              decimalsMax={wallet.erc20TokenBalanceSelected.decimals}
-              asset={wallet.erc20TokenBalanceSelected}
-            />
-          </Wrapper>
-          <Buttons>
-            <ButtonStyled
-              onClick={closeModal}
-              backgroundTransparent
-              borderVisible
-            >
-              CANCEL
-            </ButtonStyled>
-            <ButtonStyled
-              onClick={() => setSummaryModalOpen(true)}
-              enabled={confirmEnabled()}
-            >
-              CONFIRM
-            </ButtonStyled>
-          </Buttons>
-        </div>
-      )}
+  const handleConfirmClick = async () => {
+    const { chainId } = networks.items[networks.activeNetwork];
+    const senderAddress = wallet.accounts[0].address;
+    const contractAddress = wallet.erc20TokenBalanceSelected.address;
 
-      {summaryModalOpen && (
-        <SendSummaryModal
-          closeModal={closeModal}
-          address={fields.address}
-          amount={fields.amount}
-          chainId={fields.chainId}
+    const erc20Abi = [
+      'function transfer(address recipient, uint256 amount) returns (bool)',
+    ];
+    const erc20Contract = new ethers.Contract(contractAddress, erc20Abi);
+    const encodedFunction = erc20Contract.interface.encodeFunctionData(
+      'transfer',
+      [
+        fields.address,
+        ethers.utils.parseUnits(
+          fields.amount,
+          wallet.erc20TokenBalanceSelected.decimals,
+        ),
+      ],
+    );
+    const functionFragment = erc20Contract.interface
+      .getFunction('transfer')
+      .format();
+
+    await addAction(
+      senderAddress,
+      contractAddress,
+      encodedFunction,
+      functionFragment,
+      chainId,
+    );
+    closeModal();
+  };
+
+  return (
+    <div>
+      <Wrapper>
+        <Header>
+          <Title>Send</Title>
+        </Header>
+        <Network>Network {networks.items[networks.activeNetwork].name}</Network>
+        <AddressInput
+          label="To"
+          placeholder="Paste recipient address here"
+          onChange={(value) => handleChange('address', value.target.value)}
         />
-      )}
-    </>
+        <AmountInput
+          label="Amount"
+          onChangeCustom={(value) => handleChange('amount', value)}
+          error={errors.amount !== ''}
+          helperText={errors.amount}
+          decimalsMax={wallet.erc20TokenBalanceSelected.decimals}
+          asset={wallet.erc20TokenBalanceSelected}
+        />
+      </Wrapper>
+      <Buttons>
+        <ButtonStyled onClick={closeModal} backgroundTransparent borderVisible>
+          CANCEL
+        </ButtonStyled>
+        <ButtonStyled
+          onClick={() => handleConfirmClick()}
+          enabled={confirmEnabled()}
+        >
+          CONFIRM
+        </ButtonStyled>
+      </Buttons>
+    </div>
   );
 };
