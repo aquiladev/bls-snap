@@ -27,7 +27,7 @@ export const AccountAddressView = ({ address, full, placement }: Props) => {
           placement={placement}
         >
           <Wrapper
-            iconRight="clone"
+            customIconLeft="clone"
             onClick={handleAddressClick}
             backgroundTransparent
           >
