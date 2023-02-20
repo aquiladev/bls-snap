@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Bundle } from '@aquiladev/bls-snap/src/types/snapState';
 import { ActionsList } from '../../ActionsList';
+import { shortenAddress } from '../../../../utils/utils';
 import { Wrapper } from './BundleListItem.style';
 import { getBundleStatus } from './types';
 
@@ -23,7 +24,7 @@ export const BundleListItemView = ({ bundle }: Props) => {
         <span style={{ paddingRight: 20, fontWeight: 900 }}>
           {showActions ? '-' : '+'}
         </span>
-        {bundle.bundleHash}
+        {shortenAddress(bundle.bundleHash)}
         <span style={{ paddingLeft: 20, color: statusColor }}>{status}</span>
         <span style={{ paddingLeft: 20 }}>{bundle.blockNumber}</span>
         {bundle.transactionHash && (
@@ -33,7 +34,7 @@ export const BundleListItemView = ({ bundle }: Props) => {
             rel="noopener noreferrer"
             target="_blank"
           >
-            View on explorer
+            {shortenAddress(bundle.transactionHash)}
           </a>
         )}
       </Wrapper>
