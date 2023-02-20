@@ -31,7 +31,7 @@ export const BundleListItemView = ({ bundle }: Props) => {
           }
           alt="icon arrow"
         />
-        <span style={{ paddingLeft: 20, color: statusColor }}>
+        <span style={{ paddingLeft: 20 }}>
           {shortenAddress(bundle.bundleHash)}
         </span>
         <span style={{ paddingLeft: 20, color: statusColor }}>{status}</span>
