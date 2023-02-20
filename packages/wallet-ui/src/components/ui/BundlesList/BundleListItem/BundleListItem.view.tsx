@@ -20,6 +20,9 @@ export const BundleListItemView = ({ bundle }: Props) => {
           setShowActions(!showActions);
         }}
       >
+        <span style={{ paddingRight: 20, fontWeight: 900 }}>
+          {showActions ? '-' : '+'}
+        </span>
         {bundle.bundleHash}
         <span style={{ paddingLeft: 20, color: statusColor }}>{status}</span>
         <span style={{ paddingLeft: 20 }}>{bundle.blockNumber}</span>
