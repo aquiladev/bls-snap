@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Bundle } from '@aquiladev/bls-snap/src/types/snapState';
+import { useAppSelector } from '../../../../hooks/redux';
 import { ActionsList } from '../../ActionsList';
 import { shortenAddress } from '../../../../utils/utils';
+import { getNetwork } from '../../../../utils/config';
 import ArrowIcon from '../../../../assets/icon_arrow.svg';
 import { Wrapper } from './BundleListItem.style';
 import { getBundleStatus } from './types';
@@ -11,6 +13,8 @@ type Props = {
 };
 
 export const BundleListItemView = ({ bundle }: Props) => {
+  const networks = useAppSelector((state) => state.networks);
+  const chainId = networks.items[networks.activeNetwork]?.chainId;
   const [showActions, setShowActions] = useState(false);
   const status = getBundleStatus(bundle);
   const statusColor = status.toLowerCase() === 'pending' ? 'orange' : 'green';
@@ -38,7 +42,9 @@ export const BundleListItemView = ({ bundle }: Props) => {
         <span style={{ paddingLeft: 20 }}>{bundle.blockNumber}</span>
         {bundle.transactionHash && (
           <a
-            href={`https://blockscout.com/optimism/goerli/tx/${bundle.transactionHash}`}
+            href={`${getNetwork(chainId).explorerUrl}/tx/${
+              bundle.transactionHash
+            }`}
             style={{ paddingLeft: 20, textDecoration: 'none' }}
             rel="noopener noreferrer"
             target="_blank"
