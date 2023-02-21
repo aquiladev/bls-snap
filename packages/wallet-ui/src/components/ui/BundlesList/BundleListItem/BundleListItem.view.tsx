@@ -30,24 +30,43 @@ export const BundleListItemView = ({ bundle }: Props) => {
           setShowActions(!showActions);
         }}
       >
-        <span>{shortenAddress(bundle.bundleHash)}</span>
-        <span style={{ paddingLeft: 20, color: statusColor }}>{status}</span>
-        <span style={{ paddingLeft: 20 }}>{bundle.blockNumber}</span>
-        {bundle.transactionHash && (
-          <Link
-            href={`${explorerUrl}/tx/${bundle.transactionHash}`}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            {shortenAddress(bundle.transactionHash)}
-            <IconStyled
-              icon={['fas', 'arrow-up-right-from-square']}
-              style={{
-                paddingLeft: 5,
-              }}
-            />
-          </Link>
-        )}
+        <div>
+          <div>
+            <span>{bundle.bundleHash}</span>
+            <span style={{ paddingLeft: 20, color: statusColor }}>
+              {status}
+            </span>
+          </div>
+          <div style={{ display: 'flex', paddingTop: 8, fontSize: 14 }}>
+            {bundle.blockNumber && (
+              <span style={{ paddingRight: 20 }}>
+                BlockNumber: {bundle.blockNumber}
+              </span>
+            )}
+            {bundle.transactionHash && (
+              <span style={{ display: 'flex' }}>
+                TxHash:
+                <Link
+                  href={`${explorerUrl}/tx/${bundle.transactionHash}`}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  id="explorer-link"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  {shortenAddress(bundle.transactionHash)}
+                  <IconStyled
+                    icon={['fas', 'arrow-up-right-from-square']}
+                    style={{
+                      paddingLeft: 5,
+                    }}
+                  />
+                </Link>
+              </span>
+            )}
+          </div>
+        </div>
         <Right>
           <IconStyled
             icon={['fas', 'chevron-right']}

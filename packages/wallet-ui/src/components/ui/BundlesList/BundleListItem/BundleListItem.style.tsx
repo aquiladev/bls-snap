@@ -80,7 +80,7 @@ export const Link = styled.a`
   justify-content: center;
   color: ${(props) => props.theme.palette.grey.grey1};
   text-decoration: none;
-  padding-left: 20px;
+  padding-left: 10px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 
