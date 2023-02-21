@@ -1,6 +1,6 @@
 import { HTMLAttributes, ReactNode } from 'react';
 import { CSSProperties } from 'styled-components';
-import { LastItemWrapper, List, ListItem, Wrapper } from './List.style';
+import { List, ListItem, Wrapper } from './List.style';
 
 export type IListProps<T> = {
   data: T[];
@@ -8,7 +8,6 @@ export type IListProps<T> = {
   keyExtractor: (val: T, index: number) => string;
   emptyView?: ReactNode;
   listStyle?: CSSProperties;
-  lastItem?: ReactNode;
 } & HTMLAttributes<HTMLElement>;
 
 export const ListView = <T,>({
@@ -17,7 +16,6 @@ export const ListView = <T,>({
   keyExtractor,
   emptyView,
   listStyle,
-  lastItem,
   ...otherProps
 }: IListProps<T>) => {
   return (
@@ -33,7 +31,6 @@ export const ListView = <T,>({
       ) : (
         emptyView
       )}
-      {lastItem !== null && <LastItemWrapper>{lastItem}</LastItemWrapper>}
     </Wrapper>
   );
 };

@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import { useBLSSnap } from '../../../services/useBLSSnap';
 import { setAddTokenModalVisible } from '../../../slices/UISlice';
 import { AddressInput } from '../AddressInput';
+import { Alert } from '../Alert';
 import { Button } from '../Button';
 import { LoadingSpinner } from '../LoadingSmall/LoadingSmall.style';
 import { ValueInput } from '../ValueInput';
@@ -28,18 +29,35 @@ export const AddNewTokenModalView = () => {
   const [name, setName] = useState('');
   const [symbol, setSymbol] = useState('');
   const [decimals, setDecimals] = useState(0);
+  const [error, setError] = useState<string>();
 
   const isAllValid = useMemo(() => {
     return isValidAddress && isValidName && isValidSymbol && isValidDecimals;
   }, [isValidAddress, isValidName, isValidSymbol, isValidDecimals]);
 
   const addToken = useCallback(async () => {
-    setIsAddingToken(true);
-    const activeNetwork = networks.items[networks.activeNetwork];
-    await addERC20Token(address, name, symbol, decimals, activeNetwork.chainId);
-    await getWalletData(activeNetwork.chainId, networks.items);
-    dispatch(setAddTokenModalVisible(false));
-    setIsAddingToken(false);
+    if (isAddingToken) {
+      return;
+    }
+
+    try {
+      setIsAddingToken(true);
+      setError(undefined);
+      const activeNetwork = networks.items[networks.activeNetwork];
+      await addERC20Token(
+        address,
+        name,
+        symbol,
+        decimals,
+        activeNetwork.chainId,
+      );
+      await getWalletData(activeNetwork.chainId, networks.items);
+      dispatch(setAddTokenModalVisible(false));
+    } catch (err: any) {
+      setError('Error during token adding');
+    } finally {
+      setIsAddingToken(false);
+    }
   }, [
     address,
     name,
@@ -79,6 +97,7 @@ export const AddNewTokenModalView = () => {
         setIsValid={setIsValidDecimals}
         onChange={(val) => setDecimals(Number(val.target.value))}
       />
+      {error && <Alert text={error} variant="error" />}
       <ButtonsContainer>
         <Button
           disabled={isAddingToken}

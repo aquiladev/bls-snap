@@ -9,12 +9,13 @@ export const Right = styled.div`
   flex-grow: 1;
   text-align: end;
 
-  && > svg {
+  && > #icon {
     display: none;
     cursor: pointer;
+    padding-right: 10px;
   }
 
-  && > svg:hover > path {
+  && > #icon > svg:hover > path {
     color: ${(props) => props.theme.palette.warning.dark};
   }
 `;
@@ -23,21 +24,18 @@ export const Wrapper = styled.div<IDiv>`
   display: flex;
   flex-direction: row;
   box-shadow: ${(props) => props.theme.colors.border.default};
-  background-color: ${(props) =>
-    props.selected
-      ? props.theme.colors.background.default
-      : props.theme.colors.background.alternative};
+  background-color: ${(props) => props.theme.colors.background.default};
+  cursor: ${(props) => (props.selected ? 'initial' : 'pointer')};
   height: 64px;
   padding-left: 20px;
   align-items: center;
   border-color: ${(props) => props.theme.colors.border.default};
   border-width: 0px;
   border-right-width: ${(props) => (props.selected ? '2px' : '0px')};
-  border-bottom-width: ${(props) => (props.selected ? '2px' : '0px')};
   border-style: solid;
 
-  &&:hover > ${Right} > svg {
-    display: block;
+  &&:hover > ${Right} > #icon {
+    display: initial;
   }
 `;
 

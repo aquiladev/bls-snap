@@ -1,6 +1,6 @@
+import { HTMLAttributes, useCallback, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ethers } from 'ethers';
-import { HTMLAttributes, useCallback } from 'react';
 import { useAppSelector } from '../../../../hooks/redux';
 import { useBLSSnap } from '../../../../services/useBLSSnap';
 import { Erc20TokenBalance } from '../../../../types';
@@ -27,10 +27,21 @@ export const AssetListItemView = ({
   const { removeERC20Token, getWalletData } = useBLSSnap();
   const networks = useAppSelector((state) => state.networks);
 
+  const [isRemovingToken, setIsRemovingToken] = useState(false);
+
   const removeToken = useCallback(async () => {
-    const activeNetwork = networks.items[networks.activeNetwork];
-    await removeERC20Token(asset.address, asset.chainId);
-    await getWalletData(activeNetwork.chainId, networks.items);
+    if (isRemovingToken) {
+      return;
+    }
+
+    try {
+      setIsRemovingToken(true);
+      const activeNetwork = networks.items[networks.activeNetwork];
+      await removeERC20Token(asset.address, asset.chainId);
+      await getWalletData(activeNetwork.chainId, networks.items);
+    } finally {
+      setIsRemovingToken(false);
+    }
   }, [removeERC20Token, asset]);
 
   return (
@@ -44,11 +55,15 @@ export const AssetListItemView = ({
           </Description>
         </Column>
       </Left>
-
       <Middle></Middle>
       <Right>
         {!asset.isInternal && (
-          <FontAwesomeIcon onClick={removeToken} icon="close" />
+          <span id="icon">
+            <FontAwesomeIcon
+              onClick={removeToken}
+              icon={isRemovingToken ? 'spinner' : 'trash'}
+            />
+          </span>
         )}
       </Right>
     </Wrapper>
