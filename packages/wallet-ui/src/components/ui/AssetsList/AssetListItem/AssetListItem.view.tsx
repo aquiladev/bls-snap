@@ -55,7 +55,6 @@ export const AssetListItemView = ({
           </Description>
         </Column>
       </Left>
-      <Middle></Middle>
       <Right>
         {!asset.isInternal && (
           <span id="icon">
