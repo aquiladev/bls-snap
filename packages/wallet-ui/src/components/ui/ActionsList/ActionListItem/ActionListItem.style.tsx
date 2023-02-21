@@ -29,7 +29,7 @@ export const Wrapper = styled.div`
 export const Column = styled.div`
   display: flex;
   flex-direction: column;
-  margin-left: ${(props) => props.theme.spacing.small};
+  margin-right: ${(props) => props.theme.spacing.small};
 `;
 
 export const LeftIcon = styled(RoundedIcon)`

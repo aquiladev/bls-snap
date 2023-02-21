@@ -3,7 +3,7 @@ import { BigNumber } from 'ethers';
 
 export { type GetSnapsResponse, type Snap } from './snap';
 
-export type Network = Pick<Types.Network, 'name' | 'chainId'>;
+export type Network = Pick<Types.Network, 'name' | 'chainId' | 'explorerUrl'>;
 export type Account = Pick<Types.BlsAccount, 'address'>;
 
 export type Action = {
