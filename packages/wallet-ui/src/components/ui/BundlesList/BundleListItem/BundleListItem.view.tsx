@@ -3,9 +3,13 @@ import { Bundle } from '@aquiladev/bls-snap/src/types/snapState';
 import { useAppSelector } from '../../../../hooks/redux';
 import { ActionsList } from '../../ActionsList';
 import { shortenAddress } from '../../../../utils/utils';
-import { getNetwork } from '../../../../utils/config';
-import ArrowIcon from '../../../../assets/icon_arrow.svg';
-import { Wrapper } from './BundleListItem.style';
+import {
+  Content,
+  IconStyled,
+  Link,
+  Right,
+  Wrapper,
+} from './BundleListItem.style';
 import { getBundleStatus } from './types';
 
 type Props = {
@@ -14,7 +18,7 @@ type Props = {
 
 export const BundleListItemView = ({ bundle }: Props) => {
   const networks = useAppSelector((state) => state.networks);
-  const chainId = networks.items[networks.activeNetwork]?.chainId;
+  const explorerUrl = networks.items[networks.activeNetwork]?.explorerUrl;
   const [showActions, setShowActions] = useState(false);
   const status = getBundleStatus(bundle);
   const statusColor = status.toLowerCase() === 'pending' ? 'orange' : 'green';
@@ -26,34 +30,38 @@ export const BundleListItemView = ({ bundle }: Props) => {
           setShowActions(!showActions);
         }}
       >
-        <img
-          src={ArrowIcon}
-          style={
-            showActions
-              ? { transform: 'rotate(90deg)' }
-              : { transform: 'rotate(0deg)' }
-          }
-          alt="icon arrow"
-        />
-        <span style={{ paddingLeft: 20 }}>
-          {shortenAddress(bundle.bundleHash)}
-        </span>
+        <span>{shortenAddress(bundle.bundleHash)}</span>
         <span style={{ paddingLeft: 20, color: statusColor }}>{status}</span>
         <span style={{ paddingLeft: 20 }}>{bundle.blockNumber}</span>
         {bundle.transactionHash && (
-          <a
-            href={`${getNetwork(chainId).explorerUrl}/tx/${
-              bundle.transactionHash
-            }`}
-            style={{ paddingLeft: 20, textDecoration: 'none' }}
+          <Link
+            href={`${explorerUrl}/tx/${bundle.transactionHash}`}
             rel="noopener noreferrer"
             target="_blank"
           >
             {shortenAddress(bundle.transactionHash)}
-          </a>
+            <IconStyled
+              icon={['fas', 'arrow-up-right-from-square']}
+              style={{
+                paddingLeft: 5,
+              }}
+            />
+          </Link>
         )}
+        <Right>
+          <IconStyled
+            icon={['fas', 'chevron-right']}
+            style={{
+              transform: showActions ? 'rotate(90deg)' : 'rotate(0deg)',
+            }}
+          />
+        </Right>
       </Wrapper>
-      {showActions && <ActionsList actions={bundle.actions} />}
+      {showActions && (
+        <Content>
+          <ActionsList actions={bundle.actions} />
+        </Content>
+      )}
     </>
   );
 };
