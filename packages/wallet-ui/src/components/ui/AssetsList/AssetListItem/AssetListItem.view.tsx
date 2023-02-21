@@ -1,6 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ethers } from 'ethers';
-import { HTMLAttributes } from 'react';
+import { HTMLAttributes, useCallback } from 'react';
+import { useAppSelector } from '../../../../hooks/redux';
+import { useBLSSnap } from '../../../../services/useBLSSnap';
 import { Erc20TokenBalance } from '../../../../types';
 import {
   Column,
@@ -22,6 +24,15 @@ export const AssetListItemView = ({
   selected,
   ...otherProps
 }: Props) => {
+  const { removeERC20Token, getWalletData } = useBLSSnap();
+  const networks = useAppSelector((state) => state.networks);
+
+  const removeToken = useCallback(async () => {
+    const activeNetwork = networks.items[networks.activeNetwork];
+    await removeERC20Token(asset.address, asset.chainId);
+    await getWalletData(activeNetwork.chainId, networks.items);
+  }, [removeERC20Token, asset]);
+
   return (
     <Wrapper selected={selected} {...otherProps}>
       <Left>
@@ -35,7 +46,11 @@ export const AssetListItemView = ({
       </Left>
 
       <Middle></Middle>
-      <Right>{!asset.isInternal && <FontAwesomeIcon icon="close" />}</Right>
+      <Right>
+        {!asset.isInternal && (
+          <FontAwesomeIcon onClick={removeToken} icon="close" />
+        )}
+      </Right>
     </Wrapper>
   );
 };

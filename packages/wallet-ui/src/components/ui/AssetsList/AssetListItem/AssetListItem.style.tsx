@@ -26,13 +26,14 @@ export const Wrapper = styled.div<IDiv>`
   background-color: ${(props) =>
     props.selected
       ? props.theme.colors.background.default
-      : props.theme.colors.background.inverse};
+      : props.theme.colors.background.alternative};
   height: 64px;
   padding-left: 20px;
   align-items: center;
   border-color: ${(props) => props.theme.colors.border.default};
   border-width: 0px;
   border-right-width: ${(props) => (props.selected ? '2px' : '0px')};
+  border-bottom-width: ${(props) => (props.selected ? '2px' : '0px')};
   border-style: solid;
 
   &&:hover > ${Right} > svg {

@@ -4,6 +4,7 @@ import { useBLSSnap } from '../../../services/useBLSSnap';
 import { setAddTokenModalVisible } from '../../../slices/UISlice';
 import { AddressInput } from '../AddressInput';
 import { Button } from '../Button';
+import { LoadingSpinner } from '../LoadingSmall/LoadingSmall.style';
 import { ValueInput } from '../ValueInput';
 import {
   Wrapper,
@@ -15,8 +16,9 @@ import {
 export const AddNewTokenModalView = () => {
   const networks = useAppSelector((state) => state.networks);
   const dispatch = useAppDispatch();
-  const { addERC20Token } = useBLSSnap();
+  const { addERC20Token, getWalletData } = useBLSSnap();
 
+  const [isAddingToken, setIsAddingToken] = useState(false);
   const [isValidAddress, setIsValidAddress] = useState(false);
   const [isValidName, setIsValidName] = useState(false);
   const [isValidSymbol, setIsValidSymbol] = useState(false);
@@ -32,10 +34,22 @@ export const AddNewTokenModalView = () => {
   }, [isValidAddress, isValidName, isValidSymbol, isValidDecimals]);
 
   const addToken = useCallback(async () => {
+    setIsAddingToken(true);
     const activeNetwork = networks.items[networks.activeNetwork];
     await addERC20Token(address, name, symbol, decimals, activeNetwork.chainId);
+    await getWalletData(activeNetwork.chainId, networks.items);
     dispatch(setAddTokenModalVisible(false));
-  }, [address, name, symbol, decimals, networks, dispatch]);
+    setIsAddingToken(false);
+  }, [
+    address,
+    name,
+    symbol,
+    decimals,
+    networks,
+    dispatch,
+    addERC20Token,
+    getWalletData,
+  ]);
 
   return (
     <Wrapper>
@@ -67,12 +81,18 @@ export const AddNewTokenModalView = () => {
       />
       <ButtonsContainer>
         <Button
-          variant="primary"
+          disabled={isAddingToken}
           onClick={() => dispatch(setAddTokenModalVisible(false))}
         >
           Cancel
         </Button>
-        <Button disabled={!isAllValid} onClick={addToken}>
+        <Button
+          customIconLeft={
+            isAddingToken ? <LoadingSpinner icon="spinner" pulse /> : null
+          }
+          disabled={!isAllValid || isAddingToken}
+          onClick={addToken}
+        >
           Add
         </Button>
       </ButtonsContainer>
