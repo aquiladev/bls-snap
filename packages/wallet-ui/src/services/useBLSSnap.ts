@@ -350,6 +350,49 @@ export const useBLSSnap = () => {
     return data;
   };
 
+  const addERC20Token = async (
+    tokenAddress: string,
+    tokenName: string,
+    tokenSymbol: string,
+    tokenDecimals: number,
+    chainId: number,
+  ) => {
+    const data = (await ethereum.request({
+      method: 'wallet_invokeSnap',
+      params: {
+        snapId,
+        request: {
+          method: 'bls_addErc20Token',
+          params: {
+            tokenAddress,
+            tokenName,
+            tokenSymbol,
+            tokenDecimals,
+            chainId,
+          },
+        },
+      },
+    })) as Action[];
+    return data;
+  };
+
+  const removeERC20Token = async (tokenAddress: string, chainId: number) => {
+    const data = (await ethereum.request({
+      method: 'wallet_invokeSnap',
+      params: {
+        snapId,
+        request: {
+          method: 'bls_removeErc20Token',
+          params: {
+            tokenAddress,
+            chainId,
+          },
+        },
+      },
+    })) as Action[];
+    return data;
+  };
+
   const getWalletData = async (chainId: number, networks?: Network[]) => {
     if (!loader.isLoading && !networks) {
       dispatch(enableLoadingWithMessage('Getting network data ...'));
@@ -451,5 +494,7 @@ export const useBLSSnap = () => {
     getBundle,
     getBundles,
     sendBundle,
+    addERC20Token,
+    removeERC20Token,
   };
 };

@@ -2,15 +2,17 @@ import { FC, useEffect, useRef } from 'react';
 import { IListProps } from '../List/List.view';
 import { Erc20TokenBalance } from '../../../types';
 import { ASSETS_PRICE_REFRESH_FREQUENCY } from '../../../utils/constants';
-import { useAppSelector } from '../../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import { useBLSSnap } from '../../../services/useBLSSnap';
 import { Button } from '../Button';
+import { setAddTokenModalVisible } from '../../../slices/UISlice';
 import { AssetListItem } from './AssetListItem';
 import { Wrapper } from './AssetsList.style';
 
 export const AssetsListView = () => {
   const { setErc20TokenBalance, refreshTokensUSDPrice } = useBLSSnap();
   const wallet = useAppSelector((state) => state.wallet);
+  const dispatch = useAppDispatch();
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const timeoutHandle = useRef(setTimeout(() => {}));
 
@@ -41,7 +43,11 @@ export const AssetsListView = () => {
         />
       )}
       keyExtractor={(asset) => asset.address}
-      lastItem={<Button>Add token</Button>}
+      lastItem={
+        <Button onClick={() => dispatch(setAddTokenModalVisible(true))}>
+          Add token
+        </Button>
+      }
     />
   );
 };
