@@ -1,11 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
-import { theme } from '../../../../config/theme';
 import { RoundedIcon } from '../../RoundedIcon';
-
-type ISpan = {
-  status?: string;
-};
 
 type IIconeStyled = {
   transactionname?: string;
@@ -72,4 +67,25 @@ export const Middle = styled.div`
 export const Right = styled.div`
   flex: 1;
   text-align: end;
+`;
+
+export const Content = styled.div`
+  margin-left: ${(props) => props.theme.spacing.small};
+`;
+
+export const Link = styled.a`
+  display: flex;
+  align-self: flex-start;
+  align-items: center;
+  justify-content: center;
+  color: ${(props) => props.theme.palette.grey.grey1};
+  text-decoration: none;
+  padding-left: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  ${({ theme }) => theme.mediaQueries.small} {
+    width: 100%;
+    box-sizing: border-box;
+  }
 `;

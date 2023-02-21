@@ -95,7 +95,7 @@ export const HeaderView = ({ address }: Props) => {
           Send
         </Button>
         {wallet.erc20TokenBalanceSelected.isInternal && (
-          <Button onClick={() => handleMintClick()} borderVisible>
+          <Button variant="secondary" onClick={() => handleMintClick()}>
             (Faucet) Mint 0.5 tokens
           </Button>
         )}

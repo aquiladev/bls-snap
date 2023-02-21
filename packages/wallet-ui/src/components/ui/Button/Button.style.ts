@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Variant, VariantOptions } from '../../../config/theme';
 
 type IButtonProps = {
+  variant?: Variant;
   enabled?: boolean;
   backgroundTransparent?: boolean;
   borderVisible?: boolean;
@@ -34,15 +36,15 @@ export const Wrapper = styled.button<IButtonProps>`
 `;
 
 export const TextWrapper = styled.span<ITextWrapper>`
-  font-size: ${(props) => props.theme.fontSizes.small};
-  margin-left: 1rem;
-  margin-right: 1rem;
+  font-size: ${(props) => props.fontSize || props.theme.typography.p2.fontSize};
+  margin-left: ${(props) => props.theme.spacing.tiny2};
+  margin-right: ${(props) => props.theme.spacing.tiny2};
 `;
 
 export const LeftIcon = styled(FontAwesomeIcon)`
-  font-size: ${(props) => props.theme.fontSizes.small};
+  font-size: ${(props) => props.theme.typography.i3.fontSize};
 `;
 
 export const RightIcon = styled(FontAwesomeIcon)`
-  font-size: ${(props) => props.theme.fontSizes.small};
+  font-size: ${(props) => props.theme.typography.i3.fontSize};
 `;
