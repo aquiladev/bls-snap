@@ -5,6 +5,20 @@ type IDiv = {
   selected?: boolean;
 };
 
+export const Right = styled.div`
+  flex-grow: 1;
+  text-align: end;
+
+  && > svg {
+    display: none;
+    cursor: pointer;
+  }
+
+  && > svg:hover > path {
+    color: ${(props) => props.theme.palette.warning.dark};
+  }
+`;
+
 export const Wrapper = styled.div<IDiv>`
   display: flex;
   flex-direction: row;
@@ -20,6 +34,10 @@ export const Wrapper = styled.div<IDiv>`
   border-width: 0px;
   border-right-width: ${(props) => (props.selected ? '2px' : '0px')};
   border-style: solid;
+
+  &&:hover > ${Right} > svg {
+    display: block;
+  }
 `;
 
 export const Column = styled.div`
@@ -55,9 +73,4 @@ export const Middle = styled.div`
   color: ${(props) => props.theme.palette.grey.grey1};
   flex-grow: 2;
   text-align: center;
-`;
-
-export const Right = styled.div`
-  flex-grow: 1;
-  text-align: end;
 `;

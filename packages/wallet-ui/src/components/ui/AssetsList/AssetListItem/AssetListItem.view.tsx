@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ethers } from 'ethers';
 import { HTMLAttributes } from 'react';
 import { Erc20TokenBalance } from '../../../../types';
@@ -34,7 +35,7 @@ export const AssetListItemView = ({
       </Left>
 
       <Middle></Middle>
-      <Right></Right>
+      <Right>{!asset.isInternal && <FontAwesomeIcon icon="close" />}</Right>
     </Wrapper>
   );
 };

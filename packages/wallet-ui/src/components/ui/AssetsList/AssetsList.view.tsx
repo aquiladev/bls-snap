@@ -4,6 +4,7 @@ import { Erc20TokenBalance } from '../../../types';
 import { ASSETS_PRICE_REFRESH_FREQUENCY } from '../../../utils/constants';
 import { useAppSelector } from '../../../hooks/redux';
 import { useBLSSnap } from '../../../services/useBLSSnap';
+import { Button } from '../Button';
 import { AssetListItem } from './AssetListItem';
 import { Wrapper } from './AssetsList.style';
 
@@ -40,6 +41,7 @@ export const AssetsListView = () => {
         />
       )}
       keyExtractor={(asset) => asset.address}
+      lastItem={<Button>Add token</Button>}
     />
   );
 };
