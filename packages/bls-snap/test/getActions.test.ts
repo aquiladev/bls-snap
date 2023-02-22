@@ -83,13 +83,13 @@ describe('getActions', () => {
   });
 
   it('should throw error if getActions failed', async () => {
-    sinon.stub(snapUtils, 'getActions').throws(new Error());
+    sinon.stub(snapUtils, 'getActions').throws(new Error('error'));
     const requestObject: GetActionsRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       senderAddress: ZERO_ADDRESS,
     };
     apiParams.requestParams = requestObject;
 
-    await expect(getActions(apiParams)).to.be.rejected;
+    await expect(getActions(apiParams)).to.be.rejectedWith('error');
   });
 });

@@ -71,12 +71,13 @@ describe('createAccount', () => {
   });
 
   it('should throw error if getAccounts failed', async () => {
-    sinon.stub(snapUtils, 'getKeysFromAddressIndex').throws(new Error());
+    sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
+    sinon.stub(snapUtils, 'getKeysFromAddressIndex').throws(new Error('error'));
     const requestObject: CreateAccountRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
     };
     apiParams.requestParams = requestObject;
 
-    await expect(createAccount(apiParams)).to.be.rejected;
+    await expect(createAccount(apiParams)).to.be.rejectedWith('error');
   });
 });

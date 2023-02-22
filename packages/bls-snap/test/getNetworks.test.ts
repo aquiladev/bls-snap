@@ -45,11 +45,11 @@ describe('getNetworks', () => {
   });
 
   it('should throw error if getNetworks failed', async () => {
-    sinon.stub(snapUtils, 'getNetworks').throws(new Error());
+    sinon.stub(snapUtils, 'getNetworks').throws(new Error('error'));
     const requestObject: GetNetworksRequestParams = {};
     apiParams.requestParams = requestObject;
 
-    await expect(getNetworks(apiParams)).to.be.rejected;
+    await expect(getNetworks(apiParams)).to.be.rejectedWith('error');
     expect(walletStub.rpcStubs.snap_manageState).not.to.have.been.called;
   });
 });

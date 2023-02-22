@@ -1,8 +1,8 @@
 /* eslint-disable import/no-named-as-default-member */
 import { expect } from 'chai';
 import { Mutex } from 'async-mutex';
-import sinon from 'sinon';
 import { BigNumber } from 'ethers';
+import sinon from 'sinon';
 
 import {
   ApiParams,

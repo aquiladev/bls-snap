@@ -1,9 +1,9 @@
 /* eslint-disable import/no-named-as-default-member */
 import { expect } from 'chai';
 import { Mutex } from 'async-mutex';
+import { BigNumber } from 'ethers';
 import sinon from 'sinon';
 
-import { BigNumber } from 'ethers';
 import { AddErc20TokenRequestParams, ApiParams } from '../src/types/snapApi';
 import { SnapState } from '../src/types/snapState';
 import { addErc20Token } from '../src/addErc20Token';
