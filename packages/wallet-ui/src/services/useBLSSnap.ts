@@ -154,25 +154,21 @@ export const useBLSSnap = () => {
     userAddress: string,
     chainId: number,
   ) => {
-    try {
-      const response = await ethereum.request({
-        method: 'wallet_invokeSnap',
-        params: {
-          snapId,
-          request: {
-            method: 'bls_getErc20TokenBalance',
-            params: {
-              tokenAddress,
-              userAddress,
-              chainId,
-            },
+    const response = await ethereum.request({
+      method: 'wallet_invokeSnap',
+      params: {
+        snapId,
+        request: {
+          method: 'bls_getErc20TokenBalance',
+          params: {
+            tokenAddress,
+            userAddress,
+            chainId,
           },
         },
-      });
-      return response;
-    } catch (err) {
-      // TODO: Fix error on snap level
-    }
+      },
+    });
+    return response;
   };
 
   const setErc20TokenBalance = (erc20TokenBalance: Erc20TokenBalance) => {

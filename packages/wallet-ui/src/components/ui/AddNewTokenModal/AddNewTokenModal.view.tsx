@@ -54,7 +54,7 @@ export const AddNewTokenModalView = () => {
       await getWalletData(activeNetwork.chainId, networks.items);
       dispatch(setAddTokenModalVisible(false));
     } catch (err: any) {
-      setError('Error during token adding');
+      setError(err?.message || 'Error during token adding');
     } finally {
       setIsAddingToken(false);
     }

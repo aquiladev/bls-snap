@@ -9,7 +9,6 @@ import {
   Description,
   Label,
   Left,
-  Middle,
   Right,
   Wrapper,
 } from './AssetListItem.style';

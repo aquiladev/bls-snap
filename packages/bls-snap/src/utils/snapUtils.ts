@@ -14,6 +14,7 @@ import { AddErc20TokenRequestParams } from '../types/snapApi';
 import { getPrivateKey } from './crypto';
 import { getBundleReceipt } from './blsUtils';
 import * as config from './config';
+import * as evmUtils from './evmUtils';
 
 export const DEFAULT_DECIMALS = 18;
 export const MAX_TOKEN_NAME_LENGTH = 64;
@@ -32,7 +33,7 @@ function isValidAscii(value: string, maxLength: number) {
   );
 }
 
-export function validateAddErc20TokenParams(
+export async function validateAddErc20TokenParams(
   params: AddErc20TokenRequestParams,
 ) {
   if (!utils.isAddress(params.tokenAddress)) {
@@ -56,6 +57,16 @@ export function validateAddErc20TokenParams(
     throw new Error(
       `The given token symbol is invalid, needs to be in ASCII chars, not all spaces, and has length larger than ${MAX_TOKEN_SYMBOL_LENGTH}: ${params.tokenSymbol}`,
     );
+  }
+
+  try {
+    await evmUtils.getErc20TokenBalance(
+      network,
+      params.tokenAddress,
+      params.tokenAddress,
+    );
+  } catch (err) {
+    throw new Error(`The given token is invalid: ${params.tokenAddress}`);
   }
 }
 
