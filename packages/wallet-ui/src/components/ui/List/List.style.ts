@@ -17,10 +17,3 @@ export const List = styled.ul`
 `;
 
 export const ListItem = styled.li``;
-
-export const LastItemWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-`;
