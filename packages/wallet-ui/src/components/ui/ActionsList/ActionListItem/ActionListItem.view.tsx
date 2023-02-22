@@ -1,19 +1,58 @@
 import { Action } from '@aquiladev/bls-snap/src/types/snapState';
-import { Column, Description, Wrapper } from './ActionListItem.style';
+import { useState } from 'react';
+import {
+  shortenAddress,
+  getDate,
+  getAmountPrice,
+} from '../../../../utils/utils';
+import {
+  Column,
+  Description,
+  Wrapper,
+  IconStyled,
+  Right,
+} from './ActionListItem.style';
 
 type Props = {
   action: Action;
 };
 
 export const ActionListItemView = ({ action }: Props) => {
+  const [isSelected, setIsSelected] = useState(true);
+  console.log(action);
   return (
-    <Wrapper>
+    <Wrapper
+      onClick={() => {
+        setIsSelected(!isSelected);
+      }}
+    >
       <Column>
-        <Description>{action.contractAddress}</Description>
+        <IconStyled
+          icon={['fas', `${isSelected ? 'square-check' : 'square'}`]}
+        />
       </Column>
-      <Column style={{ maxWidth: 600 }}>
-        <Description>{action.encodedFunction}</Description>
+      <Column>
+        <div style={{ marginBottom: 8 }}>
+          <Description>
+            <span style={{ fontSize: 18 }}>
+              {action.functionFragment ? action.functionFragment : 'Send'}
+            </span>
+          </Description>
+        </div>
+        <Description>
+          <span style={{ color: 'green' }}>
+            {getDate(action.createdAt)}&nbsp;&#183;
+          </span>
+          <span style={{ paddingLeft: 10, paddingRight: 4 }}>To:</span>
+          <span style={{ color: 'slateGray' }}>
+            {shortenAddress(action.contractAddress)}
+          </span>
+        </Description>
       </Column>
+      <Right>
+        <span>{action.value}</span>
+        <span>&nbsp;ETH</span>
+      </Right>
     </Wrapper>
   );
 };

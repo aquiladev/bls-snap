@@ -79,3 +79,8 @@ export const fetchWithTimeout = async (
   clearTimeout(id);
   return response;
 };
+
+export const getDate = (date: number, options?: any) => {
+  const config = options || { month: 'short', day: 'numeric' };
+  return new Date(date).toLocaleDateString('en-US', config);
+};
