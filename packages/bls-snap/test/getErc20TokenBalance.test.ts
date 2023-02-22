@@ -43,12 +43,7 @@ describe('getErc20TokenBalance', () => {
 
   it('should get the ERC20 token balance', async () => {
     sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
-
-    sinon
-      .stub(evmUtils, 'callContract')
-      .resolves(
-        '0x0000000000000000000000000000000000000000000000000000000000000001',
-      );
+    sinon.stub(evmUtils, 'getErc20TokenBalance').resolves(BigNumber.from(1));
 
     const requestObject: GetErc20TokenBalanceRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
@@ -76,7 +71,7 @@ describe('getErc20TokenBalance', () => {
 
   it('should throw error if callContract failed', async () => {
     sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
-    sinon.stub(evmUtils, 'callContract').throws(new Error());
+    sinon.stub(evmUtils, 'getErc20TokenBalance').throws(new Error('error'));
     const requestObject: GetErc20TokenBalanceRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       tokenAddress: ERC20_TOKEN_ZERO.address,
@@ -84,6 +79,6 @@ describe('getErc20TokenBalance', () => {
     };
     apiParams.requestParams = requestObject;
 
-    await expect(getErc20TokenBalance(apiParams)).to.be.rejected;
+    await expect(getErc20TokenBalance(apiParams)).to.be.rejectedWith('error');
   });
 });
