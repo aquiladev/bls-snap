@@ -65,7 +65,7 @@ describe('addAction', () => {
   });
 
   it('should throw error if insertAction failed', async () => {
-    sinon.stub(snapUtils, 'insertAction').throws(new Error());
+    sinon.stub(snapUtils, 'insertAction').throws(new Error('error'));
     const requestObject: AddActionRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       senderAddress: ZERO_ADDRESS,
@@ -74,6 +74,6 @@ describe('addAction', () => {
     };
     apiParams.requestParams = requestObject;
 
-    await expect(addAction(apiParams)).to.be.rejected;
+    await expect(addAction(apiParams)).to.be.rejectedWith('error');
   });
 });

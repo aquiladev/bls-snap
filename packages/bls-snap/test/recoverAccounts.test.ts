@@ -67,12 +67,12 @@ describe('recoverAccounts', () => {
   });
 
   it('should throw error if getAccounts failed', async () => {
-    sinon.stub(snapUtils, 'getAccounts').throws(new Error());
+    sinon.stub(snapUtils, 'getAccounts').throws(new Error('error'));
     const requestObject: RecoverAccountsRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
     };
     apiParams.requestParams = requestObject;
 
-    await expect(recoverAccounts(apiParams)).to.be.rejected;
+    await expect(recoverAccounts(apiParams)).to.be.rejectedWith('error');
   });
 });

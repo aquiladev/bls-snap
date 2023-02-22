@@ -25,7 +25,7 @@ export async function addErc20Token(params: ApiParams): Promise<Erc20Token> {
       );
     }
 
-    validateAddErc20TokenParams(requestParamsObj);
+    await validateAddErc20TokenParams(requestParamsObj);
 
     const erc20Token: Erc20Token = {
       address: requestParamsObj.tokenAddress,
