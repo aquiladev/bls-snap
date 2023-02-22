@@ -1,6 +1,7 @@
 /* eslint-disable import/no-named-as-default-member */
 import { expect } from 'chai';
 import { Mutex } from 'async-mutex';
+import { BigNumber } from 'ethers';
 import sinon from 'sinon';
 
 import { AddErc20TokenRequestParams, ApiParams } from '../src/types/snapApi';
@@ -8,6 +9,7 @@ import { SnapState } from '../src/types/snapState';
 import { addErc20Token } from '../src/addErc20Token';
 import * as config from '../src/utils/config';
 import * as snapUtils from '../src/utils/snapUtils';
+import * as evmUtils from '../src/utils/evmUtils';
 import { WalletMock } from './utils/wallet.mock';
 import {
   ERC20_TOKEN_ZERO,
@@ -38,6 +40,7 @@ describe('addErc20Token', () => {
 
   it('should insert asset correctly', async () => {
     sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
+    sinon.stub(evmUtils, 'getErc20TokenBalance').resolves(BigNumber.from(0));
     const requestObject: AddErc20TokenRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       tokenAddress: ERC20_TOKEN_ZERO.address,
@@ -54,6 +57,7 @@ describe('addErc20Token', () => {
 
   it('should insert asset with default decimals', async () => {
     sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
+    sinon.stub(evmUtils, 'getErc20TokenBalance').resolves(BigNumber.from(0));
     const requestObject: AddErc20TokenRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       tokenAddress: ERC20_TOKEN_ZERO.address,
@@ -70,6 +74,7 @@ describe('addErc20Token', () => {
 
   it('should insert asset with provided decimals', async () => {
     sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
+    sinon.stub(evmUtils, 'getErc20TokenBalance').resolves(BigNumber.from(0));
     const requestObject: AddErc20TokenRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       tokenAddress: ERC20_TOKEN_ZERO.address,
@@ -184,7 +189,8 @@ describe('addErc20Token', () => {
 
   it('should throw error if upsertErc20Token failed', async () => {
     sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
-    sinon.stub(snapUtils, 'upsertErc20Token').throws(new Error());
+    sinon.stub(evmUtils, 'getErc20TokenBalance').resolves(BigNumber.from(0));
+    sinon.stub(snapUtils, 'upsertErc20Token').throws(new Error('error'));
     const requestObject: AddErc20TokenRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       tokenAddress: ERC20_TOKEN_ZERO.address,
@@ -193,6 +199,6 @@ describe('addErc20Token', () => {
     };
     apiParams.requestParams = requestObject;
 
-    await expect(addErc20Token(apiParams)).to.be.rejected;
+    await expect(addErc20Token(apiParams)).to.be.rejectedWith('error');
   });
 });

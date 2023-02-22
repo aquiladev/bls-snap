@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { providers } from 'ethers';
+import { BigNumber, providers, utils } from 'ethers';
 import { Network } from '../types/snapState';
 
 export async function callContract(
@@ -16,4 +16,17 @@ export function getProvider(network: Network): providers.JsonRpcProvider {
     name: network.name,
     chainId: network.chainId,
   });
+}
+
+export async function getErc20TokenBalance(
+  network: Network,
+  tokenAddress: string,
+  account: string,
+): Promise<BigNumber> {
+  const iface = new utils.Interface(['function balanceOf(address owner)']);
+  const calldata = iface.encodeFunctionData('balanceOf', [account]);
+
+  const result = await callContract(network, tokenAddress, calldata);
+  const [balance] = utils.defaultAbiCoder.decode(['uint256'], result);
+  return balance;
 }

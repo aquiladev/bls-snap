@@ -64,12 +64,12 @@ describe('getErc20Tokens', () => {
   });
 
   it('should throw error if getErc20Tokens failed', async () => {
-    sinon.stub(snapUtils, 'getErc20Tokens').throws(new Error());
+    sinon.stub(snapUtils, 'getErc20Tokens').throws(new Error('error'));
     const requestObject: GetErc20TokensRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
     };
     apiParams.requestParams = requestObject;
 
-    await expect(getErc20Tokens(apiParams)).to.be.rejected;
+    await expect(getErc20Tokens(apiParams)).to.be.rejectedWith('error');
   });
 });

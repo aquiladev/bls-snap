@@ -6,6 +6,6 @@ export const Backdrop = styled.div`
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: ${(props) => props.theme.colors.text.inverse};
-  opacity: 0.5;
+  background-color: ${(props) => props.theme.colors.text.default};
+  opacity: 0.4;
 `;

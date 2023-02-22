@@ -82,15 +82,16 @@ describe('removeErc20Token', () => {
     );
   });
 
-  it('should throw error if deleteErc20Token failed', async () => {
+  it('should throw error when token is internal', async () => {
     sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
-    sinon.stub(snapUtils, 'deleteErc20Token').throws(new Error());
     const requestObject: RemoveErc20TokenRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       tokenAddress: ERC20_TOKEN_ONE.address,
     };
     apiParams.requestParams = requestObject;
 
-    await expect(removeErc20Token(apiParams)).to.be.rejected;
+    await expect(removeErc20Token(apiParams)).to.be.rejectedWith(
+      'The token is internal, not possible to remove',
+    );
   });
 });

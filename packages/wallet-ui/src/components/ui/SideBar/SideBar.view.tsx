@@ -1,8 +1,9 @@
 import { useRef, useState } from 'react';
-import { useAppSelector } from '../../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import { AccountAddress } from '../AccountAddress';
 import { AccountDetailsModal } from '../AccountDetailsModal';
 import { AssetsList } from '../AssetsList';
+import { setAddTokenModalVisible } from '../../../slices/UISlice';
 
 import {
   AccountDetailButton,
@@ -10,6 +11,7 @@ import {
   AccountDetailsContent,
   AccountImageStyled,
   AccountLabel,
+  AddTokenButton,
   DivList,
   PopInStyled,
   RowDiv,
@@ -23,6 +25,7 @@ type Props = {
 export const SideBarView = ({ address }: Props) => {
   const [accountDetailsOpen, setAccountDetailsOpen] = useState(false);
   const wallet = useAppSelector((state) => state.wallet);
+  const dispatch = useAppDispatch();
 
   const ref = useRef<HTMLDivElement>();
 
@@ -60,6 +63,12 @@ export const SideBarView = ({ address }: Props) => {
       <DivList ref={ref as any}>
         <AssetsList />
       </DivList>
+      <AddTokenButton
+        backgroundTransparent
+        onClick={() => dispatch(setAddTokenModalVisible(true))}
+      >
+        Add token
+      </AddTokenButton>
     </Wrapper>
   );
 };
