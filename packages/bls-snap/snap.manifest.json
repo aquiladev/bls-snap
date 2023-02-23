@@ -1,5 +1,5 @@
 {
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "BLS Snap",
   "proposedName": "@aquiladev/bls-snap",
   "repository": {
@@ -7,7 +7,7 @@
     "url": "https://github.com/aquiladev/bls-snap.git"
   },
   "source": {
-    "shasum": "KhwsX0ZcZv0JIfW/1YPDBeV9H5d4yQJ8jCbwU338t5I=",
+    "shasum": "3CBaYJPOe9Z2zn8MZLLvxWxy9BfMW10wC3+w0KuR8yg=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
