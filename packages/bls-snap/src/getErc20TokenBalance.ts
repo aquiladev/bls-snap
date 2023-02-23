@@ -1,8 +1,8 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { ethers, utils, BigNumber } from 'ethers';
+import { ethers, BigNumber } from 'ethers';
 import { ApiParams, GetErc20TokenBalanceRequestParams } from './types/snapApi';
 import * as config from './utils/config';
-import { callContract } from './utils/evmUtils';
+import * as evmUtils from './utils/evmUtils';
 
 export async function getErc20TokenBalance(params: ApiParams): Promise<string> {
   try {
@@ -35,15 +35,11 @@ export async function getErc20TokenBalance(params: ApiParams): Promise<string> {
       `getErc20Balance:\nerc20Address: ${tokenAddress}\nuserAddress: ${userAddress}`,
     );
 
-    const ABI = 'function balanceOf(address owner)';
-
-    const iface = new utils.Interface([ABI]);
-    const calldata = iface.encodeFunctionData('balanceOf', [
-      userAddress.toLowerCase(),
-    ]);
-
-    const result = await callContract(network, tokenAddress, calldata);
-    const [balance] = utils.defaultAbiCoder.decode(['uint256'], result);
+    const balance = await evmUtils.getErc20TokenBalance(
+      network,
+      tokenAddress,
+      userAddress,
+    );
     console.log(`getErc20Balance:\nresp: ${JSON.stringify(balance)}`);
 
     return BigNumber.from(balance).toHexString();

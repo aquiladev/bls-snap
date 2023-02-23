@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { Footer, Header } from './components';
 import { Home } from './components/pages/Home';
+import { AddNewTokenModal } from './components/ui/AddNewTokenModal';
 import { ConnectModal } from './components/ui/ConnectModal';
 import { LoadingBackdrop } from './components/ui/LoadingBackdrop';
 import { NewAccountDetailsInfoModal } from './components/ui/NewAccountDetailsInfoModal';
@@ -35,7 +36,9 @@ function App() {
   const { connected, forceReconnect } = useAppSelector((state) => state.wallet);
   const { accounts } = useAppSelector((state) => state.wallet);
   const networks = useAppSelector((state) => state.networks);
-  const { loader, infoModalVisible } = useAppSelector((state) => state.UI);
+  const { loader, infoModalVisible, addTokenModalVisible } = useAppSelector(
+    (state) => state.UI,
+  );
   const { hasMetamaskFlask } = useHasMetamaskFlask();
 
   const address =
@@ -91,6 +94,9 @@ function App() {
           </PopIn>
           <PopIn isOpen={infoModalVisible}>
             <NewAccountDetailsInfoModal address={address} />
+          </PopIn>
+          <PopIn isOpen={addTokenModalVisible || false}>
+            <AddNewTokenModal />
           </PopIn>
         </WrapperContent>
       </Wrapper>

@@ -47,6 +47,8 @@ export const Wrapper = styled.div<Idiv>`
   margin: 0rem auto;
   padding-top: 12px;
   padding-bottom: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const Parag = styled.p`

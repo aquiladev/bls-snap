@@ -82,13 +82,13 @@ describe('getBundles', () => {
   });
 
   it('should throw error if getBundles failed', async () => {
-    sinon.stub(snapUtils, 'getBundles').throws(new Error());
+    sinon.stub(snapUtils, 'getBundles').throws(new Error('error'));
     const requestObject: GetBundlesRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       senderAddress: ZERO_ADDRESS,
     };
     apiParams.requestParams = requestObject;
 
-    await expect(getBundles(apiParams)).to.be.rejected;
+    await expect(getBundles(apiParams)).to.be.rejectedWith('error');
   });
 });

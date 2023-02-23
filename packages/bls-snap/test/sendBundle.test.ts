@@ -95,13 +95,13 @@ describe('sendBundle', () => {
 
   it('should throw error if getAccount failed', async () => {
     sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
-    sinon.stub(snapUtils, 'getAccount').throws(new Error());
+    sinon.stub(snapUtils, 'getAccount').throws(new Error('error'));
     const requestObject: SendBundleRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       senderAddress: ZERO_ADDRESS,
     };
     apiParams.requestParams = requestObject;
 
-    await expect(sendBundle(apiParams)).to.be.rejected;
+    await expect(sendBundle(apiParams)).to.be.rejectedWith('error');
   });
 });

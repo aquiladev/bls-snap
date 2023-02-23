@@ -35,14 +35,10 @@ export const RowDiv = styled.div`
 
 export const DivList = styled.div``;
 
-export const AddTokenButton = styled(Button).attrs((props) => ({
-  textStyle: {
-    fontSize: props.theme.fontSizes.text,
-    // fontWeight: props.theme.fonts.bold,
-    // fontFamily: props.theme.typography.bold.fontFamily,
-  },
-}))<IAddTokenButton>`
-  height: 66px;
+export const AddTokenButton = styled(Button).attrs(
+  (props) => ({}),
+)<IAddTokenButton>`
+  height: 36px;
   justify-content: center;
   padding-left: 20px;
   box-shadow: ${(props) =>
