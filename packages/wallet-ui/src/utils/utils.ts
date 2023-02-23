@@ -84,3 +84,17 @@ export const getDate = (date: number, options?: any) => {
   const config = options || { month: 'short', day: 'numeric' };
   return new Date(date).toLocaleDateString('en-US', config);
 };
+
+export const getFunctionName = (functionName: string) => {
+  let name = functionName;
+  if (name.includes('function')) {
+    name = name.slice(8);
+  }
+  const indexBracket = name.indexOf('(');
+  name = name
+    .slice(0, indexBracket)
+    .trim()
+    .replace(/([A-Z])/u, ' $1');
+  name = name[0].toUpperCase() + name.slice(1);
+  return name;
+};
