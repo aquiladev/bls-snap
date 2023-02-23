@@ -3,6 +3,7 @@ import { useState } from 'react';
 import {
   shortenAddress,
   getDate,
+  getFunctionName,
   getAmountPrice,
 } from '../../../../utils/utils';
 import {
@@ -18,6 +19,7 @@ type Props = {
 };
 
 export const ActionListItemView = ({ action }: Props) => {
+  console.log(action);
   const [isSelected, setIsSelected] = useState(true);
   console.log(action);
   return (
@@ -35,7 +37,9 @@ export const ActionListItemView = ({ action }: Props) => {
         <div style={{ marginBottom: 8 }}>
           <Description>
             <span style={{ fontSize: 18 }}>
-              {action.functionFragment ? action.functionFragment : 'Send'}
+              {action.functionFragment
+                ? getFunctionName(action.functionFragment)
+                : 'Send'}
             </span>
           </Description>
         </div>
