@@ -1,10 +1,9 @@
 import { Action } from '@aquiladev/bls-snap/src/types/snapState';
-import { useState } from 'react';
+import { useBLSSnap } from '../../../../services/useBLSSnap';
 import {
   shortenAddress,
   getDate,
   getFunctionName,
-  getAmountPrice,
 } from '../../../../utils/utils';
 import {
   Column,
@@ -16,46 +15,54 @@ import {
 
 type Props = {
   action: Action;
+  postponeCheckbox?: boolean;
 };
 
-export const ActionListItemView = ({ action }: Props) => {
-  console.log(action);
-  const [isSelected, setIsSelected] = useState(true);
-  console.log(action);
+export const ActionListItemView = ({ action, postponeCheckbox }: Props) => {
+  const {
+    id,
+    value,
+    contractAddress,
+    createdAt,
+    functionFragment,
+    postpone = false,
+  } = action;
+  const { updatePostponeAction } = useBLSSnap();
   return (
     <Wrapper
-      onClick={() => {
-        setIsSelected(!isSelected);
+      onClick={async () => {
+        if (postponeCheckbox) {
+          await updatePostponeAction(id, !postpone || false);
+        }
       }}
     >
-      <Column>
-        <IconStyled
-          icon={['fas', `${isSelected ? 'square-check' : 'square'}`]}
-        />
-      </Column>
+      {postponeCheckbox && (
+        <Column>
+          <IconStyled
+            icon={['fas', `${postpone ? 'square' : 'square-check'}`]}
+          />
+        </Column>
+      )}
       <Column>
         <div style={{ marginBottom: 8 }}>
           <Description>
             <span style={{ fontSize: 18 }}>
-              {action.functionFragment
-                ? getFunctionName(action.functionFragment)
-                : 'Send'}
+              {functionFragment ? getFunctionName(functionFragment) : 'Send'}
             </span>
           </Description>
         </div>
         <Description>
           <span style={{ color: 'green' }}>
-            {getDate(action.createdAt)}&nbsp;&#183;
+            {getDate(createdAt)}&nbsp;&#183;
           </span>
           <span style={{ paddingLeft: 10, paddingRight: 4 }}>To:</span>
           <span style={{ color: 'slateGray' }}>
-            {shortenAddress(action.contractAddress)}
+            {shortenAddress(contractAddress)}
           </span>
         </Description>
       </Column>
       <Right>
-        <span>{action.value}</span>
-        <span>&nbsp;ETH</span>
+        <span>-{value}&nbsp;ETH</span>
       </Right>
     </Wrapper>
   );

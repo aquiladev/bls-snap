@@ -7,15 +7,18 @@ import { ActionListItem } from './ActionListItem';
 
 type Props = {
   actions?: Action[];
+  postponeCheckbox?: boolean;
 };
 
-export const ActionsListView = ({ actions }: Props) => {
+export const ActionsListView = ({ actions, postponeCheckbox }: Props) => {
   const wallet = useAppSelector((state) => state.wallet);
 
   return (
     <Wrapper<FC<IListProps<Action>>>
       data={actions || wallet.actions || []}
-      render={(action) => <ActionListItem action={action} />}
+      render={(action) => (
+        <ActionListItem action={action} postponeCheckbox={postponeCheckbox} />
+      )}
       keyExtractor={(action) => action.id}
     />
   );

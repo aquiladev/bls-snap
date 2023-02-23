@@ -86,6 +86,14 @@ export const walletSlice = createSlice({
     addAction: (state, { payload }) => {
       state.actions = [payload, ...state.actions];
     },
+    updatePostponeAction: (state, { payload }) => {
+      state.actions = state.actions.map((action) => {
+        if (action.id === payload.id) {
+          return { ...action, ...payload };
+        }
+        return action;
+      });
+    },
     removeActions: (state, { payload }) => {
       const list = Array(payload).flat();
       state.actions = state.actions.filter((o) => {
@@ -119,6 +127,7 @@ export const {
   upsertErc20TokenBalance,
   setActions,
   addAction,
+  updatePostponeAction,
   removeActions,
   setBundles,
   addBundle,

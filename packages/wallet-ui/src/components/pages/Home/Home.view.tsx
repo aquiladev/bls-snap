@@ -44,12 +44,14 @@ export const HomeView = ({ address }: Props) => {
         )}
         <RightPartContent>
           <RightPartContentHeader>Actions</RightPartContentHeader>
-          <ActionsList />
+          <ActionsList postponeCheckbox />
           {Boolean(actions.length) && (
             <Buttons style={{ textAlign: 'center' }}>
               <HeaderButton
                 onClick={() => handleSendBundle()}
-                disabled={isSendingBundle}
+                disabled={
+                  isSendingBundle || !actions.some((action) => !action.postpone)
+                }
                 customIconLeft={
                   isSendingBundle ? (
                     <LoadingSpinner icon="spinner" pulse />

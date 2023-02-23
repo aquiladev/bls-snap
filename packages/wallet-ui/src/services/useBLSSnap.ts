@@ -270,6 +270,15 @@ export const useBLSSnap = () => {
     return data;
   };
 
+  const updatePostponeAction = async (id: string, postpone: boolean) => {
+    const data = {
+      id,
+      postpone,
+    };
+    dispatch(ws.updatePostponeAction(data));
+    return data;
+  };
+
   const getBundles = async (
     senderAddress: string,
     chainId: number,
@@ -448,6 +457,7 @@ export const useBLSSnap = () => {
     updateTokenBalance,
     addAction,
     getActions,
+    updatePostponeAction,
     getBundle,
     getBundles,
     sendBundle,
