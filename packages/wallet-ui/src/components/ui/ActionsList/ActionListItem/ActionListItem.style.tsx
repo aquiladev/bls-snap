@@ -2,10 +2,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import { RoundedIcon } from '../../RoundedIcon';
 
-type ISpan = {
-  status?: string;
-};
-
 type IIconeStyled = {
   transactionname?: string;
 };
