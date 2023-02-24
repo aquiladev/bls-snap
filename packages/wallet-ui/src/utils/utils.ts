@@ -1,5 +1,6 @@
+/* eslint-disable require-unicode-regexp */
 import { Erc20Token } from '@aquiladev/bls-snap/src/types/snapState';
-import { ethers } from 'ethers';
+import { BigNumber, utils } from 'ethers';
 import { KeyboardEvent } from 'react';
 import { Erc20TokenBalance } from '../types';
 import { TIMEOUT_DURATION } from './constants';
@@ -61,7 +62,7 @@ export const addMissingPropertiesToToken = (
   return {
     ...token,
     chainId,
-    amount: ethers.BigNumber.from(balance || '0x0'),
+    amount: BigNumber.from(balance || '0x0'),
     usdPrice,
   };
 };
@@ -85,17 +86,17 @@ export const getDate = (date: number, options?: any) => {
   return new Date(date).toLocaleDateString('en-US', config);
 };
 
-export const getFunctionName = (functionName: string) => {
-  let str = functionName;
-  if (str.includes('function')) {
-    str = str.slice(8);
+export const humanizeFragment = (str: string | undefined = ''): string => {
+  try {
+    const iface = new utils.Interface([str]);
+    return iface.fragments[0].name
+      .replace(/[^A-Za-z0-9]/g, ' ')
+      .replace(/([A-Z])/g, ' $1')
+      .split(' ')
+      .filter((i) => i)
+      .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+      .join(' ');
+  } catch (e) {
+    return '';
   }
-
-  if (str.includes('(')) {
-    const indexBracket = str.indexOf('(');
-    str = str.slice(0, indexBracket);
-  }
-  str = str.trim().replace(/([A-Z])/u, ' $1');
-  str = str[0].toUpperCase() + str.slice(1);
-  return str;
 };

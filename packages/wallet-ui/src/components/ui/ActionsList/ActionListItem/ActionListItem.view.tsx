@@ -1,10 +1,11 @@
-import { Action } from '@aquiladev/bls-snap/src/types/snapState';
-import { useBLSSnap } from '../../../../services/useBLSSnap';
+import { useAppDispatch } from '../../../../hooks/redux';
+import { SelectableAction } from '../../../../types';
 import {
   shortenAddress,
   getDate,
-  getFunctionName,
+  humanizeFragment,
 } from '../../../../utils/utils';
+import * as ws from '../../../../slices/walletSlice';
 import {
   Column,
   Description,
@@ -14,42 +15,39 @@ import {
 } from './ActionListItem.style';
 
 type Props = {
-  action: Action;
-  postponeCheckbox?: boolean;
+  action: SelectableAction;
+  isSelectable?: boolean;
 };
 
-export const ActionListItemView = ({ action, postponeCheckbox }: Props) => {
-  const {
-    id,
-    value,
-    contractAddress,
-    createdAt,
-    functionFragment,
-    postpone = false,
-  } = action;
-  const { updatePostponeAction } = useBLSSnap();
+export const ActionListItemView = ({ action, isSelectable }: Props) => {
+  const dispatch = useAppDispatch();
+  const { value, contractAddress, createdAt, functionFragment, selected } =
+    action;
+
+  const title = humanizeFragment(functionFragment) || 'Send';
   return (
-    <Wrapper
-      onClick={async () => {
-        if (postponeCheckbox) {
-          await updatePostponeAction(id, !postpone || false);
-        }
-      }}
-    >
-      {postponeCheckbox && (
-        <Column>
+    <Wrapper>
+      {isSelectable && (
+        <Column
+          onClick={() => {
+            dispatch(
+              ws.updateAction({ ...action, selected: !action.selected }),
+            );
+          }}
+          style={{ cursor: 'pointer' }}
+        >
           <IconStyled
-            icon={['fas', `${postpone ? 'square' : 'square-check'}`]}
+            icon={['fas', `${selected ? 'square-check' : 'square'}`]}
+            style={{
+              fontSize: 22,
+            }}
           />
         </Column>
       )}
       <Column>
         <div style={{ marginBottom: 8 }}>
           <Description>
-            <span style={{ fontSize: 18 }}>
-              {/* {functionFragment ? getFunctionName(functionFragment) : 'Send'} */}
-              {getFunctionName('fragment')}
-            </span>
+            <span style={{ fontSize: 18 }}>{title}</span>
           </Description>
         </div>
         <Description>
@@ -63,7 +61,7 @@ export const ActionListItemView = ({ action, postponeCheckbox }: Props) => {
         </Description>
       </Column>
       <Right>
-        <span>-{value}&nbsp;ETH</span>
+        <span>-{value} ETH</span>
       </Right>
     </Wrapper>
   );

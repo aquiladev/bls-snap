@@ -44,7 +44,6 @@ export type Action = {
   encodedFunction: string;
   createdAt: number;
   functionFragment?: string;
-  postpone?: boolean;
 };
 
 export type Bundle = {

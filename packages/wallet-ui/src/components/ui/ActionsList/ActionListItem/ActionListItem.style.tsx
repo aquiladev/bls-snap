@@ -23,7 +23,6 @@ export const Wrapper = styled.div`
     background-color: ${(props) => props.theme.colors.background.inverse};
     color: ${(props) => props.theme.colors.text.inverse}};
   }
-  cursor: pointer;
 `;
 
 export const Column = styled.div`

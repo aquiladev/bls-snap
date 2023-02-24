@@ -6,13 +6,12 @@ export { type GetSnapsResponse, type Snap } from './snap';
 export type Network = Pick<Types.Network, 'name' | 'chainId' | 'explorerUrl'>;
 export type Account = Pick<Types.BlsAccount, 'address'>;
 
-export type Action = {
-  to: string;
-  calldata: string;
+export type SelectableAction = Types.Action & {
+  selected: boolean;
 };
 
-export type Erc20TokenBalance = {
+export type Erc20TokenBalance = Types.Erc20Token & {
   amount: BigNumber;
   chainId: number;
   usdPrice?: number;
-} & Types.Erc20Token;
+};
