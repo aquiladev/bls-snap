@@ -47,6 +47,7 @@ describe('sendBundle', () => {
     const requestObject: SendBundleRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       senderAddress: ZERO_ADDRESS,
+      actionIds: [],
     };
     apiParams.requestParams = requestObject;
 
@@ -58,6 +59,7 @@ describe('sendBundle', () => {
     const requestObject: SendBundleRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       senderAddress: ACCOUNT_ZERO.address,
+      actionIds: [],
     };
     apiParams.requestParams = requestObject;
 
@@ -71,6 +73,7 @@ describe('sendBundle', () => {
     const requestObject: SendBundleRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       senderAddress: ACCOUNT_ZERO.address,
+      actionIds: [ACTION_ZERO.id],
     };
     apiParams.requestParams = requestObject;
     apiParams.state[TEST_CHAIN_ID_ZERO].actions = [ACTION_ZERO];
@@ -87,6 +90,7 @@ describe('sendBundle', () => {
     const requestObject: SendBundleRequestParams = {
       chainId: TEST_CHAIN_ID_UNKNOWN,
       senderAddress: ACCOUNT_ZERO.address,
+      actionIds: [],
     };
     apiParams.requestParams = requestObject;
 
@@ -99,6 +103,7 @@ describe('sendBundle', () => {
     const requestObject: SendBundleRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       senderAddress: ZERO_ADDRESS,
+      actionIds: [ACTION_ZERO.id],
     };
     apiParams.requestParams = requestObject;
 
