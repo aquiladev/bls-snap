@@ -47,7 +47,8 @@ export const ActionListItemView = ({ action, postponeCheckbox }: Props) => {
         <div style={{ marginBottom: 8 }}>
           <Description>
             <span style={{ fontSize: 18 }}>
-              {functionFragment ? getFunctionName(functionFragment) : 'Send'}
+              {/* {functionFragment ? getFunctionName(functionFragment) : 'Send'} */}
+              {getFunctionName('fragment')}
             </span>
           </Description>
         </div>
