@@ -354,8 +354,10 @@ export const useBLSSnap = () => {
         },
       },
     });
+    // const actionsNotPostpone = actions.filter((action) => !action.postpone);
     dispatch(ws.addBundle({ bundleHash: data.bundleHash }));
     dispatch(ws.removeActions(actions));
+    // dispatch(ws.removeActions(actionsNotPostpone));
     return data;
   };
 
