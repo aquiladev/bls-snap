@@ -38,9 +38,14 @@ jobs:
           CI: true
         if: steps.cache.outputs.cache-hit != 'true'
 
+      - run: yarn workspace @aquiladev/bls-snap build
+
+      - uses: google-github-actions/release-please-action@v3
+        with:
+          command: manifest
+
       - name: Publish to NPM
         run: |
-          yarn workspace @aquiladev/bls-snap build
           yarn workspace @aquiladev/bls-snap npm publish --tag latest --access public 2>&1 > /dev/null || :
 
       - name: Build UI
@@ -52,7 +57,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./packages/wallet-ui/build
-
-      - uses: google-github-actions/release-please-action@v3
-        with:
-          command: manifest
