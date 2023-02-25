@@ -53,7 +53,6 @@ jobs:
       - name: Build UI
         run: |
           REACT_APP_SNAP_ID=npm:@aquiladev/bls-snap yarn workspace wallet-ui build
-        if: ${{ steps.release.outputs.release_created }}
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
