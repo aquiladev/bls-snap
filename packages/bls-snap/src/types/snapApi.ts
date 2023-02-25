@@ -52,6 +52,10 @@ export type AddActionRequestParams = {
   functionFragment?: string;
 } & BaseRequestParams;
 
+export type RemoveActionRequestParams = {
+  id: string;
+} & BaseRequestParams;
+
 export type GetBundleRequestParams = {
   bundleHash: string;
 } & BaseRequestParams;
@@ -77,6 +81,7 @@ export type ApiRequestParams =
   | GetErc20TokenBalanceRequestParams
   | GetActionsRequestParams
   | AddActionRequestParams
+  | RemoveActionRequestParams
   | GetBundleRequestParams
   | GetBundlesRequestParams
   | SendBundleRequestParams;

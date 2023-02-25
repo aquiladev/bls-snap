@@ -1,6 +1,10 @@
 import { OnRpcRequestHandler } from '@metamask/snaps-types';
 import { Mutex } from 'async-mutex';
 
+import { ApiParams, ApiRequestParams } from './types/snapApi';
+import { addTestToken, upsertNetwork } from './utils/snapUtils';
+import * as config from './utils/config';
+import { getAddressKeyDeriver } from './utils/crypto';
 import { addAction } from './addAction';
 import { getActions } from './getActions';
 import { createAccount } from './createAccount';
@@ -11,12 +15,9 @@ import { getNetworks } from './getNetworks';
 import { getBundles } from './getBundles';
 import { recoverAccounts } from './recoverAccounts';
 import { sendBundle } from './sendBundle';
-import { ApiParams, ApiRequestParams } from './types/snapApi';
-import * as config from './utils/config';
-import { addTestToken, upsertNetwork } from './utils/snapUtils';
 import { getBundle } from './getBundle';
-import { getAddressKeyDeriver } from './utils/crypto';
 import { removeErc20Token } from './removeErc20Token';
+import { removeAction } from './removeAction';
 
 declare const snap;
 const mutex = new Mutex();
@@ -99,6 +100,8 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
       return addAction(apiParams);
     case 'bls_getActions':
       return getActions(apiParams);
+    case 'bls_removeAction':
+      return removeAction(apiParams);
     case 'bls_getBundles':
       return getBundles(apiParams);
     case 'bls_getBundle':

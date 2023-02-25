@@ -259,7 +259,7 @@ export async function upsertErc20Token(
   });
 }
 
-export async function deleteErc20Token(
+export async function removeErc20Token(
   erc20Token: Erc20Token,
   chainId: number,
   snap: any,
@@ -356,6 +356,14 @@ export function getActions(
     (action) =>
       action.senderAddress.toLowerCase() === senderAddress.toLowerCase(),
   );
+}
+
+export function getActionById(
+  id: string,
+  chainId: number,
+  state: SnapState,
+): Action | undefined {
+  return state[chainId]?.actions?.find((action) => action.id === id);
 }
 
 export async function removeActions(
