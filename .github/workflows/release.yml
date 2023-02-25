@@ -41,19 +41,48 @@ jobs:
       - run: yarn workspace @aquiladev/bls-snap build
 
       - uses: google-github-actions/release-please-action@v3
+        id: release
         with:
           command: manifest
+
+      - name: Fail when release-please failed
+        run: exit 1
+        if: ${{ steps.release.outputs.release_created }} != 'true'
 
       - name: Publish to NPM
         run: |
           yarn workspace @aquiladev/bls-snap npm publish --tag latest --access public 2>&1 > /dev/null || :
+        if: ${{ steps.release.outputs.release_created }}
 
       - name: Build UI
         run: |
           REACT_APP_SNAP_ID=npm:@aquiladev/bls-snap yarn workspace wallet-ui build
+        if: ${{ steps.release.outputs.release_created }}
 
       - name: Upload to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./packages/wallet-ui/build
+        if: ${{ steps.release.outputs.release_created }}
+
+  upload_ipfs:
+    permissions:
+      contents: none
+    runs-on: ubuntu-latest
+    needs: release
+    environment:
+      name: 'IPFS'
+      url: https://ipfs.infura.io/ipfs/${{ steps.ipfs_upload.outputs.hash }}
+
+    steps:
+      - name: Upload dApp to IPFS
+        uses: aquiladev/ipfs-action@v0.3.1
+        id: ipfs_upload
+        with:
+          path: ./packages/wallet-ui/build
+          service: infura
+          infuraProjectId: ${{ secrets.INFURA_PROJECT_ID }}
+          infuraProjectSecret: ${{ secrets.INFURA_PROJECT_SECRET }}
+          timeout: 120000
+          verbose: true
