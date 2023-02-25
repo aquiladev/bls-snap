@@ -9,7 +9,8 @@ import { getAggregator, getWallet } from './utils/blsUtils';
 export async function sendBundle(params: ApiParams): Promise<Bundle> {
   try {
     const { state, mutex, snap, requestParams } = params;
-    const { senderAddress, chainId } = requestParams as SendBundleRequestParams;
+    const { senderAddress, actionIds, chainId } =
+      requestParams as SendBundleRequestParams;
 
     if (!ethers.utils.isAddress(senderAddress)) {
       throw new Error(`The given sender address is invalid: ${senderAddress}`);
@@ -20,6 +21,10 @@ export async function sendBundle(params: ApiParams): Promise<Bundle> {
       throw new Error(`ChainId not supported: ${chainId}`);
     }
 
+    if (!actionIds.length) {
+      throw new Error(`No actions provided: ${JSON.stringify(requestParams)}`);
+    }
+
     const account = snapUtils.getAccount(senderAddress, chainId, state);
     if (!account) {
       throw new Error(
@@ -27,9 +32,20 @@ export async function sendBundle(params: ApiParams): Promise<Bundle> {
       );
     }
 
-    const actions = snapUtils.getActions(senderAddress, chainId, state);
+    const actions = snapUtils
+      .getActions(senderAddress, chainId, state)
+      .filter((a) => actionIds.includes(a.id));
     if (!actions?.length) {
       throw new Error(`No actions found: ${senderAddress} chainId: ${chainId}`);
+    }
+
+    if (actionIds.length !== actions.length) {
+      const foundIds = actions.map((a) => a.id);
+      throw new Error(
+        `Some actions were not found: ${actionIds.filter(
+          (a) => !foundIds.includes(a),
+        )}`,
+      );
     }
 
     // Note that if a wallet doesn't yet exist, it will be

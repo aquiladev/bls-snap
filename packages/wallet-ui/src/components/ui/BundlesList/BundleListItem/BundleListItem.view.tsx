@@ -3,6 +3,7 @@ import { Bundle } from '@aquiladev/bls-snap/src/types/snapState';
 import { useAppSelector } from '../../../../hooks/redux';
 import { ActionsList } from '../../ActionsList';
 import { shortenAddress } from '../../../../utils/utils';
+import { SelectableAction } from '../../../../types';
 import {
   Content,
   IconStyled,
@@ -32,7 +33,7 @@ export const BundleListItemView = ({ bundle }: Props) => {
       >
         <div>
           <div>
-            <span>{bundle.bundleHash}</span>
+            <span>BundleHash: {shortenAddress(bundle.bundleHash)}</span>
             <span style={{ paddingLeft: 20, color: statusColor }}>
               {status}
             </span>
@@ -78,7 +79,12 @@ export const BundleListItemView = ({ bundle }: Props) => {
       </Wrapper>
       {showActions && (
         <Content>
-          <ActionsList actions={bundle.actions} />
+          <ActionsList
+            actions={(bundle.actions || []).map((a) => {
+              return { ...a, selected: false } as SelectableAction;
+            })}
+            isSelectable={false}
+          />
         </Content>
       )}
     </>

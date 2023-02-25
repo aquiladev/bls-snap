@@ -25,13 +25,19 @@ export const HomeView = ({ address }: Props) => {
   const { erc20TokenBalanceSelected, actions } = useAppSelector(
     (state) => state.wallet,
   );
+  const hasSelectedActions = actions.some((action) => action.selected);
+
   const { sendBundle } = useBLSSnap();
   const [isSendingBundle, setIsSendingBundle] = useState(false);
 
   const handleSendBundle = async () => {
     const { chainId } = networks.items[networks.activeNetwork];
     setIsSendingBundle(true);
-    await sendBundle(address, chainId);
+    await sendBundle(
+      address,
+      actions.filter((action) => action.selected),
+      chainId,
+    );
     setIsSendingBundle(false);
   };
 
@@ -49,7 +55,7 @@ export const HomeView = ({ address }: Props) => {
             <Buttons style={{ textAlign: 'center' }}>
               <HeaderButton
                 onClick={() => handleSendBundle()}
-                disabled={isSendingBundle}
+                disabled={isSendingBundle || !hasSelectedActions}
                 customIconLeft={
                   isSendingBundle ? (
                     <LoadingSpinner icon="spinner" pulse />

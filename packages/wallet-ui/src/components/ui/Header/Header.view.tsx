@@ -63,7 +63,7 @@ export const HeaderView = ({ address }: Props) => {
     ]);
     const functionFragment = erc20Contract.interface
       .getFunction('mint')
-      .format();
+      .format('minimal');
 
     await addAction(
       senderAddress,

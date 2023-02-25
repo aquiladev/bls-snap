@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Action, Bundle } from '@aquiladev/bls-snap/src/types/snapState';
+import { Bundle } from '@aquiladev/bls-snap/src/types/snapState';
 import { BigNumber } from 'ethers';
-import { Account, Erc20TokenBalance } from '../types';
+import { Account, SelectableAction, Erc20TokenBalance } from '../types';
 
 export type WalletState = {
   connected: boolean;
@@ -10,7 +10,7 @@ export type WalletState = {
   accounts: Account[];
   erc20TokenBalances: Erc20TokenBalance[];
   erc20TokenBalanceSelected: Erc20TokenBalance;
-  actions: Action[];
+  actions: SelectableAction[];
   bundles: Bundle[];
 };
 
@@ -81,10 +81,22 @@ export const walletSlice = createSlice({
       }
     },
     setActions: (state, { payload }) => {
-      state.actions = (payload || []).reverse();
+      state.actions = (payload || [])
+        .map((a) => {
+          return { ...a, selected: true };
+        })
+        .reverse();
     },
     addAction: (state, { payload }) => {
-      state.actions = [payload, ...state.actions];
+      state.actions = [{ ...payload, selected: true }, ...state.actions];
+    },
+    updateAction: (state, { payload }) => {
+      state.actions = state.actions.map((action) => {
+        if (action.id === payload.id) {
+          return { ...action, ...payload };
+        }
+        return action;
+      });
     },
     removeActions: (state, { payload }) => {
       const list = Array(payload).flat();
@@ -119,6 +131,7 @@ export const {
   upsertErc20TokenBalance,
   setActions,
   addAction,
+  updateAction,
   removeActions,
   setBundles,
   addBundle,
