@@ -1,0 +1,14 @@
+{
+  "packages": {
+    "packages/bls-snap": {
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "snap.manifest.json",
+          "jsonpath": "$.version"
+        }
+      ]
+    },
+    "packages/wallet-ui": {}
+  }
+}

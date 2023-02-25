@@ -6,20 +6,12 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "noFallthroughCasesInSwitch": true
   },
-  "files": [
-    "../../node_modules/@metamask/snaps-types/global.d.ts"
-  ],
-  "include": [
-    "src"
-  ]
+  "files": ["../../node_modules/@metamask/snaps-types/global.d.ts"],
+  "include": ["src"]
 }
