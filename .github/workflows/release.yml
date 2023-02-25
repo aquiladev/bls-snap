@@ -15,11 +15,6 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
 
-      - uses: oprypin/find-latest-tag@v1
-        with:
-          repository: aquiladev/bls-snap
-        id: latesttag
-
       - uses: actions/setup-node@v3
         with:
           node-version: 16.x
