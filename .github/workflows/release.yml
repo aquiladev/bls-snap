@@ -55,6 +55,12 @@ jobs:
           REACT_APP_SNAP_ID=npm:@aquiladev/bls-snap yarn workspace wallet-ui build
         if: ${{ steps.release.outputs.release_created }}
 
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
+        with:
+          name: wallet-ui-${{ github.sha }}
+          path: ./packages/wallet-ui/build
+
       - name: Upload to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
@@ -72,11 +78,17 @@ jobs:
       url: https://ipfs.infura.io/ipfs/${{ steps.ipfs_upload.outputs.hash }}
 
     steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: wallet-ui-${{ github.sha }}
+          path: ./wallet-ui-${{ github.sha }}
+
       - name: Upload dApp to IPFS
         uses: aquiladev/ipfs-action@v0.3.1
         id: ipfs_upload
         with:
-          path: ./packages/wallet-ui/build
+          path: ./wallet-ui-${{ github.sha }}
           service: infura
           infuraProjectId: ${{ secrets.INFURA_PROJECT_ID }}
           infuraProjectSecret: ${{ secrets.INFURA_PROJECT_SECRET }}
