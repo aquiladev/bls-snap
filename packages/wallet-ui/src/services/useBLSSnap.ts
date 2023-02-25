@@ -4,7 +4,12 @@ import semver from 'semver/preload';
 import { Erc20Token, Bundle } from '@aquiladev/bls-snap/src/types/snapState';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import * as ws from '../slices/walletSlice';
-import { Account, Erc20TokenBalance, Network, Action } from '../types';
+import {
+  Account,
+  Erc20TokenBalance,
+  Network,
+  SelectableAction,
+} from '../types';
 import {
   disableLoading,
   enableLoadingWithMessage,
@@ -17,9 +22,7 @@ import { getAssetPriceUSD } from './coinGecko';
 export const useBLSSnap = () => {
   const dispatch = useAppDispatch();
   const { activeNetwork } = useAppSelector((state) => state.networks);
-  const { erc20TokenBalances, actions } = useAppSelector(
-    (state) => state.wallet,
-  );
+  const { erc20TokenBalances } = useAppSelector((state) => state.wallet);
   const { loader } = useAppSelector((state) => state.UI);
 
   const { ethereum } = window as any;
@@ -265,7 +268,7 @@ export const useBLSSnap = () => {
           },
         },
       },
-    })) as Action[];
+    })) as SelectableAction[];
     dispatch(ws.setActions(data));
     return data;
   };
@@ -331,7 +334,11 @@ export const useBLSSnap = () => {
     }
   };
 
-  const sendBundle = async (senderAddress: string, chainId: number) => {
+  const sendBundle = async (
+    senderAddress: string,
+    actions: SelectableAction[],
+    chainId: number,
+  ) => {
     const data = await ethereum.request({
       method: 'wallet_invokeSnap',
       params: {
@@ -341,6 +348,7 @@ export const useBLSSnap = () => {
           params: {
             senderAddress,
             chainId,
+            actionIds: actions.map((action) => action.id),
           },
         },
       },
@@ -372,7 +380,7 @@ export const useBLSSnap = () => {
           },
         },
       },
-    })) as Action[];
+    })) as Erc20Token[];
     return data;
   };
 
@@ -389,7 +397,7 @@ export const useBLSSnap = () => {
           },
         },
       },
-    })) as Action[];
+    })) as Erc20Token[];
     return data;
   };
 

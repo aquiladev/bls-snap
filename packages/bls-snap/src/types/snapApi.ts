@@ -68,6 +68,7 @@ export type GetBundlesRequestParams = {
 
 export type SendBundleRequestParams = {
   senderAddress: string;
+  actionIds: string[];
 } & BaseRequestParams;
 
 export type ApiRequestParams =
