@@ -15,26 +15,14 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
 
-      - name: 'Extract current package version'
-        run: node -p -e '`PACKAGE_VERSION=${"v" + require("./package.json").version}`' >> $GITHUB_ENV
-
       - uses: oprypin/find-latest-tag@v1
         with:
           repository: aquiladev/bls-snap
         id: latesttag
 
-      - name: Print current package version
-        run: echo "${{ env.PACKAGE_VERSION }}"
-      - name: Print latest repository tag
-        run: echo "${{ steps.latesttag.outputs.tag }}"
-
-      - run: echo "No new version found... Skipping"
-        if: steps.latesttag.outputs.tag == env.PACKAGE_VERSION
-
       - uses: actions/setup-node@v3
         with:
           node-version: 16.x
-        if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
 
       - name: Setup .yarnrc.yml
         run: |
@@ -43,37 +31,32 @@ jobs:
           yarn config set npmAuthToken $NPM_AUTH_TOKEN
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
 
       - uses: actions/cache@v3
         id: cache
         with:
           path: '**/node_modules'
           key: uns-yarn-${{ hashFiles('**/yarn.lock') }}
-        if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
 
       - run: yarn install --immutable
         env:
           CI: true
-        if: steps.cache.outputs.cache-hit != 'true' && steps.latesttag.outputs.tag != env.PACKAGE_VERSION
+        if: steps.cache.outputs.cache-hit != 'true'
 
       - name: Publish to NPM
         run: |
           yarn workspace @aquiladev/bls-snap build
           yarn workspace @aquiladev/bls-snap npm publish --tag latest --access public 2>&1 > /dev/null || :
-        if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
 
       - name: Build UI
         run: |
           REACT_APP_SNAP_ID=npm:@aquiladev/bls-snap yarn workspace wallet-ui build
-        if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
 
       - name: Upload to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./packages/wallet-ui/build
-        if: steps.latesttag.outputs.tag != env.PACKAGE_VERSION
 
       - uses: google-github-actions/release-please-action@v3
         with:
