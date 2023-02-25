@@ -74,7 +74,7 @@ jobs:
     needs: release
     environment:
       name: 'IPFS'
-      url: https://ipfs.infura.io/ipfs/${{ steps.ipfs_upload.outputs.hash }}
+      url: https://ipfs-action.infura-ipfs.io/ipfs/${{ steps.ipfs_upload.outputs.hash }}
 
     steps:
       - name: Download artifact from build job
