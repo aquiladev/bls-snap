@@ -2,7 +2,6 @@
 
 The MetaMask Snap for [BLS Wallet](https://blswallet.org/)
 
-
 https://user-images.githubusercontent.com/1164492/214146350-eb910e0c-fcb3-4656-965d-6cbf19021675.mov
 
 ## Terminology
@@ -17,31 +16,32 @@ https://user-images.githubusercontent.com/1164492/214146350-eb910e0c-fcb3-4656-9
 1. [Chrome browser](https://www.google.com/chrome/)
 2. [MetaMask Flask](https://metamask.io/flask/)
 
-    Install MetaMask Flask in your Chrome browser. If you have MetaMask installed, you need to disable it because MetaMask does not support Snaps and cannot work with MetaMask Flask at the same time. Take a look [FAQ](https://metamask.io/flask/#flask-fa-qs)
+   Install MetaMask Flask in your Chrome browser. If you have MetaMask installed, you need to disable it because MetaMask does not support Snaps and cannot work with MetaMask Flask at the same time. Take a look [FAQ](https://metamask.io/flask/#flask-fa-qs)
+
 3. [Node.js v16+](https://nodejs.org/download/release/v16.13.2/)
 4. [Yarn](https://yarnpkg.com/getting-started/install)
 
 ## Getting Started
 
 1. Clone the repository
-    ```
-    mkdir ./bls-snap
-    cd ./bls-snap
-    git clone https://github.com/aquiladev/bls-snap.git .
-    ```
+   ```
+   mkdir ./bls-snap
+   cd ./bls-snap
+   git clone https://github.com/aquiladev/bls-snap.git .
+   ```
 2. Install dependencies
-    ```
-    yarn install
-    ```
+   ```
+   yarn install
+   ```
 3. Run snap with UI
-    ```
-    yarn start
-    ```
-    **Note:** If you have issues on the snap installation, take a look **Troubleshooting** block.
+   ```
+   yarn start
+   ```
+   **Note:** If you have issues on the snap installation, take a look **Troubleshooting** block.
 4. Run tests
-    ```
-    yarn test
-    ```
+   ```
+   yarn test
+   ```
 
 ## Snap APIs
 
@@ -80,19 +80,19 @@ await ethereum.request({
 
 ### API params
 
-| API                        | Required                                                                           | Optional                              |
-| -------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------- |
+| API                        | Required                                                                           | Optional                                        |
+| -------------------------- | ---------------------------------------------------------------------------------- | ----------------------------------------------- |
 | `ping`                     |                                                                                    |
 | `bls_getNetworks`          |                                                                                    |
 | `bls_recoverAccounts`      | `chainId`                                                                          |
-| `bls_createAccount`        | `chainId`                                                                          | `addressIndex`                        |
-| `bls_addErc20Token`        | `chainId`,<br /> `tokenAddress`,<br /> `tokenName`,<br /> `tokenSymbol`            | `tokenDecimals` (default: 18)         |
+| `bls_createAccount`        | `chainId`                                                                          | `addressIndex`                                  |
+| `bls_addErc20Token`        | `chainId`,<br /> `tokenAddress`,<br /> `tokenName`,<br /> `tokenSymbol`            | `tokenDecimals` (default: 18)                   |
 | `bls_getErc20Tokens`       | `chainId`                                                                          |
-| `bls_removeErc20Token`     | `chainId`,<br /> `tokenAddress`
+| `bls_removeErc20Token`     | `chainId`,<br /> `tokenAddress`                                                    |
 | `bls_getErc20TokenBalance` | `chainId`,<br /> `tokenAddress`,<br /> `userAddress`                               |
 | `bls_getActions`           | `chainId`,<br /> `senderAddress`                                                   |
 | `bls_addAction`            | `chainId`,<br /> `senderAddress`,<br /> `contractAddress`,<br /> `encodedFunction` | `value` (default: 0), <br /> `functionFragment` |
-| `bls_getBundles`           | `chainId`,<br /> `senderAddress`                                                   | `contractAddress`,<br /> `bundleHash` |
+| `bls_getBundles`           | `chainId`,<br /> `senderAddress`                                                   | `contractAddress`,<br /> `bundleHash`           |
 | `bls_getBundle`            | `chainId`,<br /> `bundleHash`                                                      |
 | `bls_sendBundle`           | `chainId`,<br /> `senderAddress`                                                   |
 

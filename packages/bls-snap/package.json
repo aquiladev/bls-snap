@@ -1,6 +1,10 @@
 {
   "name": "@aquiladev/bls-snap",
   "version": "0.2.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aquiladev/bls-snap.git"
+  },
   "license": "(MIT-0 OR Apache-2.0)",
   "main": "src/index.ts",
   "files": [
@@ -8,10 +12,6 @@
     "images/",
     "snap.manifest.json"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/aquiladev/bls-snap.git"
-  },
   "scripts": {
     "build": "mm-snap build",
     "build:clean": "yarn clean && yarn build",

@@ -19,6 +19,7 @@
     "lint:eslint": "eslint . --cache --ext js,ts",
     "lint:fix": "yarn lint:eslint --fix && yarn lint:misc --write",
     "lint:misc": "prettier '**/*.json' '**/*.md' '!**/CHANGELOG.md' '**/*.yml' --ignore-path .gitignore",
+    "prepare": "husky install",
     "start": "yarn workspaces foreach --parallel --interlaced --verbose run start",
     "test": "yarn workspace @aquiladev/bls-snap run test"
   },
@@ -36,6 +37,7 @@
     "eslint-plugin-jsdoc": "^39.2.9",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.3",
     "prettier": "^2.2.1",
     "prettier-plugin-packagejson": "^2.2.18",
     "typescript": "^4.7.4"
