@@ -36,7 +36,6 @@ jobs:
       - run: yarn install --immutable
         env:
           CI: true
-        if: steps.cache.outputs.cache-hit != 'true'
 
       - run: yarn workspace @aquiladev/bls-snap build
 
@@ -44,6 +43,10 @@ jobs:
         id: release
         with:
           command: manifest
+
+      - name: Fail when release-please failed
+        run: exit 1
+        if: ${{ steps.release.outputs.release_created }} != 'true'
 
       - name: Publish to NPM
         run: |
