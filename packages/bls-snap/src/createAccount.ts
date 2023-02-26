@@ -1,4 +1,3 @@
-/* eslint-disable jsdoc/require-jsdoc */
 import { ApiParams, CreateAccountRequestParams } from './types/snapApi';
 import * as config from './utils/config';
 import {
@@ -9,6 +8,16 @@ import {
 import { Account, BlsAccount } from './types/snapState';
 import { getWallet } from './utils/blsUtils';
 
+/**
+ * Creates new account for specific network.
+ * Snap uses seedprase from MetaMask through its API `snap_getBip44Entropy` in order to generate accounts.
+ * It allows to re-create the same accounts after snap re-installation.
+ *
+ * @param params - The request handler args as object.
+ * @param params.requestParams.chainId - Id of the supported network.
+ * @param params.requestParams.addressIndex - Specific address index of the derived key in BIP-44. Optional, default is 0.
+ * @returns The new account.
+ */
 export async function createAccount(params: ApiParams): Promise<Account> {
   try {
     const { state, mutex, snap, requestParams, keyDeriver } = params;

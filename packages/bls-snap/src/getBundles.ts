@@ -1,8 +1,15 @@
-/* eslint-disable jsdoc/require-jsdoc */
 import { ApiParams, GetBundlesRequestParams } from './types/snapApi';
 import { Bundle } from './types/snapState';
 import * as snapUtils from './utils/snapUtils';
 
+/**
+ * Gets bundles from the specific network.
+ *
+ * @param params - The request handler args as object.
+ * @param params.requestParams.chainId - Id of the supported network.
+ * @param params.requestParams.senderAddress - Address of the sender.
+ * @returns The bundles.
+ */
 export async function getBundles(params: ApiParams): Promise<Bundle[]> {
   try {
     const { state, requestParams } = params;
