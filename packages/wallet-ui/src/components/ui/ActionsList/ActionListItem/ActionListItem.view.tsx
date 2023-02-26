@@ -6,6 +6,7 @@ import {
   humanizeFragment,
 } from '../../../../utils/utils';
 import * as ws from '../../../../slices/walletSlice';
+import { useBLSSnap } from '../../../../services/useBLSSnap';
 import {
   Column,
   Description,
@@ -23,6 +24,7 @@ export const ActionListItemView = ({ action, isSelectable }: Props) => {
   const dispatch = useAppDispatch();
   const { value, contractAddress, createdAt, functionFragment, selected } =
     action;
+  const { removeActions } = useBLSSnap();
 
   const title = humanizeFragment(functionFragment) || 'Send';
   return (
@@ -62,6 +64,15 @@ export const ActionListItemView = ({ action, isSelectable }: Props) => {
       </Column>
       <Right>
         <span>-{value} ETH</span>
+        {isSelectable && (
+          <IconStyled
+            icon={['fas', 'trash']}
+            style={{ fontSize: 18, paddingLeft: 20, cursor: 'pointer' }}
+            onClick={() => {
+              removeActions(action.id);
+            }}
+          />
+        )}
       </Right>
     </Wrapper>
   );

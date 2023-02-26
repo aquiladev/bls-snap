@@ -273,6 +273,24 @@ export const useBLSSnap = () => {
     return data;
   };
 
+  const removeActions = async (id: string) => {
+    const action = await ethereum.request({
+      method: 'wallet_invokeSnap',
+      params: {
+        snapId,
+        request: {
+          method: 'bls_removeAction',
+          params: {
+            id,
+            // chainId,
+          },
+        },
+      },
+    });
+    dispatch(ws.removeActions(action));
+    return action;
+  };
+
   const getBundles = async (
     senderAddress: string,
     chainId: number,
@@ -292,6 +310,7 @@ export const useBLSSnap = () => {
         },
       },
     })) as Bundle[];
+    console.log(data);
     dispatch(ws.setBundles(data));
     return data;
   };
@@ -499,6 +518,7 @@ export const useBLSSnap = () => {
     updateTokenBalance,
     addAction,
     getActions,
+    removeActions,
     getBundle,
     getBundles,
     sendBundle,
