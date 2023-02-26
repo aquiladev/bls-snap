@@ -1,4 +1,3 @@
-/* eslint-disable jsdoc/require-jsdoc */
 import { ethers } from 'ethers';
 import { ApiParams, SendBundleRequestParams } from './types/snapApi';
 import * as config from './utils/config';
@@ -6,6 +5,15 @@ import * as snapUtils from './utils/snapUtils';
 import { Bundle } from './types/snapState';
 import { getAggregator, getWallet } from './utils/blsUtils';
 
+/**
+ * Sends bundle to the specific network.
+ *
+ * @param params - The request handler args as object.
+ * @param params.requestParams.chainId - Id of the supported network.
+ * @param params.requestParams.senderAddress - Address of the sender.
+ * @param params.requestParams.actionIds - Ids of the actions.
+ * @returns The bundle.
+ */
 export async function sendBundle(params: ApiParams): Promise<Bundle> {
   try {
     const { state, mutex, snap, requestParams } = params;

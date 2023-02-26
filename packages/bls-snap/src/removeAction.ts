@@ -1,8 +1,15 @@
-/* eslint-disable jsdoc/require-jsdoc */
 import { ApiParams, RemoveActionRequestParams } from './types/snapApi';
 import { Action } from './types/snapState';
 import * as snapUtils from './utils/snapUtils';
 
+/**
+ * Removes action from the specific network.
+ *
+ * @param params - The request handler args as object.
+ * @param params.requestParams.chainId - Id of the supported network.
+ * @param params.requestParams.id - Id of the action.
+ * @returns The removed action.
+ */
 export async function removeAction(params: ApiParams): Promise<Action> {
   try {
     const { state, mutex, requestParams, snap } = params;

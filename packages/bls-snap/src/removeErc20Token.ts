@@ -1,8 +1,15 @@
-/* eslint-disable jsdoc/require-jsdoc */
 import { ApiParams, RemoveErc20TokenRequestParams } from './types/snapApi';
 import { Erc20Token } from './types/snapState';
 import * as snapUtils from './utils/snapUtils';
 
+/**
+ * Removes ERC20 token from the specific network.
+ *
+ * @param params - The request handler args as object.
+ * @param params.requestParams.chainId - Id of the supported network.
+ * @param params.requestParams.tokenAddress - Address of the ERC20 token.
+ * @returns The removed ERC20 token.
+ */
 export async function removeErc20Token(params: ApiParams): Promise<Erc20Token> {
   try {
     const { state, snap, mutex, requestParams } = params;

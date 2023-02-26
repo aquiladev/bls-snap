@@ -1,4 +1,3 @@
-/* eslint-disable jsdoc/require-jsdoc */
 import { ApiParams, AddErc20TokenRequestParams } from './types/snapApi';
 import { Erc20Token } from './types/snapState';
 import {
@@ -8,6 +7,17 @@ import {
   validateAddErc20TokenParams,
 } from './utils/snapUtils';
 
+/**
+ * Adds ERC20 token to specific network.
+ *
+ * @param params - The request handler args as object.
+ * @param params.requestParams.chainId - Id of the supported network.
+ * @param params.requestParams.tokenAddress - Address of the ERC20 token.
+ * @param params.requestParams.tokenName - Name of the ERC20 token.
+ * @param params.requestParams.tokenSymbol - Symbol of the ERC20 token.
+ * @param params.requestParams.tokenDecimals - Decimals of the ERC20 token. Optional, default value is 18.
+ * @returns The added ERC20 token.
+ */
 export async function addErc20Token(params: ApiParams): Promise<Erc20Token> {
   try {
     const { state, snap, mutex, requestParams } = params;

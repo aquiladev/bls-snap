@@ -62,8 +62,6 @@ export type GetBundleRequestParams = {
 
 export type GetBundlesRequestParams = {
   senderAddress: string;
-  contractAddress?: string;
-  bundleHash?: string;
 } & BaseRequestParams;
 
 export type SendBundleRequestParams = {
