@@ -5,7 +5,7 @@ import { Home } from './components/pages/Home';
 import { AddNewTokenModal } from './components/ui/AddNewTokenModal';
 import { ConnectModal } from './components/ui/ConnectModal';
 import { LoadingBackdrop } from './components/ui/LoadingBackdrop';
-import { NewAccountDetailsInfoModal } from './components/ui/NewAccountDetailsInfoModal';
+import { ConnectInfoModal } from './components/ui/ConnectInfoModal';
 import { NoFlaskModal } from './components/ui/NoFlaskModal';
 import { PopIn } from './components/ui/PopIn';
 
@@ -76,6 +76,8 @@ function App() {
       <Wrapper>
         <WrapperContent>
           <Header handleToggleClick={toggleTheme} />
+          <Home address={address} />
+          <Footer />
           <PopIn
             isOpen={!loading && Boolean(hasMetamaskFlask) && !connected}
             showClose={false}
@@ -85,15 +87,13 @@ function App() {
           <PopIn isOpen={!hasMetamaskFlask} showClose={false}>
             <NoFlaskModal />
           </PopIn>
-          <Home address={address} />
-          <Footer />
-          <PopIn isOpen={loading}>
+          <PopIn isOpen={loading} showClose={false}>
             {loading && (
               <LoadingBackdrop>{loader.loadingMessage}</LoadingBackdrop>
             )}
           </PopIn>
           <PopIn isOpen={infoModalVisible}>
-            <NewAccountDetailsInfoModal address={address} />
+            <ConnectInfoModal address={address} />
           </PopIn>
           <PopIn isOpen={addTokenModalVisible || false}>
             <AddNewTokenModal />

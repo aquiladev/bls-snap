@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Backdrop } from '../Backdrop';
 import { Wrapper } from './LoadingBackdrop.style';
@@ -12,8 +12,8 @@ export const LoadingBackdropView = ({ children }: Props) => {
     <>
       <Backdrop />
       <Wrapper>
-        <FontAwesomeIcon icon="spinner" pulse />
-        <h3>{children}</h3>
+        <FontAwesomeIcon icon="spinner" pulse style={{ fontSize: 36 }} />
+        <h3 style={{ margin: 4 }}>{children}</h3>
       </Wrapper>
     </>
   );

@@ -10,7 +10,6 @@ import {
 } from '../slices/walletSlice';
 import { getThemePreference } from '../utils';
 import { MenuItem, Select } from './Select';
-import { Button } from './ui/Button';
 import { PopperTooltip } from './ui/PopperTooltip';
 import { AccountDetailButton } from './ui/SideBar/SideBar.style';
 
