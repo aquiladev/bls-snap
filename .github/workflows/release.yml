@@ -48,10 +48,6 @@ jobs:
         with:
           command: manifest
 
-      - name: Fail when release-please failed
-        run: exit 1
-        if: ${{ ! steps.release.outputs.release_created }}
-
       - name: Publish to NPM
         run: |
           yarn workspace @aquiladev/bls-snap npm publish --tag latest --access public 2>&1 > /dev/null || :
