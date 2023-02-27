@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/aquiladev/bls-snap/compare/wallet-ui-v0.1.1...wallet-ui-v0.1.2) (2023-02-27)
+
+
+### Bug Fixes
+
+* action with link for target address ([35f353d](https://github.com/aquiladev/bls-snap/commit/35f353ddeec2ca36e7982695ca231572f4ac283e))
+
 ## [0.1.1](https://github.com/aquiladev/bls-snap/compare/wallet-ui-v0.1.0...wallet-ui-v0.1.1) (2023-02-27)
 
 
