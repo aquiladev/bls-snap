@@ -1,4 +1,4 @@
-import { useAppDispatch } from '../../../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
 import { SelectableAction } from '../../../../types';
 import {
   shortenAddress,
@@ -12,6 +12,7 @@ import {
   Wrapper,
   IconStyled,
   Right,
+  Link,
 } from './ActionListItem.style';
 
 type Props = {
@@ -21,6 +22,8 @@ type Props = {
 
 export const ActionListItemView = ({ action, isSelectable }: Props) => {
   const dispatch = useAppDispatch();
+  const networks = useAppSelector((state) => state.networks);
+  const explorerUrl = networks.items[networks.activeNetwork]?.explorerUrl;
   const { value, contractAddress, createdAt, functionFragment, selected } =
     action;
 
@@ -56,7 +59,23 @@ export const ActionListItemView = ({ action, isSelectable }: Props) => {
           </span>
           <span style={{ paddingLeft: 10, paddingRight: 4 }}>To:</span>
           <span style={{ color: 'slateGray' }}>
-            {shortenAddress(contractAddress)}
+            <Link
+              href={`${explorerUrl}/address/${contractAddress}`}
+              rel="noopener noreferrer"
+              target="_blank"
+              id="explorer-link"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              {shortenAddress(contractAddress)}
+              <IconStyled
+                icon={['fas', 'arrow-up-right-from-square']}
+                style={{
+                  paddingLeft: 5,
+                }}
+              />
+            </Link>
           </span>
         </Description>
       </Column>
