@@ -48,7 +48,7 @@ jobs:
 
       - name: Fail when release-please failed
         run: exit 1
-        if: ${{ steps.release.outputs.release_created }} != 'true'
+        if: ${{ ! steps.release.outputs.release_created }}
 
       - name: Publish to NPM
         run: |
