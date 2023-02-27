@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import styled, { useTheme } from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { resetNetwork, setActiveNetwork } from '../slices/networkSlice';
 import {
@@ -9,8 +10,6 @@ import {
 } from '../slices/walletSlice';
 import { getThemePreference } from '../utils';
 import { MenuItem, Select } from './Select';
-import { SnapLogo } from './SnapLogo';
-import { Toggle } from './Toggle';
 import { Button } from './ui/Button';
 import { PopperTooltip } from './ui/PopperTooltip';
 import { AccountDetailButton } from './ui/SideBar/SideBar.style';
@@ -64,7 +63,6 @@ export const Header = ({
   return (
     <HeaderWrapper>
       <LogoWrapper>
-        {/* <SnapLogo color={theme.colors.icon.default} size={36} /> */}
         <Title>BLS Snap</Title>
       </LogoWrapper>
       <RightContainer>
@@ -82,25 +80,43 @@ export const Header = ({
             </MenuItem>
           ))}
         </Select>
-        <Toggle
-          onToggle={handleToggleClick}
-          defaultChecked={getThemePreference()}
-        />
         <PopperTooltip
           arrowVisible={false}
           closeTrigger="click"
           offSet={[0, 0]}
           content={
-            <AccountDetailButton
-              backgroundTransparent
-              iconLeft="right-to-bracket"
-              onClick={disconnect}
-            >
-              Disconnect
-            </AccountDetailButton>
+            <>
+              {getThemePreference() ? (
+                <AccountDetailButton
+                  backgroundTransparent
+                  iconRight="sun"
+                  onClick={handleToggleClick}
+                >
+                  Light theme
+                </AccountDetailButton>
+              ) : (
+                <AccountDetailButton
+                  backgroundTransparent
+                  iconRight="moon"
+                  onClick={handleToggleClick}
+                >
+                  Dark theme
+                </AccountDetailButton>
+              )}
+              <AccountDetailButton
+                backgroundTransparent
+                iconRight="right-to-bracket"
+                onClick={disconnect}
+              >
+                Disconnect
+              </AccountDetailButton>
+            </>
           }
         >
-          <Button iconLeft="bars" onlyIcon />
+          <FontAwesomeIcon
+            icon="bars"
+            style={{ fontSize: 24, cursor: 'pointer' }}
+          />
         </PopperTooltip>
       </RightContainer>
     </HeaderWrapper>

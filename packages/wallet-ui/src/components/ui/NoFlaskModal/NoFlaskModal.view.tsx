@@ -1,6 +1,5 @@
 import { useTheme } from 'styled-components';
 
-import { SnapLogo } from '../../SnapLogo';
 import {
   ConnectButton,
   DescriptionCentered,
@@ -13,7 +12,6 @@ export const NoFlaskModalView = () => {
 
   return (
     <Wrapper>
-      <SnapLogo color={theme.colors.icon.default} size={36} />
       <Title>You don't have the MetaMask Flask extension</Title>
       <DescriptionCentered>
         {
