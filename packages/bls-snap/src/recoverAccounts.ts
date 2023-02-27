@@ -1,8 +1,14 @@
-/* eslint-disable jsdoc/require-jsdoc */
 import { ApiParams, RecoverAccountsRequestParams } from './types/snapApi';
 import { Account } from './types/snapState';
 import { getAccounts } from './utils/snapUtils';
 
+/**
+ * Returns list of accounts for specific network.
+ *
+ * @param params - The request handler args as object.
+ * @param params.requestParams.chainId - Id of the supported network.
+ * @returns The list of accounts.
+ */
 export async function recoverAccounts(
   params: ApiParams,
 ): Promise<Account[] | undefined> {

@@ -1,13 +1,13 @@
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import { setInfoModalVisible } from '../../../slices/UISlice';
 import { Button } from '../Button';
-import { Wrapper, Normal, Bold } from './NewAccountDetailsInfoModal.style';
+import { Wrapper, Normal, Bold } from './ConnectInfoModal.style';
 
 type Props = {
   address: string;
 };
 
-export const NewAccountDetailsInfoModalView = ({ address }: Props) => {
+export const ConnectInfoModalView = ({ address }: Props) => {
   const networks = useAppSelector((state) => state.networks);
   const dispatch = useAppDispatch();
 

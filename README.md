@@ -74,6 +74,7 @@ await ethereum.request({
 - `bls_getErc20TokenBalance` - Returns ERC20 token balance from snap state.
 - `bls_getActions` - Returns list of actions from snap state.
 - `bls_addAction` - Adds new action to snap state.
+- `bls_removeAction` - Removes action from snap state.
 - `bls_getBundles` - Returns list of bundles from snap state.
 - `bls_getBundle` - Returns the bundle from snap state with status check.
 - `bls_sendBundle` - Signs and sends new bundle with ordered list of operations to an aggreegator.
@@ -92,9 +93,10 @@ await ethereum.request({
 | `bls_getErc20TokenBalance` | `chainId`,<br /> `tokenAddress`,<br /> `userAddress`                               |
 | `bls_getActions`           | `chainId`,<br /> `senderAddress`                                                   |
 | `bls_addAction`            | `chainId`,<br /> `senderAddress`,<br /> `contractAddress`,<br /> `encodedFunction` | `value` (default: 0), <br /> `functionFragment` |
-| `bls_getBundles`           | `chainId`,<br /> `senderAddress`                                                   | `contractAddress`,<br /> `bundleHash`           |
+| `bls_removeAction`         | `chainId`,<br /> `id`                                                              |
+| `bls_getBundles`           | `chainId`,<br /> `senderAddress`                                                   |
 | `bls_getBundle`            | `chainId`,<br /> `bundleHash`                                                      |
-| `bls_sendBundle`           | `chainId`,<br /> `senderAddress`                                                   |
+| `bls_sendBundle`           | `chainId`,<br /> `senderAddress`, <br /> `actionIds`                               |
 
 ## Troubleshooting
 

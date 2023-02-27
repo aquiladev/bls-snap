@@ -37,16 +37,18 @@ jobs:
         env:
           CI: true
 
-      - run: yarn workspace @aquiladev/bls-snap build
+      - name: Build Snap
+        run: yarn workspace @aquiladev/bls-snap build
 
-      - uses: google-github-actions/release-please-action@v3
+      - name: Create Release PR
+        uses: google-github-actions/release-please-action@v3
         id: release
         with:
           command: manifest
 
       - name: Fail when release-please failed
         run: exit 1
-        if: ${{ steps.release.outputs.release_created }} != 'true'
+        if: ${{ ! steps.release.outputs.release_created }}
 
       - name: Publish to NPM
         run: |

@@ -1,9 +1,17 @@
-/* eslint-disable jsdoc/require-jsdoc */
 import { ethers, BigNumber } from 'ethers';
 import { ApiParams, GetErc20TokenBalanceRequestParams } from './types/snapApi';
 import * as config from './utils/config';
 import * as evmUtils from './utils/evmUtils';
 
+/**
+ * Returns the balance of the ERC20 token for the specific account.
+ *
+ * @param params - The request handler args as object.
+ * @param params.requestParams.chainId - Id of the supported network.
+ * @param params.requestParams.tokenAddress - Address of the ERC20 token.
+ * @param params.requestParams.userAddress - Address of the account.
+ * @returns The balance of the ERC20 token.
+ */
 export async function getErc20TokenBalance(params: ApiParams): Promise<string> {
   try {
     const { requestParams } = params;

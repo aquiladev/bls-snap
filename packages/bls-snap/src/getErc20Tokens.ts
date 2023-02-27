@@ -1,8 +1,14 @@
-/* eslint-disable jsdoc/require-jsdoc */
 import { ApiParams, GetErc20TokensRequestParams } from './types/snapApi';
 import { Erc20Token } from './types/snapState';
 import * as snapUtils from './utils/snapUtils';
 
+/**
+ * Returns list of ERC20 tokens for the specific network.
+ *
+ * @param params - The request handler args as object.
+ * @param params.requestParams.chainId - Id of the supported network.
+ * @returns The list of ERC20 tokens.
+ */
 export async function getErc20Tokens(params: ApiParams): Promise<Erc20Token[]> {
   try {
     const { state, requestParams } = params;

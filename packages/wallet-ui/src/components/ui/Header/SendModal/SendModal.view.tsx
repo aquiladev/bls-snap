@@ -103,7 +103,7 @@ export const SendModalView = ({ closeModal }: Props) => {
     );
     const functionFragment = erc20Contract.interface
       .getFunction('transfer')
-      .format();
+      .format('minimal');
 
     await addAction(
       senderAddress,
