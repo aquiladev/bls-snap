@@ -51,7 +51,6 @@ jobs:
       - name: Publish to NPM
         run: |
           yarn workspace @aquiladev/bls-snap npm publish --tag latest --access public 2>&1 > /dev/null || :
-        if: ${{ steps.release.outputs.release_created }}
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
@@ -64,7 +63,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./packages/wallet-ui/build
-        if: ${{ steps.release.outputs.release_created }}
 
   upload_ipfs:
     permissions:
