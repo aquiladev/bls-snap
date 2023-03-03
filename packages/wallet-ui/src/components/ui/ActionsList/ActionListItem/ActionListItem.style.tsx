@@ -96,20 +96,3 @@ export const Link = styled.a`
     box-sizing: border-box;
   }
 `;
-
-export const Link = styled.a`
-  display: inline-flex;
-  align-self: flex-start;
-  align-items: center;
-  justify-content: center;
-  color: ${(props) => props.theme.palette.grey.grey1};
-  text-decoration: none;
-  padding-left: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-
-  ${({ theme }) => theme.mediaQueries.small} {
-    width: 100%;
-    box-sizing: border-box;
-  }
-`;
