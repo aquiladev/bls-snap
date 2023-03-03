@@ -310,7 +310,6 @@ export const useBLSSnap = () => {
         },
       },
     })) as Bundle[];
-    console.log(data);
     dispatch(ws.setBundles(data));
     return data;
   };
