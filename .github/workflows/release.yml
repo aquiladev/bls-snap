@@ -37,8 +37,10 @@ jobs:
         env:
           CI: true
 
-      - name: Build Snap
-        run: yarn workspace @aquiladev/bls-snap build
+      - name: Build
+        run: |
+          yarn workspace @aquiladev/bls-snap build
+          REACT_APP_SNAP_ID=npm:@aquiladev/bls-snap yarn workspace wallet-ui build
 
       - name: Create Release PR
         uses: google-github-actions/release-please-action@v3
@@ -46,18 +48,9 @@ jobs:
         with:
           command: manifest
 
-      - name: Fail when release-please failed
-        run: exit 1
-        if: ${{ ! steps.release.outputs.release_created }}
-
       - name: Publish to NPM
         run: |
           yarn workspace @aquiladev/bls-snap npm publish --tag latest --access public 2>&1 > /dev/null || :
-        if: ${{ steps.release.outputs.release_created }}
-
-      - name: Build UI
-        run: |
-          REACT_APP_SNAP_ID=npm:@aquiladev/bls-snap yarn workspace wallet-ui build
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
@@ -70,7 +63,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./packages/wallet-ui/build
-        if: ${{ steps.release.outputs.release_created }}
 
   upload_ipfs:
     permissions:
