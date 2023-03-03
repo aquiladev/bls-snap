@@ -1,8 +1,12 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import { RoundedIcon } from '../../RoundedIcon';
+import { Button } from '../../Button';
 
 type IIconeStyled = {
+  transactionname?: string;
+};
+type IIconButton = {
   transactionname?: string;
 };
 
@@ -17,7 +21,7 @@ export const Wrapper = styled.div`
   align-items: center;
   &:hover {
     background-color: ${(props) => props.theme.colors.background.inverse};
-    color: ${(props) => props.theme.colors.text.inverse}};
+    color: ${(props) => props.theme.colors.text.inverse};
   }
 `;
 
@@ -65,4 +69,24 @@ export const Middle = styled.div`
 export const Right = styled.div`
   flex: 1;
   text-align: end;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+export const AddressLink = styled.span`
+  cursor: pointer;
+  color: ${(props) => props.theme.palette.grey.grey1};
+  &&:hover {
+    color: ${(props) => props.theme.palette.primary.light};
+  }
+`;
+
+export const IconButton = styled(FontAwesomeIcon)<IIconButton>`
+  cursor: pointer;
+  font-size: ${(props) => props.theme.typography.i3.fontSize};
+  padding-left: 20px;
+  color: ${(props) => props.theme.palette.grey.grey1};
+  &&:hover {
+    color: ${(props) => props.theme.palette.warning.dark};
+  }
 `;

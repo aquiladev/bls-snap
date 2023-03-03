@@ -12,12 +12,18 @@ type Props = {
 
 export const ActionsListView = ({ actions, isSelectable = true }: Props) => {
   const wallet = useAppSelector((state) => state.wallet);
+  const networks = useAppSelector((state) => state.networks);
+  const chainId = networks.items[networks.activeNetwork]?.chainId;
 
   return (
     <Wrapper<FC<IListProps<SelectableAction>>>
       data={actions || wallet.actions || []}
       render={(action) => (
-        <ActionListItem action={action} isSelectable={isSelectable} />
+        <ActionListItem
+          action={action}
+          isSelectable={isSelectable}
+          chainId={chainId}
+        />
       )}
       keyExtractor={(action) => action.id}
     />

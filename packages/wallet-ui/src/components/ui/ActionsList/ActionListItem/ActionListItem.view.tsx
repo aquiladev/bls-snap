@@ -7,20 +7,28 @@ import {
 } from '../../../../utils/utils';
 import * as ws from '../../../../slices/walletSlice';
 import { useBLSSnap } from '../../../../services/useBLSSnap';
+import { PopperTooltip } from '../../PopperTooltip';
 import {
   Column,
   Description,
   Wrapper,
   IconStyled,
   Right,
+  AddressLink,
+  IconButton,
 } from './ActionListItem.style';
 
 type Props = {
   action: SelectableAction;
   isSelectable?: boolean;
+  chainId?: number;
 };
 
-export const ActionListItemView = ({ action, isSelectable }: Props) => {
+export const ActionListItemView = ({
+  action,
+  isSelectable,
+  chainId,
+}: Props) => {
   const dispatch = useAppDispatch();
   const { value, contractAddress, createdAt, functionFragment, selected } =
     action;
@@ -57,22 +65,12 @@ export const ActionListItemView = ({ action, isSelectable }: Props) => {
             {getDate(createdAt)}&nbsp;&#183;
           </span>
           <span style={{ paddingLeft: 10, paddingRight: 4 }}>To:</span>
-          <span style={{ color: 'slateGray' }}>
-            {shortenAddress(contractAddress)}
-          </span>
+          <AddressLink>{shortenAddress(contractAddress)}</AddressLink>
         </Description>
       </Column>
       <Right>
         <span>-{value} ETH</span>
-        {isSelectable && (
-          <IconStyled
-            icon={['fas', 'trash']}
-            style={{ fontSize: 18, paddingLeft: 20, cursor: 'pointer' }}
-            onClick={() => {
-              removeActions(action.id);
-            }}
-          />
-        )}
+        {isSelectable && <IconButton icon={['fas', 'trash']} />}
       </Right>
     </Wrapper>
   );
