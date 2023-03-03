@@ -20,7 +20,6 @@ import {
 type Props = {
   action: SelectableAction;
   isSelectable?: boolean;
-  chainId?: number;
 };
 
 export const ActionListItemView = ({ action, isSelectable }: Props) => {
