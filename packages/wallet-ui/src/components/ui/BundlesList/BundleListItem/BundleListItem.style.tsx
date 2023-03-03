@@ -16,7 +16,7 @@ export const Wrapper = styled.div`
   align-items: center;
   &:hover {
     background-color: ${(props) => props.theme.colors.background.inverse};
-    color: ${(props) => props.theme.colors.text.inverse}};
+    color: ${(props) => props.theme.colors.text.inverse};
   }
   cursor: pointer;
   background-color: ${(props) => props.theme.colors.background.default};

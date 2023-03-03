@@ -1,4 +1,4 @@
-import { useAppDispatch } from '../../../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
 import { SelectableAction } from '../../../../types';
 import {
   shortenAddress,
@@ -7,15 +7,14 @@ import {
 } from '../../../../utils/utils';
 import * as ws from '../../../../slices/walletSlice';
 import { useBLSSnap } from '../../../../services/useBLSSnap';
-import { PopperTooltip } from '../../PopperTooltip';
 import {
   Column,
   Description,
   Wrapper,
   IconStyled,
   Right,
-  AddressLink,
   IconButton,
+  Link,
 } from './ActionListItem.style';
 
 type Props = {
@@ -24,15 +23,14 @@ type Props = {
   chainId?: number;
 };
 
-export const ActionListItemView = ({
-  action,
-  isSelectable,
-  chainId,
-}: Props) => {
+export const ActionListItemView = ({ action, isSelectable }: Props) => {
   const dispatch = useAppDispatch();
   const { value, contractAddress, createdAt, functionFragment, selected } =
     action;
   const { removeActions } = useBLSSnap();
+  const networks = useAppSelector((state) => state.networks);
+  const chainId = networks.items[networks.activeNetwork]?.chainId;
+  const explorerUrl = networks.items[networks.activeNetwork]?.explorerUrl;
 
   const title = humanizeFragment(functionFragment) || 'Send';
   return (
@@ -65,12 +63,34 @@ export const ActionListItemView = ({
             {getDate(createdAt)}&nbsp;&#183;
           </span>
           <span style={{ paddingLeft: 10, paddingRight: 4 }}>To:</span>
-          <AddressLink>{shortenAddress(contractAddress)}</AddressLink>
+          <Link
+            href={`${explorerUrl}/address/${contractAddress}`}
+            rel="noopener noreferrer"
+            target="_blank"
+            id="explorer-link"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            {shortenAddress(contractAddress)}
+            <IconStyled
+              icon={['fas', 'arrow-up-right-from-square']}
+              style={{ paddingLeft: 5 }}
+            />
+          </Link>
         </Description>
       </Column>
       <Right>
         <span>-{value} ETH</span>
-        {isSelectable && <IconButton icon={['fas', 'trash']} />}
+        {isSelectable && (
+          <IconButton
+            icon={['fas', 'trash']}
+            onClick={(e) => {
+              e.stopPropagation();
+              removeActions(action.id, chainId);
+            }}
+          />
+        )}
       </Right>
     </Wrapper>
   );

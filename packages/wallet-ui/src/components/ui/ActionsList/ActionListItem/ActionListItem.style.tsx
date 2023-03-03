@@ -73,20 +73,26 @@ export const Right = styled.div`
   justify-content: flex-end;
 `;
 
-export const AddressLink = styled.span`
-  cursor: pointer;
-  color: ${(props) => props.theme.palette.grey.grey1};
-  &&:hover {
-    color: ${(props) => props.theme.palette.primary.light};
-  }
-`;
-
 export const IconButton = styled(FontAwesomeIcon)<IIconButton>`
   cursor: pointer;
   font-size: ${(props) => props.theme.typography.i3.fontSize};
   padding-left: 20px;
   color: ${(props) => props.theme.palette.grey.grey1};
+  transition: all 0.2s ease-in-out;
   &&:hover {
     color: ${(props) => props.theme.palette.warning.dark};
+  }
+`;
+
+export const Link = styled.a`
+  color: ${(props) => props.theme.palette.grey.grey1};
+  text-decoration: none;
+  padding-left: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  ${({ theme }) => theme.mediaQueries.small} {
+    width: 100%;
+    box-sizing: border-box;
   }
 `;
