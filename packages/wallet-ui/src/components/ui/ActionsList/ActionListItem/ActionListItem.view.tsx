@@ -61,7 +61,7 @@ export const ActionListItemView = ({ action, isSelectable }: Props) => {
           <span style={{ color: 'green' }}>
             {getDate(createdAt)}&nbsp;&#183;
           </span>
-          <span style={{ paddingLeft: 10, paddingRight: 4 }}>To:</span>
+          <span style={{ paddingLeft: 10 }}>To:</span>
           <Link
             href={`${explorerUrl}/address/${contractAddress}`}
             rel="noopener noreferrer"

@@ -18,6 +18,8 @@ type Props = {
 export const HeaderView = ({ address }: Props) => {
   const [receiveOpen, setReceiveOpen] = useState(false);
   const [sendOpen, setSendOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const networks = useAppSelector((state) => state.networks);
   const wallet = useAppSelector((state) => state.wallet);
   const { updateTokenBalance, addAction } = useBLSSnap();
@@ -51,27 +53,35 @@ export const HeaderView = ({ address }: Props) => {
   };
 
   const handleMintClick = async () => {
-    const { chainId } = networks.items[networks.activeNetwork];
-    const senderAddress = wallet.accounts[0].address;
-    const contractAddress = wallet.erc20TokenBalanceSelected.address;
+    setIsLoading(true);
 
-    const erc20Abi = ['function mint(address to, uint amount) returns (bool)'];
-    const erc20Contract = new ethers.Contract(contractAddress, erc20Abi);
-    const encodedFunction = erc20Contract.interface.encodeFunctionData('mint', [
-      senderAddress,
-      ethers.utils.parseUnits('0.5', 18),
-    ]);
-    const functionFragment = erc20Contract.interface
-      .getFunction('mint')
-      .format('minimal');
+    try {
+      const { chainId } = networks.items[networks.activeNetwork];
+      const senderAddress = wallet.accounts[0].address;
+      const contractAddress = wallet.erc20TokenBalanceSelected.address;
 
-    await addAction(
-      senderAddress,
-      contractAddress,
-      encodedFunction,
-      functionFragment,
-      chainId,
-    );
+      const erc20Abi = [
+        'function mint(address to, uint amount) returns (bool)',
+      ];
+      const erc20Contract = new ethers.Contract(contractAddress, erc20Abi);
+      const encodedFunction = erc20Contract.interface.encodeFunctionData(
+        'mint',
+        [senderAddress, ethers.utils.parseUnits('0.5', 18)],
+      );
+      const functionFragment = erc20Contract.interface
+        .getFunction('mint')
+        .format('minimal');
+
+      await addAction(
+        senderAddress,
+        contractAddress,
+        encodedFunction,
+        functionFragment,
+        chainId,
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const asset = wallet.erc20TokenBalanceSelected;
@@ -88,6 +98,7 @@ export const HeaderView = ({ address }: Props) => {
       <Buttons>
         <Button onClick={() => setReceiveOpen(true)}>Receive</Button>
         <Button
+          disabled={isLoading}
           onClick={() => handleSendClick()}
           backgroundTransparent
           borderVisible
@@ -95,7 +106,11 @@ export const HeaderView = ({ address }: Props) => {
           Send
         </Button>
         {wallet.erc20TokenBalanceSelected.isInternal && (
-          <Button variant="secondary" onClick={() => handleMintClick()}>
+          <Button
+            variant="secondary"
+            disabled={isLoading}
+            onClick={() => handleMintClick()}
+          >
             (Faucet) Mint 0.5 tokens
           </Button>
         )}

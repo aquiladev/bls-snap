@@ -274,6 +274,7 @@ export const useBLSSnap = () => {
   };
 
   const removeActions = async (id: string, chainId: number) => {
+    dispatch(ws.removeActions({ id }));
     const action = await ethereum.request({
       method: 'wallet_invokeSnap',
       params: {
@@ -287,7 +288,6 @@ export const useBLSSnap = () => {
         },
       },
     });
-    dispatch(ws.removeActions(action));
     return action;
   };
 
