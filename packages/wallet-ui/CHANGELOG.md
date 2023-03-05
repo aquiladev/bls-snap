@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/aquiladev/bls-snap/compare/wallet-ui-v0.1.2...wallet-ui-v0.1.3) (2023-03-05)
+
+
+### Bug Fixes
+
+* lock asset buttons while requesting api ([fb0c054](https://github.com/aquiladev/bls-snap/commit/fb0c0541ce1ec02ee63ba442eee2bd68e3460128))
+
 ## [0.1.2](https://github.com/aquiladev/bls-snap/compare/wallet-ui-v0.1.1...wallet-ui-v0.1.2) (2023-02-27)
 
 
