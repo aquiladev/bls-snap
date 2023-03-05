@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.5](https://github.com/aquiladev/bls-snap/compare/bls-snap-v0.2.4...bls-snap-v0.2.5) (2023-03-05)
+
+
+### Bug Fixes
+
+* remove sinon-register ([f9a960d](https://github.com/aquiladev/bls-snap/commit/f9a960d9a4b19b506824587367c50e43926d2f58))
+
 ## [0.2.4](https://github.com/aquiladev/bls-snap/compare/bls-snap-v0.2.3...bls-snap-v0.2.4) (2023-02-25)
 
 
