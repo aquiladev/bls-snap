@@ -13,7 +13,6 @@ module.exports = {
   require: [
     'tsconfig-paths/register',
     'source-map-support/register',
-    'sinon-register',
     './test/utils/mochaHooks.ts',
   ],
   slow: 1000,

@@ -73,7 +73,6 @@ __metadata:
     rimraf: ^3.0.2
     sinon: ^15.0.1
     sinon-chai: ^3.7.0
-    sinon-register: ^1.0.1
     ts-mocha: ^10.0.0
     ts-node: ^10.9.1
     typescript: ^4.7.4
@@ -16241,13 +16240,6 @@ __metadata:
     chai: ^4.0.0
     sinon: ">=4.0.0"
   checksum: 49a353d8eb66cc6db35ac452f6965c72778aa090d1f036dd1e54ba88594b1c3f314b1a403eaff22a4e314f94dc92d9c7d03cbb88c21d89e814293bf5b299964d
-  languageName: node
-  linkType: hard
-
-"sinon-register@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "sinon-register@npm:1.0.1"
-  checksum: 5b1c4ded0543ffb3055f012d5957d5194687975d0b61adbeaeadae4c6946a1ff63d24aebf1f03f52de7c90e3779aaaff00aca4fd1a226db1774acc50afd78d0a
   languageName: node
   linkType: hard
 
