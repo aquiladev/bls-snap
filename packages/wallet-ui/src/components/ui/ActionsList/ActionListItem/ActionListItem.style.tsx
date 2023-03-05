@@ -2,7 +2,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import { RoundedIcon } from '../../RoundedIcon';
 
-type IIconeStyled = {
+type IIconStyled = {
+  transactionname?: string;
+};
+
+type IIconButton = {
   transactionname?: string;
 };
 
@@ -17,7 +21,7 @@ export const Wrapper = styled.div`
   align-items: center;
   &:hover {
     background-color: ${(props) => props.theme.colors.background.inverse};
-    color: ${(props) => props.theme.colors.text.inverse}};
+    color: ${(props) => props.theme.colors.text.inverse};
   }
 `;
 
@@ -32,7 +36,7 @@ export const LeftIcon = styled(RoundedIcon)`
   width: 32px;
 `;
 
-export const IconStyled = styled(FontAwesomeIcon)<IIconeStyled>`
+export const IconStyled = styled(FontAwesomeIcon)<IIconStyled>`
   font-size: ${(props) => props.theme.typography.i2.fontSize};
   color: ${(props) => props.theme.palette.grey.grey1};
   transform: ${(props) =>
@@ -65,16 +69,25 @@ export const Middle = styled.div`
 export const Right = styled.div`
   flex: 1;
   text-align: end;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+export const IconButton = styled(FontAwesomeIcon)<IIconButton>`
+  cursor: pointer;
+  font-size: ${(props) => props.theme.typography.i3.fontSize};
+  padding-left: 20px;
+  color: ${(props) => props.theme.palette.grey.grey1};
+  transition: all 0.2s ease-in-out;
+  &&:hover {
+    color: ${(props) => props.theme.palette.warning.dark};
+  }
 `;
 
 export const Link = styled.a`
-  display: inline-flex;
-  align-self: flex-start;
-  align-items: center;
-  justify-content: center;
   color: ${(props) => props.theme.palette.grey.grey1};
   text-decoration: none;
-  padding-left: 4px;
+  padding-left: 10px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 

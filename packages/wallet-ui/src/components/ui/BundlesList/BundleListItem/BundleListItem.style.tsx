@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import { RoundedIcon } from '../../RoundedIcon';
 
-type IIconeStyled = {
+type IIconStyled = {
   transactionname?: string;
 };
 
@@ -16,7 +16,7 @@ export const Wrapper = styled.div`
   align-items: center;
   &:hover {
     background-color: ${(props) => props.theme.colors.background.inverse};
-    color: ${(props) => props.theme.colors.text.inverse}};
+    color: ${(props) => props.theme.colors.text.inverse};
   }
   cursor: pointer;
   background-color: ${(props) => props.theme.colors.background.default};
@@ -33,7 +33,7 @@ export const LeftIcon = styled(RoundedIcon)`
   width: 32px;
 `;
 
-export const IconStyled = styled(FontAwesomeIcon)<IIconeStyled>`
+export const IconStyled = styled(FontAwesomeIcon)<IIconStyled>`
   font-size: ${(props) => props.theme.typography.i2.fontSize};
   color: ${(props) => props.theme.palette.grey.grey1};
   transform: ${(props) =>
