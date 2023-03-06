@@ -16,14 +16,14 @@
     "build": "mm-snap build",
     "build:clean": "yarn clean && yarn build",
     "clean": "rimraf build/*",
+    "coverage": "nyc --reporter=text --reporter=text-summary yarn test",
     "lint": "yarn lint:eslint && yarn lint:misc --check",
     "lint:eslint": "eslint . --cache --ext js,ts",
     "lint:fix": "yarn lint:eslint --fix && yarn lint:misc --write",
     "lint:misc": "prettier '**/*.json' '**/*.md' '!CHANGELOG.md' --ignore-path .gitignore",
     "serve": "mm-snap serve",
     "start": "mm-snap watch",
-    "test": "ts-mocha --config ./.mocharc.js \"test/**/*.test.ts\"",
-    "coverage": "nyc --reporter=text --reporter=text-summary yarn test"
+    "test": "ts-mocha --config ./.mocharc.js \"test/**/*.test.ts\""
   },
   "dependencies": {
     "@metamask/key-tree": "^6.2.1",
