@@ -14,6 +14,7 @@ import {
   TEST_CHAIN_ID_ZERO,
   TEST_NETWORK_ZERO,
   ZERO_ADDRESS,
+  WRONG_ADDRESS,
 } from './utils/constants';
 
 describe('addAction', () => {
@@ -75,5 +76,33 @@ describe('addAction', () => {
     apiParams.requestParams = requestObject;
 
     await expect(addAction(apiParams)).to.be.rejectedWith('error');
+  });
+
+  it('should throw error when sender address is invalid', async () => {
+    const requestObject: AddActionRequestParams = {
+      chainId: TEST_CHAIN_ID_ZERO,
+      senderAddress: WRONG_ADDRESS,
+      contractAddress: ERC20_TOKEN_ZERO.address,
+      encodedFunction: '0x12345678',
+    };
+    apiParams.requestParams = requestObject;
+
+    await expect(addAction(apiParams)).to.be.rejectedWith(
+      `The given sender address is invalid: ${WRONG_ADDRESS}`,
+    );
+  });
+
+  it('should throw error when contract address is invalid', async () => {
+    const requestObject: AddActionRequestParams = {
+      chainId: TEST_CHAIN_ID_ZERO,
+      senderAddress: ZERO_ADDRESS,
+      contractAddress: WRONG_ADDRESS,
+      encodedFunction: '0x12345678',
+    };
+    apiParams.requestParams = requestObject;
+
+    await expect(addAction(apiParams)).to.be.rejectedWith(
+      `The given contract address is invalid: ${WRONG_ADDRESS}`,
+    );
   });
 });
