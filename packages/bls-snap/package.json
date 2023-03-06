@@ -23,7 +23,7 @@
     "serve": "mm-snap serve",
     "start": "mm-snap watch",
     "test": "ts-mocha --config ./.mocharc.js \"test/**/*.test.ts\"",
-    "coverage": "nyc yarn test"
+    "coverage": "nyc --reporter=text --reporter=text-summary yarn test"
   },
   "dependencies": {
     "@metamask/key-tree": "^6.2.1",
