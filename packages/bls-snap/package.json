@@ -22,7 +22,8 @@
     "lint:misc": "prettier '**/*.json' '**/*.md' '!CHANGELOG.md' --ignore-path .gitignore",
     "serve": "mm-snap serve",
     "start": "mm-snap watch",
-    "test": "ts-mocha --config ./.mocharc.js \"test/**/*.test.ts\""
+    "test": "ts-mocha --config ./.mocharc.js \"test/**/*.test.ts\"",
+    "coverage": "nyc yarn test"
   },
   "dependencies": {
     "@metamask/key-tree": "^6.2.1",
@@ -57,6 +58,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.2.1",
     "mocha": "^10.2.0",
+    "nyc": "^15.1.0",
     "prettier": "^2.2.1",
     "prettier-plugin-packagejson": "^2.2.11",
     "rimraf": "^3.0.2",
