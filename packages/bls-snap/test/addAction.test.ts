@@ -78,6 +78,7 @@ describe('addAction', () => {
     await expect(addAction(apiParams)).to.be.rejectedWith('error');
   });
 
+  // Stub ethers.utils.isAddress function to be not dependant on its implementation
   it('should throw error when sender address is invalid', async () => {
     const requestObject: AddActionRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
@@ -92,6 +93,7 @@ describe('addAction', () => {
     );
   });
 
+  // Stub ethers.utils.isAddress function to be not dependant on its implementation
   it('should throw error when contract address is invalid', async () => {
     const requestObject: AddActionRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,

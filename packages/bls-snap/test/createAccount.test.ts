@@ -57,17 +57,16 @@ describe('createAccount', () => {
   });
 
   it('should throw error when unknown chainId', async () => {
-    sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
-    sinon.stub(blsUtils, 'getWallet').resolves(BLS_ACCOUNT_ZERO);
-    sinon.stub(cryptoUtils, 'getPrivateKey').resolves(PRIVATE_KEY_ZERO);
+    sinon.stub(config, 'getNetwork').returns(undefined);
 
     const requestObject: CreateAccountRequestParams = {
       chainId: TEST_CHAIN_ID_UNKNOWN,
     };
     apiParams.requestParams = requestObject;
-    apiParams.keyDeriver = { path: '' };
 
-    await expect(createAccount(apiParams)).to.be.rejected;
+    await expect(createAccount(apiParams)).to.be.rejectedWith(
+      `ChainId not supported: ${TEST_CHAIN_ID_UNKNOWN}`,
+    );
   });
 
   it('should throw error if getAccounts failed', async () => {
