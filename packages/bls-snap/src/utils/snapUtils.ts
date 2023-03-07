@@ -15,23 +15,11 @@ import { getPrivateKey } from './crypto';
 import { getBundleReceipt } from './blsUtils';
 import * as config from './config';
 import * as evmUtils from './evmUtils';
+import { isValidAscii } from './textUtils';
 
 export const DEFAULT_DECIMALS = 18;
 export const MAX_TOKEN_NAME_LENGTH = 64;
 export const MAX_TOKEN_SYMBOL_LENGTH = 16;
-
-function hasOnlyAsciiChars(value: string) {
-  // eslint-disable-next-line require-unicode-regexp
-  return /^[ -~]+$/.test(value);
-}
-
-function isValidAscii(value: string, maxLength: number) {
-  return (
-    hasOnlyAsciiChars(value) &&
-    value.trim().length > 0 &&
-    value.length <= maxLength
-  );
-}
 
 export async function validateAddErc20TokenParams(
   params: AddErc20TokenRequestParams,
