@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.6](https://github.com/aquiladev/bls-snap/compare/bls-snap-v0.2.5...bls-snap-v0.2.6) (2023-03-07)
+
+
+### Bug Fixes
+
+* shasum ([cfe5f02](https://github.com/aquiladev/bls-snap/commit/cfe5f02176f80a99bca193f24c87ff69cddf5be5))
+
 ## [0.2.5](https://github.com/aquiladev/bls-snap/compare/bls-snap-v0.2.4...bls-snap-v0.2.5) (2023-03-05)
 
 
