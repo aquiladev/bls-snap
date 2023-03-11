@@ -46,7 +46,7 @@ describe('validateAddErc20TokenParams', () => {
     };
     await expect(
       validateAddErc20TokenParams(callFunctionParams),
-    ).to.be.rejectedWith(`ChainId not supported: ${TEST_CHAIN_ID_ZERO}`);
+    ).to.be.rejectedWith(`The network is not supported: ${TEST_CHAIN_ID_ZERO}`);
   });
 
   it('should throw error when token name is invalid', async () => {
@@ -98,8 +98,9 @@ describe('validateAddErc20TokenParams', () => {
       tokenName: 'TEST',
       tokenSymbol: 'TST',
     };
-    await expect(validateAddErc20TokenParams(callFunctionParams)).to.be
-      .rejected;
+    await expect(
+      validateAddErc20TokenParams(callFunctionParams),
+    ).to.be.rejectedWith('The given token is invalid');
   });
 
   it('should call getErc20TokenBalance with right params', async () => {

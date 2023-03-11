@@ -61,7 +61,9 @@ describe('getBundle', () => {
     };
     apiParams.requestParams = requestObject;
 
-    await expect(getBundle(apiParams)).to.be.rejected;
+    await expect(getBundle(apiParams)).to.be.rejectedWith(
+      'The bundle not found',
+    );
   });
 
   it('should throw error if getBundle failed', async () => {
