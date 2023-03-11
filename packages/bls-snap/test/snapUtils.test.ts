@@ -90,7 +90,7 @@ describe('validateAddErc20TokenParams', () => {
   it('should throw error when getErc20TokenBalance function is failed', async () => {
     sinon.stub(config, 'getNetwork').returns(TEST_NETWORK_ZERO);
     sinon.stub(textUtils, 'isValidAscii').returns(true);
-    sinon.stub(evmUtils, 'getErc20TokenBalance').throws('Error');
+    sinon.stub(evmUtils, 'getErc20TokenBalance').throws();
 
     const callFunctionParams: AddErc20TokenRequestParams = {
       tokenAddress: ZERO_ADDRESS,
