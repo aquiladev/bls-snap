@@ -32,7 +32,7 @@ export async function validateAddErc20TokenParams(
 
   const network = config.getNetwork(params.chainId);
   if (!network) {
-    throw new Error(`ChainId not supported: ${params.chainId}`);
+    throw new Error(`The network is not supported: ${params.chainId}`);
   }
 
   if (!isValidAscii(params.tokenName, MAX_TOKEN_NAME_LENGTH)) {
@@ -457,7 +457,7 @@ export async function getBundle(
     (bundle) => bundle.bundleHash === bundleHash,
   );
   if (!bundle) {
-    throw new Error(`Bundle not found ${bundleHash}`);
+    throw new Error(`The bundle not found: ${bundleHash}`);
   }
 
   if (!bundle?.blockNumber) {
@@ -536,8 +536,6 @@ export const getKeysFromAddressIndex = async (
 
 function assertNetwork(chainId: number, state: SnapState) {
   if (!state[chainId]) {
-    throw new Error(
-      `can't find the network in snap state with chainId: ${chainId}`,
-    );
+    throw new Error(`The network not found: ${chainId}`);
   }
 }

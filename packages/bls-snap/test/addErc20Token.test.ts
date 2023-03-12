@@ -183,7 +183,7 @@ describe('addErc20Token', () => {
     apiParams.requestParams = requestObject;
 
     await expect(addErc20Token(apiParams)).to.be.rejectedWith(
-      'ChainId not supported',
+      'The network is not supported',
     );
   });
 

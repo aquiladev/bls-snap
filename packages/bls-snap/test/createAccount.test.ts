@@ -65,7 +65,7 @@ describe('createAccount', () => {
     apiParams.requestParams = requestObject;
 
     await expect(createAccount(apiParams)).to.be.rejectedWith(
-      `ChainId not supported: ${TEST_CHAIN_ID_UNKNOWN}`,
+      `The network is not supported: ${TEST_CHAIN_ID_UNKNOWN}`,
     );
   });
 

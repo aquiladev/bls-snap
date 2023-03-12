@@ -7,7 +7,6 @@ import { RemoveErc20TokenRequestParams, ApiParams } from '../src/types/snapApi';
 import { SnapState } from '../src/types/snapState';
 import { removeErc20Token } from '../src/removeErc20Token';
 import * as config from '../src/utils/config';
-import * as snapUtils from '../src/utils/snapUtils';
 import { WalletMock } from './utils/wallet.mock';
 import {
   ERC20_TOKEN_ONE,

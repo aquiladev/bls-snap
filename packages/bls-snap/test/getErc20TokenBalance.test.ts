@@ -66,7 +66,9 @@ describe('getErc20TokenBalance', () => {
     };
     apiParams.requestParams = requestObject;
 
-    await expect(getErc20TokenBalance(apiParams)).to.be.rejected;
+    await expect(getErc20TokenBalance(apiParams)).to.be.rejectedWith(
+      'The network is not supported',
+    );
   });
 
   it('should throw error if callContract failed', async () => {

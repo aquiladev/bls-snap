@@ -62,7 +62,9 @@ describe('addAction', () => {
     };
     apiParams.requestParams = requestObject;
 
-    await expect(addAction(apiParams)).to.be.rejected;
+    await expect(addAction(apiParams)).to.be.rejectedWith(
+      'The network not found',
+    );
   });
 
   it('should throw error if insertAction failed', async () => {

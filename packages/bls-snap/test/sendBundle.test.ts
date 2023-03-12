@@ -47,11 +47,11 @@ describe('sendBundle', () => {
     const requestObject: SendBundleRequestParams = {
       chainId: TEST_CHAIN_ID_ZERO,
       senderAddress: ZERO_ADDRESS,
-      actionIds: [],
+      actionIds: ['1'],
     };
     apiParams.requestParams = requestObject;
 
-    await expect(sendBundle(apiParams)).to.be.rejected;
+    await expect(sendBundle(apiParams)).to.be.rejectedWith('Account not found');
   });
 
   it('should throw error if no actions found', async () => {
@@ -63,7 +63,9 @@ describe('sendBundle', () => {
     };
     apiParams.requestParams = requestObject;
 
-    await expect(sendBundle(apiParams)).to.be.rejected;
+    await expect(sendBundle(apiParams)).to.be.rejectedWith(
+      'No actions provided',
+    );
   });
 
   it('should create bundle correctly', async () => {
@@ -94,7 +96,9 @@ describe('sendBundle', () => {
     };
     apiParams.requestParams = requestObject;
 
-    await expect(sendBundle(apiParams)).to.be.rejected;
+    await expect(sendBundle(apiParams)).to.be.rejectedWith(
+      'The network is not supported',
+    );
   });
 
   it('should throw error if getAccount failed', async () => {

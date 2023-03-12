@@ -26,7 +26,7 @@ export async function createAccount(params: ApiParams): Promise<Account> {
 
     const network = config.getNetwork(chainId);
     if (!network) {
-      throw new Error(`ChainId not supported: ${chainId}`);
+      throw new Error(`The network is not supported: ${chainId}`);
     }
 
     const {
