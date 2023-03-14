@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/aquiladev/bls-snap/compare/wallet-ui-v0.1.3...wallet-ui-v0.1.4) (2023-03-14)
+
+
+### Bug Fixes
+
+* use navigator.language ([248655a](https://github.com/aquiladev/bls-snap/commit/248655a2f2ea08f57f97337c7fdac502223e7f9a))
+
 ## [0.1.3](https://github.com/aquiladev/bls-snap/compare/wallet-ui-v0.1.2...wallet-ui-v0.1.3) (2023-03-05)
 
 
