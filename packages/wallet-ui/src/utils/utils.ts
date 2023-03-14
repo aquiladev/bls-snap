@@ -83,7 +83,7 @@ export const fetchWithTimeout = async (
 
 export const getDate = (date: number, options?: any) => {
   const config = options || { month: 'short', day: 'numeric' };
-  return new Date(date).toLocaleDateString('en-US', config);
+  return new Date(date).toLocaleDateString(navigator.language, config);
 };
 
 export const humanizeFragment = (str: string | undefined = ''): string => {
