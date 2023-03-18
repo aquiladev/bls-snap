@@ -19,7 +19,7 @@ export async function recoverAccounts(
     const accounts = await getAccounts(chainId, state);
     if (accounts?.length) {
       return accounts.map((a) => {
-        return { address: a.address };
+        return { address: a.address, name: a.name };
       });
     }
 
