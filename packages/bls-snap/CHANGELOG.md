@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/aquiladev/bls-snap/compare/bls-snap-v0.2.6...bls-snap-v0.3.0) (2023-03-18)
+
+
+### Features
+
+* add account's name ([b8adfc0](https://github.com/aquiladev/bls-snap/commit/b8adfc0e18862429d0a9a09bb977fdae941e7af7))
+
 ## [0.2.6](https://github.com/aquiladev/bls-snap/compare/bls-snap-v0.2.5...bls-snap-v0.2.6) (2023-03-07)
 
 
