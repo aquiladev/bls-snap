@@ -53,6 +53,7 @@ describe('createAccount', () => {
     expect(result).to.be.eql({
       address: '0xCCb80EE6f58cC9e87C8032BD908C59F475CCc435',
       name: 'Account 1',
+      index: 0,
     });
     expect(state[TEST_CHAIN_ID_ZERO].accounts).to.not.equal([ACCOUNT_ZERO]);
   });

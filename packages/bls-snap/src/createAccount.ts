@@ -57,6 +57,7 @@ export async function createAccount(params: ApiParams): Promise<Account> {
     return {
       address: account.address,
       name: account.name,
+      index: account.addressIndex,
     };
   } catch (err) {
     console.error(`Problem found: ${err}`);
