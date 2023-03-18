@@ -49,7 +49,11 @@ describe('recoverAccounts', () => {
     expect(walletStub.rpcStubs.snap_manageState).not.to.have.been.called;
     expect(result?.length).to.be.eq(1);
     expect(result).to.be.eql(
-      state[TEST_CHAIN_ID_ZERO].accounts?.map((a) => ({ address: a.address })),
+      state[TEST_CHAIN_ID_ZERO].accounts?.map((a) => ({
+        address: a.address,
+        name: a.name,
+        index: 0,
+      })),
     );
   });
 

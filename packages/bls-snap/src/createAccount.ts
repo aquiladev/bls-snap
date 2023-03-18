@@ -50,11 +50,14 @@ export async function createAccount(params: ApiParams): Promise<Account> {
       privateKey: wallet.privateKey,
       derivationPath,
       addressIndex: aIndex,
+      name: `Account ${aIndex + 1}`,
     };
     await upsertAccount(account, chainId, snap, mutex, state);
 
     return {
-      address: wallet.address,
+      address: account.address,
+      name: account.name,
+      index: account.addressIndex,
     };
   } catch (err) {
     console.error(`Problem found: ${err}`);

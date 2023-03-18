@@ -22,10 +22,13 @@ export type BlsAccount = {
   privateKey: string;
   derivationPath: string;
   addressIndex: number;
+  name: string;
 };
 
 export type Account = {
   address: string;
+  name: string;
+  index: number;
 };
 
 export type Erc20Token = {
