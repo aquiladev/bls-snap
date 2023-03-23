@@ -74,10 +74,12 @@ export const AccountDetailButton = styled(Button).attrs((props) => ({
   padding: 0px;
   border-radius: 0px;
   border: 1px solid transparent;
+  background-color: ${(props) => props.theme.colors.background.inverse};
   color: ${(props) => props.theme.colors.text.inverse};
 
   &:hover {
-    color: ${(props) => props.theme.colors.text.alternative};
+    background-color: ${(props) => props.theme.colors.background.default};
+    color: ${(props) => props.theme.colors.text.default};
   }
 `;
 
@@ -86,14 +88,16 @@ export const CreateAccountButton = styled(Button).attrs((props) => ({
   fontSize: props.theme.fontSizes.text,
 }))`
   background-color: ${(props) => props.theme.colors.background.default};
-  padding: 7px;
+  padding: 8px;
   border: 1px solid transparent;
   border-radius: 0px;
-  color: ${(props) => props.theme.colors.text.default};
+  font-weight: 400;
+  background-color: ${(props) => props.theme.colors.background.inverse};
+  color: ${(props) => props.theme.colors.text.inverse};
 
   &:hover {
-    background-color: ${(props) => props.theme.colors.background.inverse};
-    color: ${(props) => props.theme.colors.text.inverse};
+    background-color: ${(props) => props.theme.colors.background.default};
+    color: ${(props) => props.theme.colors.text.default};
   }
 `;
 

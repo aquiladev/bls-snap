@@ -1,30 +1,36 @@
-import { SelectableAccount } from '../../../../types';
-import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
-import * as ws from '../../../../slices/walletSlice';
+import { Account } from '../../../../types';
+import { useBLSSnap } from '../../../../services/useBLSSnap';
 
-import { Description, Wrapper } from './AccountListItem.style';
+import { Wrapper, Row, HighlightedRow } from './AccountListItem.style';
 
 type Props = {
-  account: SelectableAccount;
-  isSelectable?: boolean;
+  account: Account;
 };
 
-export const AccountListItemView = ({ account, isSelectable }: Props) => {
-  const dispatch = useAppDispatch();
-  const { address, index, name } = account;
+export const AccountListItemView = ({ account }: Props) => {
+  const { selectAccount } = useBLSSnap();
+  const { index, name, selected } = account;
 
   return (
     <Wrapper>
-      <div
-        style={{ marginBottom: 8 }}
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-      >
-        <Description>
-          <span>{name}</span>
-        </Description>
-      </div>
+      {selected ? (
+        <div>
+          <HighlightedRow>
+            <span>{name}</span>
+          </HighlightedRow>
+        </div>
+      ) : (
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            selectAccount(index);
+          }}
+        >
+          <Row>
+            <span>{name}</span>
+          </Row>
+        </div>
+      )}
     </Wrapper>
   );
 };

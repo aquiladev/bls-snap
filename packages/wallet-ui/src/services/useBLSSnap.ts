@@ -17,12 +17,15 @@ import {
 } from '../slices/UISlice';
 import { setNetworks } from '../slices/networkSlice';
 import { addMissingPropertiesToToken } from '../utils/utils';
+import { getSelectedAccount, setSelectedAccount } from '../utils/selectAccount';
 import { getAssetPriceUSD } from './coinGecko';
 
 export const useBLSSnap = () => {
   const dispatch = useAppDispatch();
   const { activeNetwork } = useAppSelector((state) => state.networks);
-  const { erc20TokenBalances } = useAppSelector((state) => state.wallet);
+  const { erc20TokenBalances, accounts } = useAppSelector(
+    (state) => state.wallet,
+  );
   const { loader } = useAppSelector((state) => state.UI);
 
   const { ethereum } = window as any;
@@ -102,7 +105,7 @@ export const useBLSSnap = () => {
 
   const recoverAccounts = async (chainId: number) => {
     dispatch(enableLoadingWithMessage('Recovering accounts...'));
-    const accounts = (await ethereum.request({
+    let accounts = (await ethereum.request({
       method: 'wallet_invokeSnap',
       params: {
         snapId,
@@ -114,14 +117,20 @@ export const useBLSSnap = () => {
         },
       },
     })) as Account[];
-    console.log('RecoverAccounts', accounts);
+    const selectedAccount = getSelectedAccount();
+    accounts = accounts.map((account) =>
+      account.index === selectedAccount
+        ? { ...account, selected: true }
+        : account,
+    );
     dispatch(ws.setAccounts(accounts));
+    dispatch(disableLoading());
     return accounts;
   };
 
   const createAccount = async (chainId: number) => {
     dispatch(enableLoadingWithMessage('Creating account...'));
-    const newAccount = (await ethereum.request({
+    let newAccount = (await ethereum.request({
       method: 'wallet_invokeSnap',
       params: {
         snapId,
@@ -133,9 +142,29 @@ export const useBLSSnap = () => {
         },
       },
     })) as Account;
-    console.log('CreateAccount', newAccount);
-    dispatch(ws.setAccounts(newAccount));
+    newAccount = { ...newAccount, selected: true };
+    const prevSelectedIndex = getSelectedAccount();
+    const prevSelectedAccount = accounts.find(
+      (account) => account.index === prevSelectedIndex,
+    );
+    dispatch(ws.updateAccounts({ ...prevSelectedAccount, selected: false }));
+    dispatch(ws.setAccount(newAccount));
+    setSelectedAccount(newAccount.index);
+    dispatch(disableLoading());
     return newAccount;
+  };
+
+  const selectAccount = async (index: number) => {
+    const prevSelectedIndex = getSelectedAccount();
+    const prevSelectedAccount = accounts.find(
+      (account) => account.index === prevSelectedIndex,
+    );
+    dispatch(ws.updateAccounts({ ...prevSelectedAccount, selected: false }));
+    const selectedAccount = accounts.find((account) => account.index === index);
+    const valueSelectAccount = { ...selectedAccount, selected: true };
+    dispatch(ws.updateAccounts(valueSelectAccount));
+    setSelectedAccount(index);
+    return valueSelectAccount;
   };
 
   const getTokens = async (chainId: number) => {
@@ -513,6 +542,7 @@ export const useBLSSnap = () => {
     checkConnection,
     recoverAccounts,
     createAccount,
+    selectAccount,
     initSnap,
     satisfiesVersion: oldVersionDetected,
     getWalletData,

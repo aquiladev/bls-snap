@@ -10,8 +10,7 @@ export type Network = {
   aggregatorUrl: string;
   config: NetworkConfig;
 
-  // accounts?: BlsAccount[];
-  accounts?: Account[];
+  accounts?: BlsAccount[];
   erc20Tokens?: Erc20Token[];
   actions?: Action[];
   bundles?: Bundle[];
@@ -24,12 +23,6 @@ export type BlsAccount = {
   derivationPath?: string;
   addressIndex: number;
   name: string;
-};
-
-export type Account = {
-  address: string;
-  name: string;
-  index: number;
 };
 
 export type Erc20Token = {

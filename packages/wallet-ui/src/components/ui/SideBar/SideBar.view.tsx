@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import { AccountAddress } from '../AccountAddress';
 import { AccountDetailsModal } from '../AccountDetailsModal';
@@ -6,7 +6,6 @@ import { AssetsList } from '../AssetsList';
 import { setAddTokenModalVisible } from '../../../slices/UISlice';
 import { useBLSSnap } from '../../../services/useBLSSnap';
 import { AccountsList } from '../AccountsList';
-import { SelectableAccount } from '../../../types';
 
 import {
   AccountDetailButton,
@@ -33,6 +32,12 @@ export const SideBarView = ({ address }: Props) => {
   const { createAccount } = useBLSSnap();
   const networks = useAppSelector((state) => state.networks);
   const chainId = networks.items[networks.activeNetwork]?.chainId;
+  const accountName = useMemo(
+    () =>
+      wallet.accounts?.find((account) => account.selected)?.name ||
+      'My account',
+    [wallet.accounts],
+  );
 
   const ref = useRef<HTMLDivElement>();
 
@@ -53,19 +58,12 @@ export const SideBarView = ({ address }: Props) => {
             <AccountDetailButton
               backgroundTransparent
               iconLeft="qrcode"
+              style={{ paddingLeft: '8px' }}
               onClick={() => setAccountDetailsOpen(true)}
             >
               Account details
             </AccountDetailButton>
-            <AccountsList
-              accounts={(wallet.accounts || []).map((a) => {
-                // accounts={(
-                // [{ address: '12345', name: '123', addressIndex: 2 }] || []
-                // ).map((a) => {
-                return { ...a, selected: false } as SelectableAccount;
-              })}
-              isSelectable={false}
-            />
+            <AccountsList accounts={wallet.accounts || []} />
             <CreateAccountButton
               backgroundTransparent
               onClick={() => createAccount(chainId)}
@@ -78,7 +76,7 @@ export const SideBarView = ({ address }: Props) => {
         <AccountImageStyled address={address} connected={wallet.connected} />
       </AccountDetails>
 
-      <AccountLabel>My account</AccountLabel>
+      <AccountLabel>{accountName}</AccountLabel>
       <RowDiv>
         <AccountAddress address={address} />
       </RowDiv>

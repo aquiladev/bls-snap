@@ -38,6 +38,17 @@ export const walletSlice = createSlice({
     setAccounts: (state, { payload }) => {
       state.accounts = Array.isArray(payload) ? payload : [payload];
     },
+    setAccount: (state, { payload }) => {
+      state.accounts = [...state.accounts, payload];
+    },
+    updateAccounts: (state, { payload }) => {
+      state.accounts = state.accounts.map((account) => {
+        if (account.index === payload.index) {
+          return { ...account, ...payload };
+        }
+        return account;
+      });
+    },
     resetWallet: () => {
       return {
         ...initialState,
@@ -125,6 +136,8 @@ export const {
   setWalletConnection,
   setForceReconnect,
   setAccounts,
+  setAccount,
+  updateAccounts,
   resetWallet,
   setErc20TokenBalances,
   setErc20TokenBalanceSelected,
