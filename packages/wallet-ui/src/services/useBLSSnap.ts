@@ -102,7 +102,7 @@ export const useBLSSnap = () => {
 
   const recoverAccounts = async (chainId: number) => {
     dispatch(enableLoadingWithMessage('Recovering accounts...'));
-    const data = (await ethereum.request({
+    const accounts = (await ethereum.request({
       method: 'wallet_invokeSnap',
       params: {
         snapId,
@@ -114,13 +114,14 @@ export const useBLSSnap = () => {
         },
       },
     })) as Account[];
-    console.log('RecoverAccounts', data);
-    return data;
+    console.log('RecoverAccounts', accounts);
+    dispatch(ws.setAccounts(accounts));
+    return accounts;
   };
 
   const createAccount = async (chainId: number) => {
     dispatch(enableLoadingWithMessage('Creating account...'));
-    const data = (await ethereum.request({
+    const newAccount = (await ethereum.request({
       method: 'wallet_invokeSnap',
       params: {
         snapId,
@@ -132,8 +133,9 @@ export const useBLSSnap = () => {
         },
       },
     })) as Account;
-    console.log('CreateAccount', data);
-    return data;
+    console.log('CreateAccount', newAccount);
+    dispatch(ws.setAccounts(newAccount));
+    return newAccount;
   };
 
   const getTokens = async (chainId: number) => {
@@ -509,6 +511,8 @@ export const useBLSSnap = () => {
     connectToSnap,
     getNetworks,
     checkConnection,
+    recoverAccounts,
+    createAccount,
     initSnap,
     satisfiesVersion: oldVersionDetected,
     getWalletData,

@@ -10,6 +10,13 @@ export type SelectableAction = Types.Action & {
   selected: boolean;
 };
 
+export type SelectableAccount = {
+  address: string;
+  name: string;
+  index: number;
+  selected?: boolean;
+};
+
 export type Erc20TokenBalance = Types.Erc20Token & {
   amount: BigNumber;
   chainId: number;

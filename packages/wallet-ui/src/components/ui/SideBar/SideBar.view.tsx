@@ -4,6 +4,9 @@ import { AccountAddress } from '../AccountAddress';
 import { AccountDetailsModal } from '../AccountDetailsModal';
 import { AssetsList } from '../AssetsList';
 import { setAddTokenModalVisible } from '../../../slices/UISlice';
+import { useBLSSnap } from '../../../services/useBLSSnap';
+import { AccountsList } from '../AccountsList';
+import { SelectableAccount } from '../../../types';
 
 import {
   AccountDetailButton,
@@ -12,6 +15,7 @@ import {
   AccountImageStyled,
   AccountLabel,
   AddTokenButton,
+  CreateAccountButton,
   DivList,
   PopInStyled,
   RowDiv,
@@ -26,6 +30,9 @@ export const SideBarView = ({ address }: Props) => {
   const [accountDetailsOpen, setAccountDetailsOpen] = useState(false);
   const wallet = useAppSelector((state) => state.wallet);
   const dispatch = useAppDispatch();
+  const { createAccount } = useBLSSnap();
+  const networks = useAppSelector((state) => state.networks);
+  const chainId = networks.items[networks.activeNetwork]?.chainId;
 
   const ref = useRef<HTMLDivElement>();
 
@@ -50,6 +57,21 @@ export const SideBarView = ({ address }: Props) => {
             >
               Account details
             </AccountDetailButton>
+            <AccountsList
+              accounts={(wallet.accounts || []).map((a) => {
+                // accounts={(
+                // [{ address: '12345', name: '123', addressIndex: 2 }] || []
+                // ).map((a) => {
+                return { ...a, selected: false } as SelectableAccount;
+              })}
+              isSelectable={false}
+            />
+            <CreateAccountButton
+              backgroundTransparent
+              onClick={() => createAccount(chainId)}
+            >
+              + Create account
+            </CreateAccountButton>
           </AccountDetailsContent>
         }
       >
