@@ -1,6 +1,5 @@
 import { useContext, useMemo } from 'react';
 import { ThemeContext } from 'styled-components';
-import { useAppSelector } from '../../../hooks/redux';
 import {
   AccountImageDiv,
   AccountImageStyled,
@@ -14,15 +13,11 @@ import {
 
 type Props = {
   address: string;
+  accountName: string;
 };
 
-export const AccountDetailsModalView = ({ address }: Props) => {
+export const AccountDetailsModalView = ({ address, accountName }: Props) => {
   const themeContext = useContext(ThemeContext);
-  const { accounts } = useAppSelector((state) => state.wallet);
-  const accountName = useMemo(
-    () => accounts?.find((account) => account.selected)?.name || 'My account',
-    [accounts],
-  );
 
   return (
     <ModalWrapper>

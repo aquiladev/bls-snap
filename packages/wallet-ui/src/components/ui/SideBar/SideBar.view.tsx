@@ -23,21 +23,16 @@ import {
 
 type Props = {
   address: string;
+  accountName: string;
 };
 
-export const SideBarView = ({ address }: Props) => {
+export const SideBarView = ({ address, accountName }: Props) => {
   const [accountDetailsOpen, setAccountDetailsOpen] = useState(false);
   const wallet = useAppSelector((state) => state.wallet);
   const dispatch = useAppDispatch();
   const { createAccount } = useBLSSnap();
   const networks = useAppSelector((state) => state.networks);
   const chainId = networks.items[networks.activeNetwork]?.chainId;
-  const accountName = useMemo(
-    () =>
-      wallet.accounts?.find((account) => account.selected)?.name ||
-      'My account',
-    [wallet.accounts],
-  );
 
   const ref = useRef<HTMLDivElement>();
 
@@ -47,7 +42,7 @@ export const SideBarView = ({ address }: Props) => {
         isOpen={accountDetailsOpen}
         setIsOpen={setAccountDetailsOpen}
       >
-        <AccountDetailsModal address={address} />
+        <AccountDetailsModal address={address} accountName={accountName} />
       </PopInStyled>
       <AccountDetails
         arrowVisible={false}
@@ -63,7 +58,7 @@ export const SideBarView = ({ address }: Props) => {
             >
               Account details
             </AccountDetailButton>
-            <AccountsList accounts={wallet.accounts || []} />
+            <AccountsList />
             <CreateAccountButton
               backgroundTransparent
               onClick={() => createAccount(chainId)}

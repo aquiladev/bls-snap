@@ -84,7 +84,6 @@ export const AccountDetailButton = styled(Button).attrs((props) => ({
 `;
 
 export const CreateAccountButton = styled(Button).attrs((props) => ({
-  // backgroundTransparent: true,
   fontSize: props.theme.fontSizes.text,
 }))`
   background-color: ${(props) => props.theme.colors.background.default};

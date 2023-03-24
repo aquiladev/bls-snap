@@ -1,19 +1,20 @@
-import { Account } from '../../../../types';
+import { Account, ActiveAccount } from '../../../../types';
 import { useBLSSnap } from '../../../../services/useBLSSnap';
 
 import { Wrapper, Row, HighlightedRow } from './AccountListItem.style';
 
 type Props = {
   account: Account;
+  activeAccount: ActiveAccount;
 };
 
-export const AccountListItemView = ({ account }: Props) => {
+export const AccountListItemView = ({ account, activeAccount }: Props) => {
   const { selectAccount } = useBLSSnap();
-  const { index, name, selected } = account;
+  const { index, name } = account;
 
   return (
     <Wrapper>
-      {selected ? (
+      {index === activeAccount ? (
         <div>
           <HighlightedRow>
             <span>{name}</span>

@@ -34,7 +34,7 @@ function App() {
   const [darkTheme, setDarkTheme] = useState(getThemePreference());
   const { initSnap, checkConnection, getWalletData } = useBLSSnap();
   const { connected, forceReconnect } = useAppSelector((state) => state.wallet);
-  const { accounts } = useAppSelector((state) => state.wallet);
+  const { accounts, activeAccount } = useAppSelector((state) => state.wallet);
   const networks = useAppSelector((state) => state.networks);
   const { loader, infoModalVisible, addTokenModalVisible } = useAppSelector(
     (state) => state.UI,
@@ -45,6 +45,12 @@ function App() {
     accounts?.length > 0
       ? (accounts[0].address as unknown as string)
       : '0x000000000000000000000000000000';
+
+  const accountName =
+    accounts?.length > 0
+      ? (accounts.find((account) => account.index === activeAccount)
+          .name as unknown as string)
+      : 'My account';
 
   useEffect(() => {
     if (connected) {
@@ -76,7 +82,7 @@ function App() {
       <Wrapper>
         <WrapperContent>
           <Header handleToggleClick={toggleTheme} />
-          <Home address={address} />
+          <Home address={address} accountName={accountName} />
           <Footer />
           <PopIn
             isOpen={!loading && Boolean(hasMetamaskFlask) && !connected}

@@ -1,13 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Bundle } from '@aquiladev/bls-snap/src/types/snapState';
 import { BigNumber } from 'ethers';
-import { Account, SelectableAction, Erc20TokenBalance } from '../types';
+import {
+  Account,
+  ActiveAccount,
+  SelectableAction,
+  Erc20TokenBalance,
+} from '../types';
 
 export type WalletState = {
   connected: boolean;
   isLoading: boolean;
   forceReconnect: boolean;
   accounts: Account[];
+  activeAccount: ActiveAccount;
   erc20TokenBalances: Erc20TokenBalance[];
   erc20TokenBalanceSelected: Erc20TokenBalance;
   actions: SelectableAction[];
@@ -19,6 +25,7 @@ const initialState: WalletState = {
   isLoading: false,
   forceReconnect: false,
   accounts: [],
+  activeAccount: 0,
   erc20TokenBalances: [],
   erc20TokenBalanceSelected: {} as Erc20TokenBalance,
   actions: [],
@@ -38,16 +45,11 @@ export const walletSlice = createSlice({
     setAccounts: (state, { payload }) => {
       state.accounts = Array.isArray(payload) ? payload : [payload];
     },
-    setAccount: (state, { payload }) => {
+    addAccount: (state, { payload }) => {
       state.accounts = [...state.accounts, payload];
     },
-    updateAccounts: (state, { payload }) => {
-      state.accounts = state.accounts.map((account) => {
-        if (account.index === payload.index) {
-          return { ...account, ...payload };
-        }
-        return account;
-      });
+    setActiveAccount: (state, { payload }) => {
+      state.activeAccount = payload;
     },
     resetWallet: () => {
       return {
@@ -136,8 +138,8 @@ export const {
   setWalletConnection,
   setForceReconnect,
   setAccounts,
-  setAccount,
-  updateAccounts,
+  addAccount,
+  setActiveAccount,
   resetWallet,
   setErc20TokenBalances,
   setErc20TokenBalanceSelected,

@@ -17,7 +17,6 @@ import {
 } from '../slices/UISlice';
 import { setNetworks } from '../slices/networkSlice';
 import { addMissingPropertiesToToken } from '../utils/utils';
-import { getSelectedAccount, setSelectedAccount } from '../utils/selectAccount';
 import { getAssetPriceUSD } from './coinGecko';
 
 export const useBLSSnap = () => {
@@ -105,7 +104,7 @@ export const useBLSSnap = () => {
 
   const recoverAccounts = async (chainId: number) => {
     dispatch(enableLoadingWithMessage('Recovering accounts...'));
-    let accounts = (await ethereum.request({
+    const accounts = (await ethereum.request({
       method: 'wallet_invokeSnap',
       params: {
         snapId,
@@ -117,20 +116,16 @@ export const useBLSSnap = () => {
         },
       },
     })) as Account[];
-    const selectedAccount = getSelectedAccount();
-    accounts = accounts.map((account) =>
-      account.index === selectedAccount
-        ? { ...account, selected: true }
-        : account,
-    );
-    dispatch(ws.setAccounts(accounts));
+    if (accounts?.length > 0) {
+      dispatch(ws.setAccounts(accounts));
+    }
     dispatch(disableLoading());
     return accounts;
   };
 
   const createAccount = async (chainId: number) => {
     dispatch(enableLoadingWithMessage('Creating account...'));
-    let newAccount = (await ethereum.request({
+    const newAccount = (await ethereum.request({
       method: 'wallet_invokeSnap',
       params: {
         snapId,
@@ -142,29 +137,15 @@ export const useBLSSnap = () => {
         },
       },
     })) as Account;
-    newAccount = { ...newAccount, selected: true };
-    const prevSelectedIndex = getSelectedAccount();
-    const prevSelectedAccount = accounts.find(
-      (account) => account.index === prevSelectedIndex,
-    );
-    dispatch(ws.updateAccounts({ ...prevSelectedAccount, selected: false }));
-    dispatch(ws.setAccount(newAccount));
-    setSelectedAccount(newAccount.index);
+    dispatch(ws.addAccount(newAccount));
+    dispatch(ws.setActiveAccount(newAccount.index));
     dispatch(disableLoading());
     return newAccount;
   };
 
   const selectAccount = async (index: number) => {
-    const prevSelectedIndex = getSelectedAccount();
-    const prevSelectedAccount = accounts.find(
-      (account) => account.index === prevSelectedIndex,
-    );
-    dispatch(ws.updateAccounts({ ...prevSelectedAccount, selected: false }));
-    const selectedAccount = accounts.find((account) => account.index === index);
-    const valueSelectAccount = { ...selectedAccount, selected: true };
-    dispatch(ws.updateAccounts(valueSelectAccount));
-    setSelectedAccount(index);
-    return valueSelectAccount;
+    dispatch(ws.setActiveAccount(index));
+    return index;
   };
 
   const getTokens = async (chainId: number) => {

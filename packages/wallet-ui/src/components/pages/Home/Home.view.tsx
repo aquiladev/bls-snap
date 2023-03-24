@@ -18,9 +18,10 @@ import {
 
 type Props = {
   address: string;
+  accountName: string;
 };
 
-export const HomeView = ({ address }: Props) => {
+export const HomeView = ({ address, accountName }: Props) => {
   const networks = useAppSelector((state) => state.networks);
   const { erc20TokenBalanceSelected, actions } = useAppSelector(
     (state) => state.wallet,
@@ -43,7 +44,7 @@ export const HomeView = ({ address }: Props) => {
 
   return (
     <Wrapper>
-      <SideBar address={address} />
+      <SideBar address={address} accountName={accountName} />
       <RightPart>
         {Object.keys(erc20TokenBalanceSelected).length > 0 && (
           <Header address={address} />
