@@ -13,10 +13,12 @@ import {
 
 type Props = {
   address: string;
+  accountName: string;
 };
 
-export const AccountDetailsModalView = ({ address }: Props) => {
+export const AccountDetailsModalView = ({ address, accountName }: Props) => {
   const themeContext = useContext(ThemeContext);
+
   return (
     <ModalWrapper>
       <AccountImageDiv>
@@ -24,8 +26,7 @@ export const AccountDetailsModalView = ({ address }: Props) => {
       </AccountImageDiv>
       <Wrapper>
         <TitleDiv>
-          <Title>My account</Title>
-          {/* <ModifyIcon /> */}
+          <Title>{accountName}</Title>
         </TitleDiv>
         <AddressQrCode
           value={address}

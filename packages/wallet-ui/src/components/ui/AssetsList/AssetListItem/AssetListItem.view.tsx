@@ -23,8 +23,9 @@ export const AssetListItemView = ({
   selected,
   ...otherProps
 }: Props) => {
-  const { removeERC20Token, getWalletData } = useBLSSnap();
+  const { removeERC20Token, loadAccountData } = useBLSSnap();
   const networks = useAppSelector((state) => state.networks);
+  const wallet = useAppSelector((state) => state.wallet);
 
   const [isRemovingToken, setIsRemovingToken] = useState(false);
 
@@ -37,7 +38,10 @@ export const AssetListItemView = ({
       setIsRemovingToken(true);
       const activeNetwork = networks.items[networks.activeNetwork];
       await removeERC20Token(asset.address, asset.chainId);
-      await getWalletData(activeNetwork.chainId, networks.items);
+      await loadAccountData(
+        wallet.accounts[wallet.activeAccount],
+        activeNetwork.chainId,
+      );
     } finally {
       setIsRemovingToken(false);
     }

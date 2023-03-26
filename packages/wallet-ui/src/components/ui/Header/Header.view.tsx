@@ -38,15 +38,16 @@ export const HeaderView = ({ address }: Props) => {
     if (chainId && address) {
       clearTimeout(timeoutHandle.current); // cancel the timeout that was in-flight
       timeoutHandle.current = setTimeout(async () => {
+        const activeAddress = wallet.accounts[wallet.activeAccount]?.address;
         await updateTokenBalance(
           wallet.erc20TokenBalanceSelected.address,
-          address,
+          activeAddress,
           chainId,
         );
       }, TOKEN_BALANCE_REFRESH_FREQUENCY);
       return () => clearTimeout(timeoutHandle.current);
     }
-  }, [wallet.erc20TokenBalanceSelected]);
+  }, [wallet.erc20TokenBalanceSelected, wallet.activeAccount]);
 
   const handleSendClick = () => {
     setSendOpen(true);
@@ -57,7 +58,7 @@ export const HeaderView = ({ address }: Props) => {
 
     try {
       const { chainId } = networks.items[networks.activeNetwork];
-      const senderAddress = wallet.accounts[0].address;
+      const senderAddress = wallet.accounts[wallet.activeAccount].address;
       const contractAddress = wallet.erc20TokenBalanceSelected.address;
 
       const erc20Abi = [

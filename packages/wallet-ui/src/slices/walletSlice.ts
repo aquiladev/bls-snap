@@ -8,6 +8,7 @@ export type WalletState = {
   isLoading: boolean;
   forceReconnect: boolean;
   accounts: Account[];
+  activeAccount: number;
   erc20TokenBalances: Erc20TokenBalance[];
   erc20TokenBalanceSelected: Erc20TokenBalance;
   actions: SelectableAction[];
@@ -19,6 +20,7 @@ const initialState: WalletState = {
   isLoading: false,
   forceReconnect: false,
   accounts: [],
+  activeAccount: 0,
   erc20TokenBalances: [],
   erc20TokenBalanceSelected: {} as Erc20TokenBalance,
   actions: [],
@@ -37,6 +39,12 @@ export const walletSlice = createSlice({
     },
     setAccounts: (state, { payload }) => {
       state.accounts = Array.isArray(payload) ? payload : [payload];
+    },
+    addAccount: (state, { payload }) => {
+      state.accounts = [...state.accounts, payload];
+    },
+    setActiveAccount: (state, { payload }) => {
+      state.activeAccount = payload;
     },
     resetWallet: () => {
       return {
@@ -125,6 +133,8 @@ export const {
   setWalletConnection,
   setForceReconnect,
   setAccounts,
+  addAccount,
+  setActiveAccount,
   resetWallet,
   setErc20TokenBalances,
   setErc20TokenBalanceSelected,
