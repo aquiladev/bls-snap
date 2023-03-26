@@ -10,7 +10,6 @@ import {
   setWalletConnection,
 } from '../slices/walletSlice';
 import { getThemePreference } from '../utils';
-import { useBLSSnap } from '../services/useBLSSnap';
 import { MenuItem, Select } from './Select';
 import { PopperTooltip } from './ui/PopperTooltip';
 import { AccountDetailButton } from './ui/SideBar/SideBar.style';
@@ -70,7 +69,7 @@ export const Header = ({
           labelId="network-select-label"
           id="network-select"
           value={networks.activeNetwork}
-          onChange={async (event) => {
+          onChange={(event) => {
             dispatch(setActiveAccount(0));
             dispatch(setActiveNetwork(event.target.value));
           }}
