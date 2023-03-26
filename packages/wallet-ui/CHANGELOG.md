@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/aquiladev/bls-snap/compare/wallet-ui-v0.1.4...wallet-ui-v0.2.0) (2023-03-26)
+
+
+### Features
+
+* **wallet-ui:** multiple wallet ([1481e21](https://github.com/aquiladev/bls-snap/commit/1481e2134694054b7dbd595503e5a3f48faaf6be))
+
 ## [0.1.4](https://github.com/aquiladev/bls-snap/compare/wallet-ui-v0.1.3...wallet-ui-v0.1.4) (2023-03-14)
 
 
