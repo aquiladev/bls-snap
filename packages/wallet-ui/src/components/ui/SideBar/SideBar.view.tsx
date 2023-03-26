@@ -1,4 +1,5 @@
-import { useRef, useState, useMemo } from 'react';
+import { useRef, useState } from 'react';
+import { BigNumber } from 'ethers';
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import { AccountAddress } from '../AccountAddress';
 import { AccountDetailsModal } from '../AccountDetailsModal';
@@ -6,6 +7,7 @@ import { AssetsList } from '../AssetsList';
 import { setAddTokenModalVisible } from '../../../slices/UISlice';
 import { useBLSSnap } from '../../../services/useBLSSnap';
 import { AccountsList } from '../AccountsList';
+import * as ws from '../../../slices/walletSlice';
 
 import {
   AccountDetailButton,
@@ -30,7 +32,7 @@ export const SideBarView = ({ address, accountName }: Props) => {
   const [accountDetailsOpen, setAccountDetailsOpen] = useState(false);
   const wallet = useAppSelector((state) => state.wallet);
   const dispatch = useAppDispatch();
-  const { createAccount } = useBLSSnap();
+  const { createAccount, selectAccount } = useBLSSnap();
   const networks = useAppSelector((state) => state.networks);
   const chainId = networks.items[networks.activeNetwork]?.chainId;
 
@@ -47,9 +49,21 @@ export const SideBarView = ({ address, accountName }: Props) => {
       <AccountDetails
         arrowVisible={false}
         closeTrigger="click"
-        offSet={[60, 0]}
+        offSet={[0, 0]}
         content={
           <AccountDetailsContent>
+            <AccountsList />
+            <CreateAccountButton
+              backgroundTransparent
+              iconLeft="add"
+              onClick={async () => {
+                const account = await createAccount(chainId);
+                await dispatch(ws.addAccount(account));
+                await selectAccount(account);
+              }}
+            >
+              Create account
+            </CreateAccountButton>
             <AccountDetailButton
               backgroundTransparent
               iconLeft="qrcode"
@@ -58,17 +72,13 @@ export const SideBarView = ({ address, accountName }: Props) => {
             >
               Account details
             </AccountDetailButton>
-            <AccountsList />
-            <CreateAccountButton
-              backgroundTransparent
-              onClick={() => createAccount(chainId)}
-            >
-              + Create account
-            </CreateAccountButton>
           </AccountDetailsContent>
         }
       >
-        <AccountImageStyled address={address} connected={wallet.connected} />
+        <AccountImageStyled
+          address={BigNumber.from(address).toString()}
+          connected={wallet.connected}
+        />
       </AccountDetails>
 
       <AccountLabel>{accountName}</AccountLabel>

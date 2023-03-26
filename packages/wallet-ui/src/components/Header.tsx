@@ -1,14 +1,16 @@
 import { useCallback } from 'react';
-import styled, { useTheme } from 'styled-components';
+import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { resetNetwork, setActiveNetwork } from '../slices/networkSlice';
 import {
   resetWallet,
+  setActiveAccount,
   setForceReconnect,
   setWalletConnection,
 } from '../slices/walletSlice';
 import { getThemePreference } from '../utils';
+import { useBLSSnap } from '../services/useBLSSnap';
 import { MenuItem, Select } from './Select';
 import { PopperTooltip } from './ui/PopperTooltip';
 import { AccountDetailButton } from './ui/SideBar/SideBar.style';
@@ -48,7 +50,6 @@ export const Header = ({
 }: {
   handleToggleClick(): void;
 }) => {
-  const theme = useTheme();
   const dispatch = useAppDispatch();
   const networks = useAppSelector((state) => state.networks);
 
@@ -69,7 +70,8 @@ export const Header = ({
           labelId="network-select-label"
           id="network-select"
           value={networks.activeNetwork}
-          onChange={(event) => {
+          onChange={async (event) => {
+            dispatch(setActiveAccount(0));
             dispatch(setActiveNetwork(event.target.value));
           }}
         >

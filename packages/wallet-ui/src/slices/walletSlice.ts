@@ -1,19 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Bundle } from '@aquiladev/bls-snap/src/types/snapState';
 import { BigNumber } from 'ethers';
-import {
-  Account,
-  ActiveAccount,
-  SelectableAction,
-  Erc20TokenBalance,
-} from '../types';
+import { Account, SelectableAction, Erc20TokenBalance } from '../types';
 
 export type WalletState = {
   connected: boolean;
   isLoading: boolean;
   forceReconnect: boolean;
   accounts: Account[];
-  activeAccount: ActiveAccount;
+  activeAccount: number;
   erc20TokenBalances: Erc20TokenBalance[];
   erc20TokenBalanceSelected: Erc20TokenBalance;
   actions: SelectableAction[];

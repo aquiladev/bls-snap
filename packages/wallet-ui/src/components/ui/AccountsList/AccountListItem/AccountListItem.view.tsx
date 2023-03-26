@@ -1,36 +1,48 @@
-import { Account, ActiveAccount } from '../../../../types';
+import { BigNumber } from 'ethers';
+import { Account } from '../../../../types';
 import { useBLSSnap } from '../../../../services/useBLSSnap';
 
-import { Wrapper, Row, HighlightedRow } from './AccountListItem.style';
+import {
+  Wrapper,
+  Row,
+  ActiveRow,
+  ActiveIcon,
+  AccountImageStyled,
+} from './AccountListItem.style';
 
 type Props = {
   account: Account;
-  activeAccount: ActiveAccount;
+  activeAccount: number;
 };
 
 export const AccountListItemView = ({ account, activeAccount }: Props) => {
   const { selectAccount } = useBLSSnap();
-  const { index, name } = account;
+  const { index, name, address } = account;
 
   return (
     <Wrapper>
       {index === activeAccount ? (
-        <div>
-          <HighlightedRow>
-            <span>{name}</span>
-          </HighlightedRow>
-        </div>
+        <ActiveRow>
+          <ActiveIcon />
+          <AccountImageStyled
+            size={18}
+            address={BigNumber.from(address).toString()}
+          />
+          <span>{name}</span>
+        </ActiveRow>
       ) : (
-        <div
+        <Row
           onClick={(e) => {
             e.stopPropagation();
-            selectAccount(index);
+            selectAccount(account);
           }}
         >
-          <Row>
-            <span>{name}</span>
-          </Row>
-        </div>
+          <AccountImageStyled
+            size={18}
+            address={BigNumber.from(address).toString()}
+          />
+          <span>{name}</span>
+        </Row>
       )}
     </Wrapper>
   );

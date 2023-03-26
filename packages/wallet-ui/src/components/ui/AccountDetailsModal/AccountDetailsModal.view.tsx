@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react';
+import { useContext } from 'react';
 import { ThemeContext } from 'styled-components';
 import {
   AccountImageDiv,
@@ -27,7 +27,6 @@ export const AccountDetailsModalView = ({ address, accountName }: Props) => {
       <Wrapper>
         <TitleDiv>
           <Title>{accountName}</Title>
-          {/* <ModifyIcon /> */}
         </TitleDiv>
         <AddressQrCode
           value={address}

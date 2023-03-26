@@ -84,7 +84,7 @@ export const SendModalView = ({ closeModal }: Props) => {
 
   const handleConfirmClick = async () => {
     const { chainId } = networks.items[networks.activeNetwork];
-    const senderAddress = wallet.accounts[0].address;
+    const senderAddress = wallet.accounts[wallet.activeAccount].address;
     const contractAddress = wallet.erc20TokenBalanceSelected.address;
 
     const erc20Abi = [

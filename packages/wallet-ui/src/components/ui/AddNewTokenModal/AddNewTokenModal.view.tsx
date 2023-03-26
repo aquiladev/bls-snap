@@ -16,8 +16,9 @@ import {
 
 export const AddNewTokenModalView = () => {
   const networks = useAppSelector((state) => state.networks);
+  const wallet = useAppSelector((state) => state.wallet);
   const dispatch = useAppDispatch();
-  const { addERC20Token, getWalletData } = useBLSSnap();
+  const { addERC20Token, loadAccountData } = useBLSSnap();
 
   const [isAddingToken, setIsAddingToken] = useState(false);
   const [isValidAddress, setIsValidAddress] = useState(false);
@@ -51,7 +52,11 @@ export const AddNewTokenModalView = () => {
         decimals,
         activeNetwork.chainId,
       );
-      await getWalletData(activeNetwork.chainId, networks.items);
+
+      await loadAccountData(
+        wallet.accounts[wallet.activeAccount],
+        activeNetwork.chainId,
+      );
       dispatch(setAddTokenModalVisible(false));
     } catch (err: any) {
       setError(err?.message || 'Error during token adding');
@@ -66,7 +71,7 @@ export const AddNewTokenModalView = () => {
     networks,
     dispatch,
     addERC20Token,
-    getWalletData,
+    loadAccountData,
   ]);
 
   return (

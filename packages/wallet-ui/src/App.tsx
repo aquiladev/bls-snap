@@ -32,7 +32,7 @@ const WrapperContent = styled.div`
 
 function App() {
   const [darkTheme, setDarkTheme] = useState(getThemePreference());
-  const { initSnap, checkConnection, getWalletData } = useBLSSnap();
+  const { initSnap, checkConnection, loadNetworkData } = useBLSSnap();
   const { connected, forceReconnect } = useAppSelector((state) => state.wallet);
   const { accounts, activeAccount } = useAppSelector((state) => state.wallet);
   const networks = useAppSelector((state) => state.networks);
@@ -43,7 +43,8 @@ function App() {
 
   const address =
     accounts?.length > 0
-      ? (accounts[0].address as unknown as string)
+      ? (accounts.find((account) => account.index === activeAccount)
+          .address as unknown as string)
       : '0x000000000000000000000000000000';
 
   const accountName =
@@ -65,7 +66,7 @@ function App() {
   useEffect(() => {
     if (networks.items.length > 0) {
       const { chainId } = networks.items[networks.activeNetwork];
-      getWalletData(chainId);
+      loadNetworkData(chainId);
     }
   }, [networks.activeNetwork]);
 

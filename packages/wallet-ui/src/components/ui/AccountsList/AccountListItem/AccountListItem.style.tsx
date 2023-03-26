@@ -1,37 +1,41 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
+import { AccountImage } from '../../AccountImage';
 
 export const Wrapper = styled.div`
   box-shadow: ${(props) => props.theme.shadow.dividerBottom.boxShadow};
   text-align: center;
-  font-size: ${(props) => props.theme.typography.p1.fontSize};
+  font-size: ${(props) => props.theme.fontSizes.text};
   background-color: ${(props) => props.theme.colors.background.inverse};
   color: ${(props) => props.theme.colors.text.inverse};
-  &:hover {
-    background-color: ${(props) => props.theme.colors.background.default};
-    color: ${(props) => props.theme.colors.text.default};
-  }
 `;
 
 export const Row = styled.div`
-  padding: ${(props) => props.theme.spacing.large};
-  text-align: center;
+  padding: ${(props) => props.theme.spacing.small};
+  padding-left: ${(props) => props.theme.spacing.base};
   box-shadow: ${(props) => props.theme.shadow.dividerBottom.boxShadow};
-  padding-top: ${(props) => props.theme.spacing.small};
-  padding-bottom: ${(props) => props.theme.spacing.small};
   cursor: pointer;
   background-color: ${(props) => props.theme.colors.background.inverse};
   color: ${(props) => props.theme.colors.text.inverse};
   &:hover {
-    background-color: ${(props) => props.theme.colors.background.default};
-    color: ${(props) => props.theme.colors.text.default};
+    color: ${(props) => props.theme.colors.text.alternative};
   }
 `;
 
-export const HighlightedRow = styled.div`
-  padding: ${(props) => props.theme.spacing.large};
-  padding-top: ${(props) => props.theme.spacing.small};
-  padding-bottom: ${(props) => props.theme.spacing.small};
+export const AccountImageStyled = styled(AccountImage)`
+  margin-left: 4px;
+  display: inline-block;
+`;
+
+export const ActiveRow = styled.div`
+  padding: ${(props) => props.theme.spacing.small};
+  padding-left: ${(props) => props.theme.spacing.none};
   cursor: auto;
-  background-color: ${(props) => props.theme.colors.background.default};
-  color: ${(props) => props.theme.colors.text.default};
+`;
+
+export const ActiveIcon = styled(FontAwesomeIcon).attrs((props) => ({
+  color: props.theme.colors.background.default,
+  icon: 'check',
+}))`
+  padding-right: ${(props) => props.theme.spacing.tiny2};
 `;

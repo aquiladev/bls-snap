@@ -116,10 +116,6 @@ export const useBLSSnap = () => {
         },
       },
     })) as Account[];
-    if (accounts?.length > 0) {
-      dispatch(ws.setAccounts(accounts));
-    }
-    dispatch(disableLoading());
     return accounts;
   };
 
@@ -137,15 +133,7 @@ export const useBLSSnap = () => {
         },
       },
     })) as Account;
-    dispatch(ws.addAccount(newAccount));
-    dispatch(ws.setActiveAccount(newAccount.index));
-    dispatch(disableLoading());
     return newAccount;
-  };
-
-  const selectAccount = async (index: number) => {
-    dispatch(ws.setActiveAccount(index));
-    return index;
   };
 
   const getTokens = async (chainId: number) => {
@@ -431,26 +419,23 @@ export const useBLSSnap = () => {
     return data;
   };
 
-  const getWalletData = async (chainId: number, networks?: Network[]) => {
-    if (!loader.isLoading && !networks) {
-      dispatch(enableLoadingWithMessage('Getting network data ...'));
-    }
-
+  const initAccounts = async (
+    chainId: number,
+  ): Promise<Account[] | Account> => {
     let account: Account[] | Account = await recoverAccounts(chainId);
     if (!account || account.length === 0 || !account[0].address) {
       // eslint-disable-next-line require-atomic-updates
       account = await createAccount(chainId);
     }
     dispatch(ws.setAccounts(account));
-    const accountAddr = Array.isArray(account)
-      ? account[0].address
-      : account.address;
+    return account;
+  };
 
+  const loadAccountData = async (account: Account, chainId: number) => {
     const tokens = await getTokens(chainId);
-    console.log('Tokens', tokens);
     const tokenBalances = await Promise.all(
       tokens.map(async (token) => {
-        return await getTokenBalance(token.address, accountAddr, chainId);
+        return await getTokenBalance(token.address, account.address, chainId);
       }),
     );
 
@@ -468,17 +453,37 @@ export const useBLSSnap = () => {
         tokenUSDPrices[index],
       );
     });
-    if (networks) {
-      dispatch(setNetworks(networks));
-    }
     dispatch(ws.setErc20TokenBalances(tokensWithBalances));
 
     if (tokensWithBalances.length > 0) {
       setErc20TokenBalance(tokensWithBalances[0]);
     }
 
-    await getActions(accountAddr, chainId);
-    await getBundles(accountAddr, chainId);
+    await getActions(account.address, chainId);
+    await getBundles(account.address, chainId);
+  };
+
+  const selectAccount = async (account: Account) => {
+    if (!loader.isLoading) {
+      dispatch(enableLoadingWithMessage('Loading data...'));
+    }
+    const networks = await getNetworks();
+    const { chainId } = networks[activeNetwork];
+
+    await loadAccountData(account, chainId);
+
+    dispatch(ws.setActiveAccount(account.index));
+    dispatch(disableLoading());
+  };
+
+  const loadNetworkData = async (chainId: number) => {
+    if (!loader.isLoading) {
+      dispatch(enableLoadingWithMessage('Getting network data ...'));
+    }
+
+    const accounts = await initAccounts(chainId);
+    const account = Array.isArray(accounts) ? accounts[0] : accounts;
+    await loadAccountData(account, chainId);
 
     dispatch(disableLoading());
     if (!Array.isArray(account)) {
@@ -502,8 +507,10 @@ export const useBLSSnap = () => {
       if (!networks) {
         return;
       }
+
       const { chainId } = networks[activeNetwork];
-      await getWalletData(chainId, networks);
+      dispatch(setNetworks(networks));
+      await loadNetworkData(chainId);
     } catch (err: any) {
       if (err.code && err.code === 4100) {
         const toastr = new Toastr();
@@ -526,7 +533,8 @@ export const useBLSSnap = () => {
     selectAccount,
     initSnap,
     satisfiesVersion: oldVersionDetected,
-    getWalletData,
+    loadNetworkData,
+    loadAccountData,
     setErc20TokenBalance,
     refreshTokensUSDPrice,
     updateTokenBalance,

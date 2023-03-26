@@ -37,13 +37,6 @@ export const Title = styled.div`
   margin-right: 13px;
 `;
 
-export const ModifyIcon = styled(FontAwesomeIcon).attrs((props) => ({
-  color: props.theme.colors.text.default,
-  icon: 'pen',
-}))`
-  cursor: pointer;
-`;
-
 export const AddressQrCode = styled(QRCode).attrs(() => ({
   size: 134,
 }))`

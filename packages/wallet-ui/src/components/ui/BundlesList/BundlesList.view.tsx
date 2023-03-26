@@ -17,7 +17,9 @@ export const BundlesListView = () => {
   // eslint-disable-next-line consistent-return
   useEffect(() => {
     const chainId = networks.items[networks.activeNetwork]?.chainId;
-    const address = wallet.accounts?.[0] as unknown as string;
+    const address = wallet.accounts?.[
+      wallet.activeAccount
+    ] as unknown as string;
     const pandingBundles = (wallet.bundles || []).filter((b) => !b.blockNumber);
     if (chainId && address && pandingBundles?.length) {
       clearTimeout(timeoutHandle.current); // cancel the timeout that was in-flight
