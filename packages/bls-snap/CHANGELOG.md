@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/aquiladev/bls-snap/compare/bls-snap-v0.3.0...bls-snap-v0.3.1) (2023-05-19)
+
+
+### Bug Fixes
+
+* dependencies ([115c2d3](https://github.com/aquiladev/bls-snap/commit/115c2d3047361754f8701d4bf62c1878df6be403))
+
 ## [0.3.0](https://github.com/aquiladev/bls-snap/compare/bls-snap-v0.2.6...bls-snap-v0.3.0) (2023-03-18)
 
 
