@@ -23,6 +23,9 @@
     "start": "yarn workspaces foreach --parallel --interlaced --verbose run start",
     "test": "yarn workspace @aquiladev/bls-snap run test"
   },
+  "resolutions": {
+    "node-fetch": "patch:node-fetch@npm:2.6.9#.yarn/patches/node-fetch-npm-2.6.9-9fc9a54529.patch"
+  },
   "devDependencies": {
     "@commitlint/cli": "^17.4.4",
     "@commitlint/config-conventional": "^17.4.4",

@@ -1,0 +1,29 @@
+diff --git a/browser.js b/browser.js
+index ee86265ae3adab9f03cf10f486384735417320e6..3141872195eb3df8168ccedceacb0ad81bfbef33 100644
+--- a/browser.js
++++ b/browser.js
+@@ -11,15 +11,12 @@ var getGlobal = function () {
+ 	throw new Error('unable to locate global object');
+ }
+ 
+-var globalObject = getGlobal();
+-
+-module.exports = exports = globalObject.fetch;
+-
+-// Needed for TypeScript and Webpack.
+-if (globalObject.fetch) {
+-	exports.default = globalObject.fetch.bind(globalObject);
+-}
+-
+-exports.Headers = globalObject.Headers;
+-exports.Request = globalObject.Request;
+-exports.Response = globalObject.Response;
++var global = getGlobal();
++exports = {
++  default: global.fetch,
++  fetch: global.fetch,
++  Headers: global.Headers,
++  Request: global.Request,
++  Response: global.Response,
++};
++module.exports = exports
