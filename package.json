@@ -47,5 +47,8 @@
   "packageManager": "yarn@3.2.1",
   "engines": {
     "node": ">=16.0.0"
+  },
+  "resolutions": {
+    "node-fetch": "patch:node-fetch@npm:2.6.9#.yarn/patches/node-fetch-npm-2.6.9-9fc9a54529.patch"
   }
 }
