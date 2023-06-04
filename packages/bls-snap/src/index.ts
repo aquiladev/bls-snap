@@ -2,7 +2,7 @@ import { OnRpcRequestHandler } from '@metamask/snaps-types';
 import { Mutex } from 'async-mutex';
 
 import { ApiParams, ApiRequestParams } from './types/snapApi';
-import { addTestToken, upsertNetwork } from './utils/snapUtils';
+import { addNativeToken, addTestToken, upsertNetwork } from './utils/snapUtils';
 import * as config from './utils/config';
 import { getAddressKeyDeriver } from './utils/crypto';
 import { addAction } from './addAction';
@@ -65,6 +65,7 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
   const networks = config.getNetworks();
   for (const network of networks) {
     await upsertNetwork(network, snap, mutex, state);
+    await addNativeToken(network, snap, mutex, state);
     await addTestToken(network, snap, mutex, state);
   }
 

@@ -22,7 +22,13 @@ export const BundleListItemView = ({ bundle }: Props) => {
   const explorerUrl = networks.items[networks.activeNetwork]?.explorerUrl;
   const [showActions, setShowActions] = useState(false);
   const status = getBundleStatus(bundle);
-  const statusColor = status.toLowerCase() === 'pending' ? 'orange' : 'green';
+  const statusColor =
+    // eslint-disable-next-line no-nested-ternary
+    status.toLowerCase() === 'success'
+      ? 'green'
+      : status.toLowerCase().startsWith('error:')
+      ? 'red'
+      : 'orange';
 
   return (
     <>

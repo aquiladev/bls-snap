@@ -30,3 +30,11 @@ export async function getErc20TokenBalance(
   const [balance] = utils.defaultAbiCoder.decode(['uint256'], result);
   return balance;
 }
+
+export async function getBalance(
+  network: Network,
+  account: string,
+): Promise<BigNumber> {
+  const provider = getProvider(network);
+  return provider.getBalance(account);
+}

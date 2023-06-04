@@ -47,6 +47,7 @@ export async function addErc20Token(params: ApiParams): Promise<Erc20Token> {
         0,
       ),
       isInternal: false,
+      isManageble: true,
     };
 
     await upsertErc20Token(

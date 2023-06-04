@@ -37,6 +37,7 @@ export type Erc20Token = {
   symbol: string;
   decimals: number;
   isInternal: boolean;
+  isManageble: boolean;
 };
 
 export type Action = {
