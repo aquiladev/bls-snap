@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/aquiladev/bls-snap/compare/wallet-ui-v0.2.0...wallet-ui-v0.3.0) (2023-06-04)
+
+
+### Features
+
+* add estimation and fee payment, update bls client ([0d09b9d](https://github.com/aquiladev/bls-snap/commit/0d09b9db42378d371ef15b074d8cb7b40140f61e))
+
 ## [0.2.0](https://github.com/aquiladev/bls-snap/compare/wallet-ui-v0.1.4...wallet-ui-v0.2.0) (2023-03-26)
 
 

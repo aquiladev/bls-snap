@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/aquiladev/bls-snap/compare/bls-snap-v0.3.1...bls-snap-v0.4.0) (2023-06-04)
+
+
+### Features
+
+* add estimation and fee payment, update bls client ([0d09b9d](https://github.com/aquiladev/bls-snap/commit/0d09b9db42378d371ef15b074d8cb7b40140f61e))
+
 ## [0.3.1](https://github.com/aquiladev/bls-snap/compare/bls-snap-v0.3.0...bls-snap-v0.3.1) (2023-05-19)
 
 
