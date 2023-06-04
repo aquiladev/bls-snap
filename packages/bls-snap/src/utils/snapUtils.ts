@@ -177,6 +177,27 @@ export function getAccounts(
   return state[chainId]?.accounts;
 }
 
+export async function addNativeToken(
+  network: Network,
+  snap: any,
+  mutex: Mutex,
+  state: SnapState,
+) {
+  if (!network?.config?.addresses?.testToken) {
+    return;
+  }
+
+  const token: Erc20Token = {
+    address: '',
+    name: 'Ether',
+    symbol: 'ETH',
+    decimals: 18,
+    isInternal: true,
+    isManageble: false,
+  };
+  await upsertErc20Token(token, network.chainId, snap, mutex, state);
+}
+
 export async function addTestToken(
   network: Network,
   snap: any,
@@ -193,6 +214,7 @@ export async function addTestToken(
     symbol: 'TOK',
     decimals: 18,
     isInternal: true,
+    isManageble: true,
   };
   await upsertErc20Token(token, network.chainId, snap, mutex, state);
 }

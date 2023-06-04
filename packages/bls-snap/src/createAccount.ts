@@ -47,7 +47,7 @@ export async function createAccount(params: ApiParams): Promise<Account> {
     const account: BlsAccount = {
       address: wallet.address,
       publicKey: wallet.PublicKeyStr(),
-      privateKey: wallet.privateKey,
+      privateKey,
       derivationPath,
       addressIndex: aIndex,
       name: `Account ${aIndex + 1}`,

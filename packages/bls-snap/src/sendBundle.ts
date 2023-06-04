@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { BigNumber, ethers, utils } from 'ethers';
 import { ApiParams, SendBundleRequestParams } from './types/snapApi';
 import * as config from './utils/config';
 import * as snapUtils from './utils/snapUtils';
@@ -61,20 +61,50 @@ export async function sendBundle(params: ApiParams): Promise<Bundle> {
     const wallet = await getWallet(network, account.privateKey);
     const nonce = await wallet.Nonce();
 
-    // All of the actions in a bundle are atomic, if one
-    // action fails they will all fail.
-    const _bundle = wallet.sign({
-      nonce,
-      actions: actions.map((op) => {
-        return {
-          ethValue: op.value,
-          contractAddress: op.contractAddress,
-          encodedFunction: op.encodedFunction,
-        };
-      }),
+    const iface = new utils.Interface(['function sendEthToTxOrigin()']);
+    const feeAction = {
+      ethValue: 1,
+      // Provide 1 wei with this action so that the fee transfer to
+      // tx.origin can be included in the gas estimate.
+      contractAddress: network.config.addresses.utilities,
+      encodedFunction: iface.encodeFunctionData('sendEthToTxOrigin'),
+    };
+
+    const _actions = actions.map((op) => {
+      return {
+        ethValue: op.value,
+        contractAddress: op.contractAddress,
+        encodedFunction: op.encodedFunction,
+      };
     });
 
     const aggregator = getAggregator(network);
+
+    // Estimate the fee required to send the bundle
+    const estimateFeeBundle = await wallet.signWithGasEstimate({
+      nonce,
+      actions: [..._actions, feeAction],
+    });
+    const feeEstimate = await aggregator.estimateFee(estimateFeeBundle);
+
+    // Add a safety premium to the fee to account for fluctuations in gas estimation
+    const safetyDivisor = 5;
+    const feeRequired = BigNumber.from(feeEstimate.feeRequired);
+    const safetyPremium = feeRequired.div(safetyDivisor);
+    const safeFee = feeRequired.add(safetyPremium);
+
+    // All of the actions in a bundle are atomic, if one
+    // action fails they will all fail.
+    const _bundle = await wallet.signWithGasEstimate({
+      nonce,
+      actions: [
+        ..._actions,
+        {
+          ...feeAction,
+          ethValue: safeFee, // fee amount
+        },
+      ],
+    });
     const result = await aggregator.add(_bundle);
 
     if ('failures' in result) {

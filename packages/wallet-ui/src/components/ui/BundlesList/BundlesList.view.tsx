@@ -20,7 +20,9 @@ export const BundlesListView = () => {
     const address = wallet.accounts?.[
       wallet.activeAccount
     ] as unknown as string;
-    const pandingBundles = (wallet.bundles || []).filter((b) => !b.blockNumber);
+    const pandingBundles = (wallet.bundles || []).filter(
+      (b) => !b.blockNumber && !b.error,
+    );
     if (chainId && address && pandingBundles?.length) {
       clearTimeout(timeoutHandle.current); // cancel the timeout that was in-flight
       timeoutHandle.current = setTimeout(async () => {

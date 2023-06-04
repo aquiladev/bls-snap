@@ -18,15 +18,15 @@ export async function getErc20TokenBalance(params: ApiParams): Promise<string> {
     const { tokenAddress, userAddress, chainId } =
       requestParams as GetErc20TokenBalanceRequestParams;
 
-    if (!tokenAddress || !userAddress) {
+    if (!userAddress) {
       throw new Error(
-        `The given token address and user address need to be non-empty string, got: ${JSON.stringify(
+        `The given user address need to be non-empty string, got: ${JSON.stringify(
           requestParams,
         )}`,
       );
     }
 
-    if (!ethers.utils.isAddress(tokenAddress)) {
+    if (tokenAddress && !ethers.utils.isAddress(tokenAddress)) {
       throw new Error(`The given token address is invalid: ${tokenAddress}`);
     }
 
@@ -43,11 +43,9 @@ export async function getErc20TokenBalance(params: ApiParams): Promise<string> {
       `getErc20Balance:\nerc20Address: ${tokenAddress}\nuserAddress: ${userAddress}`,
     );
 
-    const balance = await evmUtils.getErc20TokenBalance(
-      network,
-      tokenAddress,
-      userAddress,
-    );
+    const balance = tokenAddress
+      ? await evmUtils.getErc20TokenBalance(network, tokenAddress, userAddress)
+      : await evmUtils.getBalance(network, userAddress);
     console.log(`getErc20Balance:\nresp: ${JSON.stringify(balance)}`);
 
     return BigNumber.from(balance).toHexString();

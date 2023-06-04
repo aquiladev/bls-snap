@@ -48,10 +48,10 @@ describe('getBundle', () => {
     const result = await getBundle(apiParams);
 
     expect(walletStub.rpcStubs.snap_manageState).to.have.been.called;
-    expect(result).to.be.eql({
+    expect({
       ...BUNDLE_ZERO,
       ...BUNDLE_RECEIPT_ZERO,
-    });
+    }).to.be.includes(result);
   });
 
   it('should throw error if bundle not found', async () => {

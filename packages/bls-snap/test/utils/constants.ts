@@ -65,10 +65,9 @@ export const ACCOUNT_ZERO: BlsAccount = {
 
 export const BLS_ACCOUNT_ZERO: bls.BlsWalletWrapper = {
   address: ACCOUNT_ZERO.address,
-  privateKey: ACCOUNT_ZERO.privateKey,
   PublicKeyStr: () => ACCOUNT_ZERO.publicKey,
   Nonce: () => Promise.resolve(BigNumber.from(0)),
-  sign: (_: bls.Operation) => {
+  signWithGasEstimate: async (_: Omit<bls.Operation, 'gas'>, __ = 0) => {
     return {} as bls.Bundle;
   },
 } as bls.BlsWalletWrapper;
@@ -79,6 +78,7 @@ export const ERC20_TOKEN_ZERO: Erc20Token = {
   symbol: 'TT0',
   decimals: 18,
   isInternal: false,
+  isManageble: true,
 };
 
 export const ERC20_TOKEN_ONE: Erc20Token = {
@@ -87,6 +87,7 @@ export const ERC20_TOKEN_ONE: Erc20Token = {
   symbol: 'TT1',
   decimals: 18,
   isInternal: true,
+  isManageble: true,
 };
 
 export const ACTION_ZERO: Action = {
@@ -122,8 +123,29 @@ export const BUNDLE_RECEIPT_ZERO: BundleReceipt = {
   bundleHash: BUNDLE_HASH_ZERO,
   blockHash: '0x1234',
   blockNumber: 1,
+  to: ZERO_ADDRESS,
+  from: ZERO_ADDRESS,
+  contractAddress: ZERO_ADDRESS,
+  cumulativeGasUsed: BigNumber.from(1),
+  effectiveGasPrice: BigNumber.from(1),
+  gasUsed: BigNumber.from(1),
+  logs: [],
+  events: [],
+  logsBloom: '',
+  status: 1,
+  byzantium: true,
+  confirmations: 1,
+  root: '0x0',
+  type: 1,
 };
 
 export const AGGREGATOR_MOCK: bls.Aggregator = {
   add: (_: bls.Bundle) => Promise.resolve({ hash: BUNDLE_HASH_ZERO }),
+  estimateFee: (_: bls.Bundle) =>
+    Promise.resolve({
+      feeType: 'ether',
+      feeDetected: '1',
+      feeRequired: '1',
+      successes: [true],
+    }),
 } as bls.Aggregator;
