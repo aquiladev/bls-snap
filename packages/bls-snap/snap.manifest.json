@@ -7,7 +7,7 @@
     "url": "https://github.com/aquiladev/bls-snap.git"
   },
   "source": {
-    "shasum": "C7TlcF1PAaXMhYD1vgz5CoOzL6qES9BceUthCDs3zBs=",
+    "shasum": "hDg4iUdVhk2XtolQGAjO4y8yislMG0ipNxcr6TZKOkM=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",

@@ -2,7 +2,7 @@
 import { BigNumber, providers, utils } from 'ethers';
 import { Network } from '../types/snapState';
 
-export async function callContract(
+async function callContract(
   network: Network,
   to: string,
   data: string,

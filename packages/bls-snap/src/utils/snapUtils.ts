@@ -105,7 +105,7 @@ export async function upsertNetwork(
   });
 }
 
-export function getNetwork(chainId: number, state: SnapState) {
+function getNetwork(chainId: number, state: SnapState) {
   return state[chainId];
 }
 
@@ -489,7 +489,7 @@ export async function getBundle(
   return bundle;
 }
 
-export async function updateBundleStatus(
+async function updateBundleStatus(
   bundle: Bundle,
   chainId: number,
   wallet: any,
@@ -525,7 +525,7 @@ export const getValidNumber = (
     : toNum;
 };
 
-export const getNextAddressIndex = (
+const getNextAddressIndex = (
   chainId: number,
   state: SnapState,
   derivationPath: string,
