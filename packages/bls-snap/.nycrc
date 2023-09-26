@@ -1,6 +1,10 @@
 {
-    "all": true,
-    "include": ["src/**"],
-    "extension": [".ts"],
-    "cache": false
+  "all": true,
+  "include": [
+    "src/**"
+  ],
+  "extension": [
+    ".ts"
+  ],
+  "cache": false
 }

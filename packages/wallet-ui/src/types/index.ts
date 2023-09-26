@@ -1,8 +1,6 @@
 import * as Types from '@aquiladev/bls-snap/src/types/snapState';
 import { BigNumber } from 'ethers';
 
-export { type GetSnapsResponse, type Snap } from './snap';
-
 export type Network = Pick<Types.Network, 'name' | 'chainId' | 'explorerUrl'>;
 export type Account = Types.Account;
 

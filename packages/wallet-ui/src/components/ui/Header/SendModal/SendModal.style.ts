@@ -40,8 +40,6 @@ export const Separator = styled.div`
   margin-bottom: ${(props) => props.theme.spacing.tiny};
 `;
 
-export const MessageAlert = styled(Alert)``;
-
 export const Buttons = styled.div`
   display: flex;
   flex-direction: row;

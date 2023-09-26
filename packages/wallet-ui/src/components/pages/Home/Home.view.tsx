@@ -8,7 +8,7 @@ import { Separator } from '../../ui/Header/SendModal/SendModal.style';
 import { ActionsList } from '../../ui/ActionsList';
 import { SideBar } from '../../ui/SideBar';
 import { BundlesList } from '../../ui/BundlesList';
-import { LoadingSpinner } from '../../ui/LoadingSmall/LoadingSmall.style';
+import { LoadingSpinner } from '../../ui/AddNewTokenModal/AddNewTokenModal.style';
 import {
   RightPart,
   RightPartContent,

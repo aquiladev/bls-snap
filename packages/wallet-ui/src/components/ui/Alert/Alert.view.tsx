@@ -1,7 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { theme, Variant, VariantOptions } from '../../../config/theme';
-import { LeftIcon } from '../Button/Button.style';
-import { Parag, Wrapper } from './Alert.style';
+import { Icon, Parag, Wrapper } from './Alert.style';
 
 type Props = {
   text: string;
@@ -21,22 +20,19 @@ export function AlertView({ text, variant }: Props) {
     <Wrapper isMultiline={isMultiline} variant={variant}>
       <>
         {variant === VariantOptions.SUCCESS && (
-          <LeftIcon icon={['fas', 'check-circle']} />
+          <Icon icon={['fas', 'check-circle']} />
         )}
         {variant === VariantOptions.INFO && (
-          <LeftIcon
-            icon={['fas', 'info-circle']}
-            color={theme.palette.info.dark}
-          />
+          <Icon icon={['fas', 'info-circle']} color={theme.palette.info.dark} />
         )}
         {variant === VariantOptions.ERROR && (
-          <LeftIcon
+          <Icon
             icon={['fas', 'exclamation-circle']}
             color={theme.palette.error.main}
           />
         )}
         {variant === VariantOptions.WARNING && (
-          <LeftIcon
+          <Icon
             icon={['fas', 'exclamation-triangle']}
             color={theme.palette.warning.main}
           />

@@ -24,14 +24,8 @@ type Props = {
 
 export const ActionListItemView = ({ action, isSelectable }: Props) => {
   const dispatch = useAppDispatch();
-  const {
-    value,
-    contractAddress,
-    createdAt,
-    functionFragment,
-    selected,
-    senderAddress,
-  } = action;
+  const { value, contractAddress, createdAt, functionFragment, selected } =
+    action;
   const { removeActions } = useBLSSnap();
   const networks = useAppSelector((state) => state.networks);
   const chainId = networks.items[networks.activeNetwork]?.chainId;

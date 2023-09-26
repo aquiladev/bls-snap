@@ -10,7 +10,7 @@ export type ApiParams = {
   keyDeriver?: BIP44AddressKeyDeriver;
 };
 
-export type BaseRequestParams = {
+type BaseRequestParams = {
   chainId: number;
 };
 

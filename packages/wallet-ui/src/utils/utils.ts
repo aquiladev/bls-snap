@@ -17,7 +17,7 @@ export const shortenAddress = (address: string, num = 3) => {
   );
 };
 
-export const getMaxDecimals = (asset: Erc20TokenBalance) => {
+const getMaxDecimals = (asset: Erc20TokenBalance) => {
   const MAX_DECIMALS = 6;
   if (asset.decimals > MAX_DECIMALS) {
     return MAX_DECIMALS;

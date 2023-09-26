@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import QRCode from 'react-qr-code';
 import styled from 'styled-components';
 import { AccountAddress } from '../AccountAddress';

@@ -43,7 +43,6 @@ export const ButtonView = ({
   const hasIcons = iconRight !== undefined || iconLeft !== undefined;
   return (
     <Wrapper
-      // variant={variant}
       onClick={onClick}
       disabled={!enabled}
       backgroundTransparent={backgroundTransparent}

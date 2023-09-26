@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 type IDiv = {
   selected?: boolean;
@@ -45,10 +44,6 @@ export const Column = styled.div`
   margin-left: ${(props) => props.theme.spacing.small};
 `;
 
-export const LeftIcon = styled(FontAwesomeIcon)`
-  font-size: ${(props) => props.theme.typography.i4.fontSize};
-`;
-
 export const Label = styled.span`
   font-size: ${(props) => props.theme.typography.p1.fontSize};
   font-weight: ${(props) => props.theme.typography.bold.fontWeight};
@@ -65,11 +60,4 @@ export const Left = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-`;
-
-export const Middle = styled.div`
-  font-size: ${(props) => props.theme.typography.p2.fontSize};
-  color: ${(props) => props.theme.palette.grey.grey1};
-  flex-grow: 2;
-  text-align: center;
 `;

@@ -138,13 +138,13 @@ export const SendModalView = ({ closeModal }: Props) => {
       </Wrapper>
       <Buttons>
         <ButtonStyled onClick={closeModal} backgroundTransparent borderVisible>
-          CANCEL
+          Cancel
         </ButtonStyled>
         <ButtonStyled
           onClick={() => handleConfirmClick()}
           enabled={confirmEnabled()}
         >
-          CONFIRM
+          Confirm
         </ButtonStyled>
       </Buttons>
     </div>

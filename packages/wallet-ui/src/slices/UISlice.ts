@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export type UIState = {
+type UIState = {
   loader: {
     isLoading: boolean;
     loadingMessage: string;
@@ -18,7 +18,7 @@ const initialState: UIState = {
   addTokenModalVisible: false,
 };
 
-export const networkSlice = createSlice({
+const uiSlice = createSlice({
   name: 'UI',
   initialState,
   reducers: {
@@ -44,6 +44,6 @@ export const {
   disableLoading,
   setInfoModalVisible,
   setAddTokenModalVisible,
-} = networkSlice.actions;
+} = uiSlice.actions;
 
-export default networkSlice.reducer;
+export default uiSlice.reducer;
