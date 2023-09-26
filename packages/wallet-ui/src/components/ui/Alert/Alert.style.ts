@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { theme, Variant } from '../../../config/theme';
 
 type NewType = boolean;
@@ -59,4 +60,8 @@ export const Parag = styled.p`
   line-height: 140%;
   margin-top: 0;
   margin-bottom: 0;
+`;
+
+export const Icon = styled(FontAwesomeIcon)`
+  font-size: ${(props) => props.theme.typography.i3.fontSize};
 `;

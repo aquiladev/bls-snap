@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
@@ -29,3 +30,5 @@ export const ButtonsContainer = styled.div`
   justify-content: space-between;
   width: 100%;
 `;
+
+export const LoadingSpinner = styled(FontAwesomeIcon)``;

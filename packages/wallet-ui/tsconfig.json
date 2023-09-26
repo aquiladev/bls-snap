@@ -12,6 +12,6 @@
     "allowSyntheticDefaultImports": true,
     "noFallthroughCasesInSwitch": true
   },
-  "files": ["../../node_modules/@metamask/snaps-types/global.d.ts"],
+  "files": ["../../node_modules/@metamask/snaps-types/dist/global.d.ts"],
   "include": ["src"]
 }

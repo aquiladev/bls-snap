@@ -91,7 +91,6 @@ export const ValueInputView = ({
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
             ref={inputRef}
-            // onKeyDown={(event) => handleOnKeyDown(event)}
             onChange={(event) => handleOnChange(event)}
             {...otherProps}
           />

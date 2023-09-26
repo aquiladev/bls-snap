@@ -17,7 +17,7 @@ export const Title = styled.div`
   margin-bottom: 8px;
 `;
 
-export const Description = styled.div`
+const Description = styled.div`
   color: ${(props) => props.theme.colors.text.default}};
 `;
 
@@ -38,11 +38,6 @@ export const WhatIsSnapDiv = styled.div`
 
 export const WhatIsSnap = styled.div`
   margin-bottom: 12px;
-`;
-
-export const ReadMore = styled.div`
-  margin-top: 12px;
-  cursor: pointer;
 `;
 
 export const ConnectButton = styled(Button).attrs(() => ({

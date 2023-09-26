@@ -5,13 +5,13 @@ import { setAddTokenModalVisible } from '../../../slices/UISlice';
 import { AddressInput } from '../AddressInput';
 import { Alert } from '../Alert';
 import { Button } from '../Button';
-import { LoadingSpinner } from '../LoadingSmall/LoadingSmall.style';
 import { ValueInput } from '../ValueInput';
 import {
   Wrapper,
   ModalTitle,
   ModalHeaderContainer,
   ButtonsContainer,
+  LoadingSpinner,
 } from './AddNewTokenModal.style';
 
 export const AddNewTokenModalView = () => {

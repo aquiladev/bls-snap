@@ -3,7 +3,7 @@ import { Bundle } from '@aquiladev/bls-snap/src/types/snapState';
 import { BigNumber } from 'ethers';
 import { Account, SelectableAction, Erc20TokenBalance } from '../types';
 
-export type WalletState = {
+type WalletState = {
   connected: boolean;
   isLoading: boolean;
   forceReconnect: boolean;
@@ -27,7 +27,7 @@ const initialState: WalletState = {
   bundles: [],
 };
 
-export const walletSlice = createSlice({
+const walletSlice = createSlice({
   name: 'wallet',
   initialState,
   reducers: {

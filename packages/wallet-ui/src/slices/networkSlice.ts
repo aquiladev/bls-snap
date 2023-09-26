@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Network } from '../types';
 
-export type NetworkState = {
+type NetworkState = {
   items: Network[];
   activeNetwork: number;
 };
@@ -11,7 +11,7 @@ const initialState: NetworkState = {
   activeNetwork: 0,
 };
 
-export const networkSlice = createSlice({
+const networkSlice = createSlice({
   name: 'network',
   initialState,
   reducers: {
